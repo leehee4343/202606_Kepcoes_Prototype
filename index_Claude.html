@@ -1,0 +1,2388 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>켑코이에스 PMS — 디자인 시안 B</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    /* ══════════════════════════════════════════════
+       디자인 시안 B — 다크 레일 사이드바 + 플랫 카드 구조
+       원본과 기능/내용 동일, 레이아웃/디자인 전면 재설계
+    ══════════════════════════════════════════════ */
+    :root {
+      /* ── 레일 사이드바: 블루 다크 계열 ── */
+      --rail-bg:     #0f2554;   /* 진한 네이비 블루 */
+      --rail-hover:  #1a3a7a;
+      --rail-active: #1d4ed8;   /* 선명한 블루 */
+      --rail-accent: #3b82f6;   /* 브라이트 블루 액티브 인디케이터 */
+      --rail-text:   #93b4e0;
+      --rail-text-on:#ffffff;
+
+      /* ── 헤더 ── */
+      --hd-bg:       #ffffff;
+      --hd-border:   #dde6f5;
+      --hd-shadow:   0 1px 0 #dde6f5, 0 2px 8px rgba(15,37,84,0.07);
+
+      /* ── 서브메뉴 패널 ── */
+      --sub-bg:      #f5f8ff;
+      --sub-border:  #dde6f5;
+      --sub-w:       200px;
+
+      /* ── 콘텐츠 배경/텍스트 ── */
+      --bg:          #eef2fa;
+      --bg2:         #ffffff;
+      --text:        #0f172a;
+      --text-sub:    #4b6083;
+      --text-label:  #334c7a;
+      --border:      #d4def5;
+
+      /* ── 기본: 고채도 블루 ── */
+      --blue:        #1d4ed8;   /* 선명한 인디고 블루 */
+      --blue-lt:     #dbeafe;
+      --blue-dk:     #1e3a8a;
+      --blue-md:     #60a5fa;
+
+      /* ── 포인트: 고채도 그린 ── */
+      --green:       #16a34a;   /* 선명한 에메랄드 그린 */
+      --green-lt:    #dcfce7;
+      --green-dk:    #14532d;
+
+      /* ── 포인트: 고채도 오렌지 ── */
+      --amber:       #ea580c;   /* 선명한 오렌지 (기존 amber보다 채도↑) */
+      --amber-lt:    #ffedd5;
+      --amber-dk:    #9a3412;
+
+      /* ── 포인트: 고채도 레드 ── */
+      --red:         #dc2626;   /* 선명한 레드 */
+      --red-lt:      #fee2e2;
+      --red-dk:      #7f1d1d;
+
+      --purple:      #7c3aed;
+      --purple-lt:   #ede9fe;
+
+      /* ── 그림자 ── */
+      --sh-sm:  0 1px 3px rgba(15,37,84,0.09), 0 1px 2px rgba(15,37,84,0.05);
+      --sh-md:  0 4px 12px rgba(15,37,84,0.11), 0 1px 3px rgba(15,37,84,0.07);
+      --sh-lg:  0 8px 24px rgba(15,37,84,0.15), 0 2px 6px rgba(15,37,84,0.07);
+
+      /* ── 기타 ── */
+      --radius:      8px;
+      --radius-sm:   6px;
+      --font:        'Noto Sans KR', 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+
+      /* 레거시 호환 */
+      --navy:        #0f2554;
+      --purple-md:   #c4b5fd;
+      --bg-sidebar:  var(--sub-bg);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font);
+      font-size: 13px;
+      line-height: 1.55;
+      color: var(--text);
+      background: var(--bg);
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button, input, select, textarea { font-family: var(--font); }
+
+    /* ════════════════════════════════
+       [A] 상단 헤더 — 화이트 플랫 바
+    ════════════════════════════════ */
+    .hd {
+      height: 52px;
+      background: var(--hd-bg);
+      border-bottom: 1px solid var(--hd-border);
+      box-shadow: var(--hd-shadow);
+      display: flex;
+      align-items: center;
+      padding: 0 16px 0 0;
+      z-index: 200;
+      flex-shrink: 0;
+      gap: 0;
+    }
+
+    /* 로고 영역 (레일 너비 고정) */
+    .hd-logo {
+      width: 64px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      background: var(--rail-bg);
+    }
+    .hd-logo svg { width: 28px; height: 28px; }
+
+    /* 시스템명 */
+    .hd-sysname {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 20px;
+      height: 100%;
+      border-right: 1px solid var(--hd-border);
+    }
+    .hd-sysname-text {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--rail-bg);
+      letter-spacing: -0.3px;
+    }
+    .hd-sysname-badge {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--blue);
+      background: var(--blue-lt);
+      padding: 2px 7px;
+      border-radius: 999px;
+      letter-spacing: 0.2px;
+    }
+
+    /* 브레드크럼 영역 */
+    .hd-breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 20px;
+      flex: 1;
+    }
+    .hd-bc-home {
+      color: var(--text-sub);
+      font-size: 13px;
+    }
+    .hd-bc-sep {
+      color: #cbd5e1;
+      font-size: 13px;
+    }
+    .hd-bc-parent {
+      color: var(--text-sub);
+      font-size: 14px;
+    }
+    .hd-bc-current {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .hd-bc-current::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--blue);
+      flex-shrink: 0;
+    }
+
+    /* 헤더 우측 영역 */
+    .hd-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .hd-auth-wrap {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 6px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+    }
+    .hd-auth-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-sub);
+      padding-right: 4px;
+      border-right: 1px solid var(--border);
+      margin-right: 2px;
+    }
+    .auth-btn {
+      border: none;
+      padding: 3px 10px;
+      border-radius: 4px;
+      font-size: 13px;
+      font-weight: 700;
+      font-family: var(--font);
+      cursor: pointer;
+      transition: all 0.15s;
+      background: transparent;
+      color: var(--text-sub);
+    }
+    .auth-btn.active {
+      background: var(--blue);
+      color: #ffffff;
+      box-shadow: 0 2px 5px rgba(29,78,216,0.35);
+    }
+    .auth-btn:hover:not(.active) { background: var(--blue-lt); color: var(--blue); }
+
+    .hd-user {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+    .hd-user-avatar {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--blue) 0%, var(--blue-dk) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+    .hd-user-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .hd-user-role {
+      font-size: 12px;
+      color: var(--text-sub);
+    }
+
+    .hd-divider {
+      width: 1px;
+      height: 24px;
+      background: var(--border);
+    }
+
+    .hd-icon-btn {
+      width: 34px; height: 34px;
+      border: none;
+      background: transparent;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-sub);
+      transition: background 0.15s, color 0.15s;
+    }
+    .hd-icon-btn:hover { background: var(--bg); color: var(--text); }
+    .hd-icon-btn svg { width: 18px; height: 18px; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+
+    .logout-lnk {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--red);
+      text-decoration: none;
+      padding: 4px 10px;
+      border-radius: var(--radius-sm);
+      transition: background 0.15s;
+    }
+    .logout-lnk:hover { background: var(--red-lt); }
+
+    /* ════════════════════════════════
+       [B] 바디 레이아웃
+    ════════════════════════════════ */
+    .body-wrap {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+      height: calc(100vh - 52px);
+    }
+
+    /* ════════════════════════════════
+       [B1] 레일 — 아이콘 전용 좌측 바
+    ════════════════════════════════ */
+    .rail {
+      width: 64px;
+      background: var(--rail-bg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 8px 0;
+      flex-shrink: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      z-index: 100;
+    }
+    .rail::-webkit-scrollbar { display: none; }
+
+    .rail-item {
+      width: 48px;
+      min-height: 52px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      cursor: pointer;
+      border-radius: var(--radius);
+      margin: 2px 0;
+      padding: 6px 4px;
+      position: relative;
+      transition: background 0.15s;
+      color: var(--rail-text);
+      user-select: none;
+    }
+    .rail-item:hover { background: var(--rail-hover); color: #c8d8ee; }
+    .rail-item.active {
+      background: var(--rail-active);
+      color: #ffffff;
+    }
+    .rail-item.active::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 25%; bottom: 25%;
+      width: 3px;
+      border-radius: 0 3px 3px 0;
+      background: var(--rail-accent);
+    }
+    .rail-item-icon { width: 22px; height: 22px; flex-shrink: 0; }
+    .rail-item-icon svg {
+      width: 100%; height: 100%;
+      stroke: currentColor;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+      display: block;
+    }
+    .rail-item-label {
+      font-size: 12px;
+      font-weight: 600;
+      text-align: center;
+      line-height: 1.2;
+      word-break: keep-all;
+    }
+
+    .rail-divider {
+      width: 32px;
+      height: 1px;
+      background: rgba(255,255,255,0.08);
+      margin: 6px 0;
+      flex-shrink: 0;
+    }
+
+    .rail-bottom {
+      margin-top: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding-top: 8px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      width: 100%;
+      padding: 8px 0;
+    }
+
+    /* ════════════════════════════════
+       [B2] 서브메뉴 패널 (슬라이드 인)
+    ════════════════════════════════ */
+    .sub-panel {
+      width: var(--sub-w);
+      background: var(--sub-bg);
+      border-right: 1px solid var(--sub-border);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      overflow: hidden;
+      transition: width 0.22s cubic-bezier(0.4,0,0.2,1);
+    }
+    .sub-panel.hidden { width: 0; border-right: none; }
+
+    .sub-panel-header {
+      padding: 16px 16px 10px;
+      border-bottom: 1px solid var(--sub-border);
+      flex-shrink: 0;
+    }
+    .sub-panel-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .sub-panel-title-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--rail-accent);
+      flex-shrink: 0;
+    }
+
+    .sub-menu-list {
+      list-style: none;
+      padding: 8px 8px;
+      flex: 1;
+      overflow-y: auto;
+    }
+    .sub-menu-list::-webkit-scrollbar { width: 3px; }
+    .sub-menu-list::-webkit-scrollbar-thumb { background: #c8d4e0; border-radius: 2px; }
+
+    .sub-menu-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-sub);
+      transition: background 0.12s, color 0.12s;
+      margin: 1px 0;
+    }
+    .sub-menu-item::before {
+      content: '';
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: #cbd5e1;
+      flex-shrink: 0;
+      transition: background 0.12s, transform 0.12s;
+    }
+    .sub-menu-item:hover { background: var(--blue-lt); color: var(--blue); }
+    .sub-menu-item:hover::before { background: var(--blue-md); transform: scale(1.5); }
+    .sub-menu-item.active {
+      background: var(--blue-lt);
+      color: var(--blue-dk);
+      font-weight: 700;
+    }
+    .sub-menu-item.active::before { background: var(--blue); transform: scale(1.5); }
+
+    /* 사이드 하단 시스템 링크 */
+    .sub-sys-links {
+      padding: 12px 8px;
+      border-top: 1px solid var(--sub-border);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+    .sys-link-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--bg2);
+      color: var(--text-sub);
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .sys-link-btn:hover { background: var(--blue-lt); border-color: var(--blue-md); color: var(--blue-dk); }
+    .sys-link-icon {
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--blue) 0%, var(--blue-dk) 100%);
+      padding: 1px;
+      flex-shrink: 0;
+    }
+    .sys-link-icon-inner {
+      width: 100%; height: 100%;
+      border-radius: 50%;
+      background: var(--bg2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .sys-link-icon-inner svg {
+      width: 13px; height: 13px;
+      stroke: var(--blue);
+      stroke-width: 2.3;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+
+    /* ════════════════════════════════
+       [C] 콘텐츠 패널
+    ════════════════════════════════ */
+    .content-panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      min-width: 0;
+    }
+
+    /* 탭 바 */
+    .tab-bar {
+      height: 44px;
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: flex-end;
+      padding: 0 16px;
+      gap: 4px;
+      flex-shrink: 0;
+      overflow-x: auto;
+    }
+    .tab-bar::-webkit-scrollbar { display: none; }
+
+    .tab-chip {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      height: 34px;
+      padding: 0 14px;
+      border-radius: 6px 6px 0 0;
+      border: 1px solid transparent;
+      border-bottom: none;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-sub);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.12s, color 0.12s;
+      user-select: none;
+      position: relative;
+      background: transparent;
+    }
+    .tab-chip:hover { background: var(--bg); color: var(--text); }
+    .tab-chip.active {
+      background: var(--bg);
+      color: var(--blue-dk);
+      font-weight: 800;
+      border-color: var(--border);
+      box-shadow: 0 -2px 0 var(--blue) inset;
+    }
+    .tab-chip-close {
+      width: 16px; height: 16px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      line-height: 1;
+      color: #94a3b8;
+      transition: background 0.12s, color 0.12s;
+    }
+    .tab-chip-close:hover { background: #e2e8f0; color: var(--red); }
+
+    /* 서브탭 (콘텐츠 내 탭) */
+    .subtab-bar {
+      display: flex;
+      gap: 6px;
+      padding: 12px 24px 0;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg2);
+      flex-shrink: 0;
+    }
+    .subtab-btn {
+      height: 36px;
+      padding: 0 16px;
+      border: none;
+      border-bottom: 2px solid transparent;
+      background: transparent;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-sub);
+      cursor: pointer;
+      transition: color 0.12s, border-color 0.12s;
+      white-space: nowrap;
+    }
+    .subtab-btn:hover { color: var(--blue); }
+    .subtab-btn.active { color: var(--blue-dk); border-bottom-color: var(--blue); font-weight: 800; }
+
+    /* 콘텐츠 스크롤 영역 */
+    .content-scroll {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 24px;
+      background: var(--bg);
+    }
+    .content-scroll::-webkit-scrollbar { width: 5px; }
+    .content-scroll::-webkit-scrollbar-thumb { background: #c8d4e0; border-radius: 3px; }
+
+    /* ════════════════════════════════
+       카드 / 컴포넌트 시스템
+    ════════════════════════════════ */
+    .card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-bottom: 16px;
+      box-shadow: var(--sh-sm);
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .card-title-icon {
+      width: 28px; height: 28px;
+      border-radius: 6px;
+      background: var(--blue-lt);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .card-title-icon svg {
+      width: 15px; height: 15px;
+      stroke: var(--blue);
+      stroke-width: 2.3;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+
+    /* 히어로 카드 */
+    .hero-card {
+      background: linear-gradient(135deg, var(--rail-bg) 0%, #1d4ed8 100%);
+      border: none;
+      border-radius: var(--radius);
+      padding: 22px 28px;
+      margin-bottom: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-card::after {
+      content: '';
+      position: absolute;
+      right: -30px; top: -40px;
+      width: 160px; height: 160px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+    }
+    .hero-tag {
+      font-size: 12px;
+      font-weight: 700;
+      color: #7dd3fc;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .hero-tag::before {
+      content: '';
+      display: inline-block;
+      width: 18px;
+      height: 2px;
+      background: var(--rail-accent);
+      border-radius: 1px;
+    }
+    .hero-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 6px;
+    }
+    .hero-desc {
+      font-size: 14px;
+      color: #bfdbfe;
+      margin-bottom: 14px;
+    }
+    .hero-badges { display: flex; gap: 6px; flex-wrap: wrap; }
+    .hero-badge {
+      font-size: 13px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 99px;
+      border: 1px solid rgba(255,255,255,0.15);
+      color: rgba(255,255,255,0.85);
+      background: rgba(255,255,255,0.08);
+    }
+    .hero-badge.hi { background: rgba(59,130,246,0.35); border-color: rgba(59,130,246,0.6); color: #93c5fd; }
+
+    /* KPI 카드 그리드 */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .kpi-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      box-shadow: var(--sh-sm);
+      position: relative;
+      overflow: hidden;
+    }
+    .kpi-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--blue);
+      border-radius: var(--radius) var(--radius) 0 0;
+    }
+    .kpi-card.green::before  { background: var(--green); }
+    .kpi-card.amber::before  { background: var(--amber); }
+    .kpi-card.red::before    { background: var(--red); }
+    .kpi-card.purple::before { background: var(--purple); }
+
+    .kpi-lbl  { font-size: 13px; font-weight: 700; color: var(--text-sub); margin-bottom: 8px; }
+    .kpi-val  { font-size: 26px; font-weight: 900; color: var(--text); line-height: 1; }
+    .kpi-unit { font-size: 15px; font-weight: 500; color: var(--text-sub); margin-left: 2px; }
+    .kpi-sub  { font-size: 13px; color: var(--text-sub); margin-top: 6px; }
+
+    /* 검색 폼 */
+    .search-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px;
+      align-items: end;
+    }
+    .form-group { display: flex; flex-direction: column; gap: 5px; }
+    .form-group label { font-size: 13px; font-weight: 700; color: var(--text-label); }
+    .required { color: var(--red); margin-left: 2px; }
+
+    .form-control {
+      height: 36px;
+      padding: 0 10px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-family: var(--font);
+      background: var(--bg2);
+      color: var(--text);
+      transition: border-color 0.15s, box-shadow 0.15s;
+      width: 100%;
+    }
+    .form-control:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px rgba(29,78,216,0.12); }
+
+    .search-row {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 12px;
+    }
+    .search-row-label {
+      width: 120px;
+      flex-shrink: 0;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-label);
+    }
+
+    /* 버튼 */
+    .btn {
+      height: 36px;
+      padding: 0 16px;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 700;
+      font-family: var(--font);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .btn svg { width: 14px; height: 14px; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+
+    .btn-primary   { background: var(--blue); color: #fff; }
+    .btn-primary:hover  { background: var(--blue-dk); box-shadow: 0 4px 10px rgba(29,78,216,0.3); }
+    .btn-success   { background: var(--green); color: #fff; }
+    .btn-success:hover  { background: var(--green-dk); }
+    .btn-secondary { background: #64748b; color: #fff; }
+    .btn-secondary:hover { background: #475569; }
+    .btn-outline   { background: var(--bg2); color: var(--text); border: 1.5px solid var(--border); }
+    .btn-outline:hover { background: var(--bg); border-color: var(--blue-md); color: var(--blue); }
+    .btn-ghost     { background: transparent; color: var(--text-sub); }
+    .btn-ghost:hover { background: var(--bg); color: var(--text); }
+
+    /* 기간 프리셋 */
+    .date-preset-btn {
+      height: 30px;
+      padding: 0 9px;
+      font-size: 13px;
+      font-weight: 600;
+      border: 1.5px solid var(--border);
+      background: var(--bg2);
+      color: var(--text-sub);
+      border-radius: 99px;
+      cursor: pointer;
+      font-family: var(--font);
+      transition: all 0.12s;
+    }
+    .date-preset-btn:hover { border-color: var(--blue-md); color: var(--blue); }
+    .date-preset-btn.active { background: var(--blue); color: #fff; border-color: var(--blue); }
+
+    /* 라디오 */
+    .radio-group { display: flex; gap: 16px; align-items: center; height: 36px; }
+    .radio-item  { display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 14px; }
+    .radio-item input { accent-color: var(--blue); width: 15px; height: 15px; }
+
+    /* 테이블 */
+    .table-wrap { width: 100%; overflow-x: auto; }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: center;
+      font-size: 14px;
+    }
+    .data-table th {
+      background: var(--bg);
+      color: var(--text-label);
+      font-weight: 700;
+      font-size: 13px;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      border-top: 1px solid var(--border);
+      white-space: nowrap;
+      letter-spacing: 0.2px;
+      text-align: center;
+    }
+    .data-table td {
+      padding: 11px 14px;
+      border-bottom: 1px solid #f1f5f9;
+      color: var(--text);
+      vertical-align: middle;
+      text-align: center;
+    }
+    .data-table tbody tr:hover { background: #f8faff; }
+    .data-table tbody tr:last-child td { border-bottom: none; }
+
+    /* 배지 */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 99px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .badge-success   { background: var(--green-lt); color: var(--green-dk); }
+    .badge-danger    { background: var(--red-lt); color: var(--red-dk); }
+    .badge-secondary { background: #f1f5f9; color: #64748b; }
+    .badge-warning   { background: var(--amber-lt); color: var(--amber-dk); }
+    .badge-blue      { background: var(--blue-lt); color: var(--blue-dk); }
+
+    /* 페이지네이션 */
+    .table-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 14px;
+      font-size: 13px;
+      color: var(--text-sub);
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .pagination { display: flex; gap: 3px; }
+    .page-btn {
+      min-width: 30px; height: 30px;
+      padding: 0 7px;
+      border: 1px solid var(--border);
+      background: var(--bg2);
+      color: var(--text-sub);
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 13px;
+      font-family: var(--font);
+      font-weight: 700;
+      transition: all 0.12s;
+    }
+    .page-btn:hover { border-color: var(--blue-md); color: var(--blue); }
+    .page-btn.active { background: var(--blue); color: #fff; border-color: var(--blue); }
+
+    /* 준비중 */
+    .prep-card {
+      text-align: center;
+      padding: 80px 40px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+    .prep-icon svg {
+      width: 52px; height: 52px;
+      stroke: #cbd5e1;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+    .prep-title { font-size: 18px; font-weight: 700; color: var(--text); }
+    .prep-desc  { font-size: 14px; color: var(--text-sub); }
+
+    /* 푸터 */
+    .footer {
+      text-align: center;
+      padding: 20px 0 8px;
+      font-size: 13px;
+      color: var(--text-sub);
+      border-top: 1px solid var(--border);
+      margin-top: 32px;
+    }
+
+    /* 통계 차트 컴포넌트 */
+    .stat-bar-container { margin-bottom: 14px; }
+    .stat-bar-title-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+    .stat-bar-label { font-size: 14px; font-weight: 700; color: var(--text); }
+    .stat-bar-value { font-size: 14px; font-weight: 700; color: var(--text-sub); }
+    .stat-bar-outer {
+      height: 22px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .stat-bar-inner {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 10px;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      border-radius: 99px;
+      white-space: nowrap;
+    }
+
+    .stat-donut-container { display: flex; align-items: center; gap: 28px; flex-wrap: wrap; margin: 14px 0; }
+    .stat-donut-chart {
+      width: 130px; height: 130px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      box-shadow: var(--sh-sm);
+    }
+    .stat-donut-legend { display: flex; flex-direction: column; gap: 8px; }
+    .stat-donut-legend-item { display: flex; align-items: center; gap: 8px; font-size: 14px; }
+    .stat-donut-color-dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+
+    .stat-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px;
+      margin: 14px 0;
+    }
+    .stat-grid-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+    }
+    .stat-grid-card-title { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+    .stat-grid-card-desc  { font-size: 14px; color: var(--text-sub); line-height: 1.5; }
+
+    /* ════════════════════════════════
+       로그인 화면
+    ════════════════════════════════ */
+    .login-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: calc(100vh - 52px - 44px);
+      overflow: hidden;
+      /* 배경: 네이비→블루 대각 그라데이션 */
+      background: linear-gradient(145deg, var(--rail-bg) 0%, #1d4ed8 60%, #1e40af 100%);
+    }
+    /* SVG 도트 패턴 오버레이 */
+    .login-wrap::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(circle, rgba(255,255,255,0.12) 1px, transparent 1px);
+      background-size: 28px 28px;
+      pointer-events: none;
+      z-index: 0;
+    }
+    /* 우측 상단 글로우 */
+    .login-wrap::after {
+      content: '';
+      position: absolute;
+      top: -120px; right: -120px;
+      width: 480px; height: 480px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(59,130,246,0.35) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    /* 중앙 컨테이너 */
+    .login-center {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 56px;
+      align-items: center;
+      width: 100%;
+      max-width: 860px;
+      padding: 48px 40px;
+    }
+    .login-left {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .login-eyebrow {
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: #93c5fd;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .login-eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 24px; height: 2px;
+      background: #60a5fa;
+      border-radius: 1px;
+    }
+    .login-headline {
+      font-size: 32px;
+      font-weight: 900;
+      color: #ffffff;
+      line-height: 1.3;
+      margin-bottom: 14px;
+      word-break: keep-all;
+    }
+    .login-headline .hl { color: #60a5fa; }
+    .login-subline {
+      font-size: 13px;
+      font-weight: 700;
+      color: #bfdbfe;
+      margin-bottom: 18px;
+      word-break: keep-all;
+      line-height: 1.6;
+    }
+    .login-subline .hl2 { color: #fdba74; }
+    .login-detail {
+      font-size: 14px;
+      color: #93b4e0;
+      line-height: 1.8;
+    }
+    /* 라이프사이클 칩 */
+    .login-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 22px;
+    }
+    .login-chip {
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 99px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: rgba(255,255,255,0.8);
+    }
+    .login-right {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .login-card {
+      width: 100%;
+      max-width: 320px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px 28px 24px;
+      box-shadow: var(--sh-lg);
+    }
+    .login-card-title { font-size: 18px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
+    .login-card-sub   { font-size: 14px; color: var(--text-sub); margin-bottom: 22px; }
+    .login-form { display: flex; flex-direction: column; gap: 14px; }
+    .login-field { display: flex; flex-direction: column; gap: 6px; }
+    .login-field label { font-size: 13px; font-weight: 800; color: #334155; }
+    .login-field input {
+      height: 42px;
+      padding: 0 12px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: #fff;
+      font-size: 15px;
+      color: var(--text);
+      font-family: var(--font);
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .login-field input:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px rgba(29,78,216,0.12); }
+    .login-options { display: flex; align-items: center; margin: 2px 0; }
+    .login-save { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text-sub); cursor: pointer; }
+    .login-save input { accent-color: var(--blue); width: 14px; height: 14px; }
+    .login-submit {
+      height: 42px;
+      border: none;
+      border-radius: var(--radius-sm);
+      background: var(--blue);
+      color: #fff;
+      font-size: 15px;
+      font-weight: 800;
+      font-family: var(--font);
+      cursor: pointer;
+      transition: background 0.15s, transform 0.15s;
+      box-shadow: 0 6px 16px rgba(29,78,216,0.25);
+    }
+    .login-submit:hover { background: var(--blue-dk); transform: translateY(-1px); }
+    .login-contact {
+      margin-top: 16px;
+      padding: 12px 14px;
+      border-radius: var(--radius-sm);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      font-size: 13px;
+      color: var(--text-sub);
+      line-height: 1.6;
+    }
+
+    /* ════════════════════════════════
+       플로팅 FAB + 모달
+    ════════════════════════════════ */
+
+
+    .desc-modal {
+      position: fixed;
+      bottom: 112px;
+      right: 22px;
+      width: 380px;
+      max-height: 480px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--sh-lg);
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transform: scale(0.92) translateY(8px);
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.2s cubic-bezier(0.16,1,0.3,1);
+    }
+    .desc-modal.open { transform: scale(1) translateY(0); opacity: 1; pointer-events: auto; }
+    .desc-modal-header {
+      padding: 12px 16px;
+      background: var(--rail-bg);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .desc-modal-header h3 { font-size: 14px; font-weight: 700; margin: 0; }
+    .desc-modal-close { background: none; border: none; color: #fff; font-size: 20px; cursor: pointer; opacity: 0.7; line-height: 1; }
+    .desc-modal-close:hover { opacity: 1; }
+    .desc-modal-body { padding: 16px; overflow-y: auto; font-size: 14px; line-height: 1.55; color: var(--text); }
+    .desc-section { margin-bottom: 14px; }
+    .desc-section-title { font-weight: 800; color: var(--blue); margin-bottom: 6px; font-size: 14px; }
+    .desc-text {
+      background: var(--bg);
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px dashed var(--border);
+      white-space: pre-line;
+      font-size: 14px;
+    }
+
+    /* 온라인 매뉴얼 모달 */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.35);
+      z-index: 1999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: auto; }
+
+    .modal-box {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.92);
+      width: 520px;
+      max-width: 90%;
+      max-height: 80vh;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--sh-lg);
+      z-index: 2000;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.2s cubic-bezier(0.16,1,0.3,1);
+    }
+    .modal-box.open { transform: translate(-50%,-50%) scale(1); opacity: 1; pointer-events: auto; }
+    .modal-header {
+      padding: 14px 18px;
+      background: var(--rail-bg);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .modal-header h3 { font-size: 15px; font-weight: 700; margin: 0; }
+    .modal-close { background: none; border: none; color: #fff; font-size: 22px; cursor: pointer; opacity: 0.7; line-height: 1; }
+    .modal-close:hover { opacity: 1; }
+    .modal-body { padding: 20px; overflow-y: auto; font-family: var(--font); font-size: 14px; }
+
+    #admin-detail-modal { width: 580px; }
+
+    /* 아이콘 유틸 */
+    .ui-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .ui-icon svg {
+      width: 15px; height: 15px;
+      stroke: currentColor;
+      stroke-width: 2.3;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══ [A] 헤더 ══ -->
+  <header class="hd">
+    <!-- 레일 너비만큼의 로고 슬롯 -->
+    <div class="hd-logo"></div>
+
+    <!-- 시스템명 -->
+    <div class="hd-sysname">
+      <span class="hd-sysname-text">사업관리시스템</span>
+      <span class="hd-sysname-badge">PMS</span>
+    </div>
+
+    <!-- 브레드크럼 -->
+    <div class="hd-breadcrumb">
+      <span class="hd-bc-home">H</span>
+      <span class="hd-bc-sep">›</span>
+      <span class="hd-bc-parent" id="breadcrumb-parent">공통관리</span>
+      <span class="hd-bc-sep">›</span>
+      <span class="hd-bc-current" id="breadcrumb-current-title">관리자 관리</span>
+    </div>
+
+    <!-- 우측 영역 -->
+    <div class="hd-right">
+      <div class="hd-auth-wrap">
+        <span class="hd-auth-label">권한</span>
+        <div id="auth-group-buttons">
+          <button class="auth-btn active" data-auth="1">그룹#1</button>
+          <button class="auth-btn" data-auth="3">그룹#3</button>
+          <button class="auth-btn" data-auth="4">그룹#4</button>
+        </div>
+      </div>
+
+      <div class="hd-divider"></div>
+
+      <div class="hd-user">
+        <div style="display:flex;align-items:center;gap:6px;white-space:nowrap;">
+          <span class="hd-user-name" id="user-greeting">이희성 부장</span>
+          <span style="color:#cbd5e1;font-size:13px;">|</span>
+          <span class="hd-user-role" id="user-role">시스템관리자</span>
+        </div>
+      </div>
+
+      <a href="#" class="logout-lnk" onclick="alert('로그아웃 되었습니다.')">로그아웃</a>
+    </div>
+  </header>
+
+  <!-- ══ 바디 래퍼 ══ -->
+  <div class="body-wrap">
+
+    <!-- ══ [B1] 레일 ══ -->
+    <nav class="rail" id="rail-nav"></nav>
+
+    <!-- ══ [B2] 서브메뉴 패널 ══ -->
+    <div class="sub-panel" id="sub-panel">
+      <div class="sub-panel-header">
+        <div class="sub-panel-title">
+          <span class="sub-panel-title-dot"></span>
+          <span id="sub-panel-title-text">공통관리</span>
+        </div>
+      </div>
+      <ul class="sub-menu-list" id="sub-menu-list"></ul>
+      <div class="sub-sys-links">
+        <a class="sys-link-btn" onclick="alert('사업관리시스템(PMS)으로 이동합니다.')">
+          <div class="sys-link-icon">
+            <div class="sys-link-icon-inner">
+              <svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M8 17V9"/><path d="M13 17V5"/><path d="M18 17v-3"/></svg>
+            </div>
+          </div>
+          <span>사업관리시스템(PMS)</span>
+        </a>
+        <a class="sys-link-btn" onclick="alert('전자입찰시스템(SRM)으로 이동합니다.')">
+          <div class="sys-link-icon">
+            <div class="sys-link-icon-inner">
+              <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8"/><path d="M8 17h6"/></svg>
+            </div>
+          </div>
+          <span>전자입찰시스템(SRM)</span>
+        </a>
+        <a class="sys-link-btn" onclick="toggleDescModal()" style="background:var(--blue-lt);border-color:var(--blue-md);color:var(--blue-dk);">
+          <div style="width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--blue-dk));display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 1 1 5.8 1c-.5 1.4-2.9 1.8-2.9 4"/><path d="M12 17h.01"/></svg>
+          </div>
+          <span>온라인 매뉴얼</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- ══ [C] 콘텐츠 패널 ══ -->
+    <div class="content-panel">
+      <!-- 탭 바 -->
+      <div class="tab-bar" id="tab-bar"></div>
+
+      <!-- 콘텐츠 스크롤 -->
+      <div class="content-scroll" id="content-scroll">
+        <div id="contents-container"></div>
+        <footer class="footer">© 2026 KEPCO Energy Solution. All Rights Reserved.</footer>
+      </div>
+    </div>
+  </div>
+
+  <!-- 기획 가이드 모달 -->
+  <div class="desc-modal" id="desc-modal">
+    <div class="desc-modal-header">
+      <h3>개발 참고 가이드 (PM & 기획 메모)</h3>
+      <button class="desc-modal-close" onclick="toggleDescModal()">×</button>
+    </div>
+    <div class="desc-modal-body" id="desc-modal-body"></div>
+  </div>
+
+  <!-- 온라인 매뉴얼 모달 -->
+  <div class="modal-overlay" id="online-manual-overlay" onclick="closeOnlineManual()"></div>
+  <div class="modal-box" id="online-manual-modal">
+    <div class="modal-header">
+      <h3>KEPCO ES PMS 온라인 매뉴얼</h3>
+      <button class="modal-close" onclick="closeOnlineManual()">×</button>
+    </div>
+    <div class="modal-body">
+      <h4 style="margin-top:0;color:var(--text);font-size:13px;border-bottom:2px solid var(--blue-lt);padding-bottom:6px;">1. 프로젝트 개요 및 성격</h4>
+      <p style="margin:8px 0 16px;font-size:13px;line-height:1.6;color:var(--text-sub);">본 사업은 단순 시스템 고도화가 아닌 켑코이에스의 핵심 사업관리 체계를 디지털 기반으로 재설계하는 업무혁신 사업입니다.</p>
+      <h4 style="color:var(--text);font-size:13px;border-bottom:2px solid var(--blue-lt);padding-bottom:6px;">2. 에너지효율화사업 전체 라이프사이클</h4>
+      <div style="background:var(--bg);border:1px solid var(--border);padding:10px;border-radius:6px;margin:8px 0 16px;font-size:13px;line-height:1.8;color:var(--text-sub);">
+        <strong>사업 접수</strong> → 현장 컨설팅 → EPC 선정 → 사업성 검토 → 사업 사전 검토 → 사업 추진 계획 → 사업 심의 → 사업 시행 → 계약 체결 → 공사 관리 → 준공 검사 → <strong>상환 관리</strong> → M&V
+      </div>
+      <h4 style="color:var(--text);font-size:13px;border-bottom:2px solid var(--blue-lt);padding-bottom:6px;">3. 데이터 흐름 설계 원칙</h4>
+      <ul style="margin:8px 0 0 16px;padding:0;font-size:13px;line-height:1.7;color:var(--text-sub);">
+        <li>데이터 생성원 단일화 (Single Source of Truth)</li>
+        <li>ERP 및 SRM, PMS 간 실시간 인터페이스 자동화</li>
+        <li>데이터 정합성 확보 및 변경 이력 추적</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 관리자 상세 모달 -->
+  <div class="modal-overlay" id="admin-detail-overlay" onclick="closeAdminDetail()"></div>
+  <div class="modal-box" id="admin-detail-modal">
+    <div class="modal-header">
+      <h3>관리자 상세 정보</h3>
+      <button class="modal-close" onclick="closeAdminDetail()">×</button>
+    </div>
+    <div class="modal-body">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px;">
+        <div class="form-group"><label>사원번호</label><input type="text" id="detail-empNo" class="form-control" readonly style="background:var(--bg);cursor:not-allowed;"></div>
+        <div class="form-group"><label>아이디</label><input type="text" id="detail-username" class="form-control" readonly style="background:var(--bg);cursor:not-allowed;"></div>
+        <div class="form-group"><label>사원명</label><input type="text" id="detail-name" class="form-control" readonly style="background:var(--bg);cursor:not-allowed;"></div>
+        <div class="form-group"><label>부서</label><input type="text" id="detail-dept" class="form-control" readonly style="background:var(--bg);cursor:not-allowed;"></div>
+        <div class="form-group"><label>직급</label><input type="text" id="detail-position" class="form-control" readonly style="background:var(--bg);cursor:not-allowed;"></div>
+        <div class="form-group"><label>이메일</label><input type="text" id="detail-email" class="form-control" readonly style="background:var(--bg);cursor:not-allowed;"></div>
+      </div>
+      <div style="border-top:1px solid var(--border);padding-top:14px;margin-bottom:16px;">
+        <h4 style="font-size:13px;font-weight:800;color:var(--text);margin-bottom:12px;">수정/등록 항목</h4>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+          <div class="form-group">
+            <label>사용여부 <span style="color:var(--red);">*</span></label>
+            <div class="radio-group">
+              <label class="radio-item"><input type="radio" name="detail-status" id="detail-status-use" value="사용"> 사용</label>
+              <label class="radio-item"><input type="radio" name="detail-status" id="detail-status-stop" value="중지"> 중지</label>
+            </div>
+          </div>
+          <div class="form-group"><label>접속아이피 <span style="color:var(--red);">*</span></label><input type="text" id="detail-ip" class="form-control" placeholder="예: 192.168.0.100"></div>
+        </div>
+      </div>
+      <div style="border-top:1px solid var(--border);padding-top:14px;margin-bottom:16px;">
+        <h4 style="font-size:13px;font-weight:800;color:var(--text);margin-bottom:10px;">부여된 권한그룹</h4>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;" id="detail-auth-groups"></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;background:var(--bg);padding:10px;border-radius:6px;font-size:13px;color:var(--text-sub);border:1px dashed var(--border);margin-bottom:16px;">
+        <div>• 등록자: <span id="detail-regUser"></span> (<span id="detail-regDate"></span>)</div>
+        <div>• 최종수정일시: <span id="detail-editDate"></span></div>
+      </div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;">
+        <button class="btn btn-primary" onclick="saveAdminDetail()">저장</button>
+        <button class="btn btn-outline" onclick="closeAdminDetail()">닫기</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ══════════════════════════════════════
+       메뉴 데이터 — 원본과 동일
+    ══════════════════════════════════════ */
+    const menuData = [
+      { id:'menu-login', label:'로그인', icon:'login', children:[{id:'login-1',label:'로그인'}] },
+      { id:'menu-rec', label:'접수관리', icon:'inbox', children:[{id:'rec-1',label:'접수현황 및 관리'}] },
+      { id:'menu-dsn', label:'설계관리', icon:'edit', children:[{id:'dsn-1',label:'설계도서 관리'}] },
+      { id:'menu-con', label:'계약관리', icon:'clipboard', children:[{id:'con-1',label:'계약 현황'}] },
+      { id:'menu-rep', label:'상환관리', icon:'credit-card', children:[{id:'rep-1',label:'상환 스케줄'}] },
+      { id:'menu-acc', label:'결산현황', icon:'wallet', children:[{id:'acc-1',label:'월별/연도별 결산'}] },
+      { id:'menu-trip', label:'출장관리', icon:'car', children:[{id:'trip-1',label:'출장신청 및 내역'}] },
+      { id:'menu-stat-analysis', label:'통계분석', icon:'bar-chart', children:[
+        {id:'stat-analysis-1',label:'종합현황'},
+        {id:'stat-analysis-2',label:'연도별 추이'},
+        {id:'stat-analysis-3',label:'부서/분야별 현황'},
+        {id:'stat-analysis-4',label:'진행/이상 현황'},
+        {id:'stat-analysis-5',label:'상환/회수 현황'},
+        {id:'stat-analysis-6',label:'수익율 분석'},
+        {id:'stat-analysis-7',label:'상환스케쥴 현황'}
+      ]},
+      { id:'menu-common', label:'공통관리', icon:'settings', active:true, children:[
+        {id:'common-1',label:'관리자 관리',active:true},
+        {id:'common-2',label:'권한그룹 및 권한 관리'},
+        {id:'common-3',label:'접속 아이피(IP) 관리'},
+        {id:'common-4',label:'개인정보 수정'}
+      ]},
+      { id:'menu-config', label:'환경설정', icon:'wrench', children:[{id:'config-1',label:'시스템 설정'}] }
+    ];
+
+    const tabData = {
+      'login-1':['로그인'],
+      'rec-1':['접수 목록','접수 등록'],
+      'dsn-1':['설계 목록','설계 등록'],
+      'con-1':['계약 목록','계약 등록'],
+      'rep-1':['상환 스케줄러','상환 수금등록'],
+      'acc-1':['결산 목록','결산 세부현황'],
+      'trip-1':['출장 신청','출장 정산'],
+      'stat-analysis-1':['종합현황'],
+      'stat-analysis-2':['연도별 추이'],
+      'stat-analysis-3':['부서/분야별 현황'],
+      'stat-analysis-4':['진행/이상 현황'],
+      'stat-analysis-5':['상환/회수 현황'],
+      'stat-analysis-6':['수익율 분석'],
+      'stat-analysis-7':['상환스케쥴 현황'],
+      'common-1':['관리자 목록','권한 설정','이력 조회'],
+      'common-2':['권한그룹 목록','권한 항목 설정'],
+      'common-3':['IP 목록','IP 등록'],
+      'common-4':['기본 정보','비밀번호 변경'],
+      'config-1':['시스템 옵션','코드 관리']
+    };
+
+    let adminList = [
+      { id:1, empNo:'EMP001', username:'hslee', name:'이희성', dept:'에너지사업부', position:'부장', email:'hslee@kepcoes.co.kr', status:'사용', regDate:'2026-06-01 09:15:30', regUser:'관리자A', editDate:'2026-06-15 14:30:22', ip:'192.168.10.11', authGroups:['1','3'] },
+      { id:2, empNo:'EMP002', username:'cskim', name:'김철수', dept:'ICT지원부', position:'대리', email:'cskim@kepcoes.co.kr', status:'사용', regDate:'2026-06-02 10:20:45', regUser:'관리자A', editDate:'2026-06-14 11:15:10', ip:'192.168.10.12', authGroups:['3'] },
+      { id:3, empNo:'EMP003', username:'yhpark', name:'박영희', dept:'기획실', position:'과장', email:'yhpark@kepcoes.co.kr', status:'사용', regDate:'2026-06-03 14:05:12', regUser:'이희성', editDate:'2026-06-12 16:45:00', ip:'192.168.10.13', authGroups:['1','4'] },
+      { id:4, empNo:'EMP004', username:'gdhong', name:'홍길동', dept:'에너지사업부', position:'차장', email:'gdhong@kepcoes.co.kr', status:'중지', regDate:'2026-05-15 09:00:00', regUser:'관리자A', editDate:'2026-05-30 18:22:15', ip:'192.168.10.14', authGroups:['4'] },
+      { id:5, empNo:'EMP005', username:'mkchoi', name:'최미경', dept:'재무관리부', position:'사원', email:'mkchoi@kepcoes.co.kr', status:'사용', regDate:'2026-06-10 11:30:24', regUser:'이희성', editDate:'2026-06-11 10:05:59', ip:'192.168.10.15', authGroups:['3','4'] }
+    ];
+
+    let currentActiveMenuId = 'common-1';
+    let currentActiveTab    = '관리자 목록';
+    let currentRailId       = 'menu-common';
+    let openTabs            = [{ id:'common-1', childId:'common-1', tabName:'관리자 목록', label:'관리자 관리' }];
+    let selectedAuthGroup   = '1';
+
+    /* ── SVG 아이콘 맵 ── */
+    const iconSvg = {
+      login:'<path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/>',
+      inbox:'<path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.5 5h13L22 12v6a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-6z"/>',
+      edit:'<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',
+      'bar-chart':'<path d="M3 3v18h18"/><path d="M8 17V9"/><path d="M13 17V5"/><path d="M18 17v-3"/>',
+      clipboard:'<rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>',
+      'credit-card':'<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/><path d="M6 15h4"/>',
+      wallet:'<path d="M19 7V5a2 2 0 0 0-2-2H5a3 3 0 0 0 0 6h14a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H5a3 3 0 0 1-3-3V6"/><path d="M16 13h.01"/>',
+      award:'<circle cx="12" cy="8" r="5"/><path d="M8.5 12.5 7 22l5-3 5 3-1.5-9.5"/>',
+      car:'<path d="M19 17h2l-2-6-3-4H8l-3 4-2 6h2"/><path d="M7 17h10"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/>',
+      settings:'<circle cx="12" cy="12" r="3"/><path d="M12 2v3"/><path d="M12 19v3"/><path d="M4.9 4.9l2.1 2.1"/><path d="M17 17l2.1 2.1"/><path d="M2 12h3"/><path d="M19 12h3"/><path d="M4.9 19.1 7 17"/><path d="M17 7l2.1-2.1"/>',
+      wrench:'<path d="M14.7 6.3a4 4 0 0 0-5 5L3 18l3 3 6.7-6.7a4 4 0 0 0 5-5l-2.4 2.4-3-3z"/>',
+      folder:'<path d="M3 7a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
+      trend:'<path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/>',
+      file:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8"/><path d="M8 17h6"/>',
+      book:'<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5z"/>',
+      user:'<path d="M20 21a8 8 0 0 0-16 0"/><circle cx="12" cy="7" r="4"/>',
+      building:'<path d="M3 21h18"/><path d="M5 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"/><path d="M9 8h4"/><path d="M9 12h4"/><path d="M9 16h4"/>',
+      alert:'<path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4"/><path d="M12 17h.01"/>',
+      dollar:'<path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7H14a3.5 3.5 0 0 1 0 7H6"/>',
+      calendar:'<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/>',
+      target:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/>',
+      construction:'<path d="M2 21h20"/><path d="M6 21V7l6-4 6 4v14"/><path d="M9 21v-8h6v8"/>',
+      pin:'<path d="M12 21s7-5.3 7-12a7 7 0 0 0-14 0c0 6.7 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/>',
+      help:'<circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 1 1 5.8 1c-.5 1.4-2.9 1.8-2.9 4"/><path d="M12 17h.01"/>',
+      ruler:'<path d="M3 17 17 3l4 4L7 21z"/><path d="M14 6l4 4"/><path d="M11 9l2 2"/><path d="M8 12l2 2"/>',
+    };
+
+    function svgIcon(name, size) {
+      const d = iconSvg[name] || iconSvg.folder;
+      const s = size || 16;
+      return `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
+    }
+    function uiIcon(name) {
+      return `<span class="ui-icon">${svgIcon(name, 15)}</span>`;
+    }
+
+    /* ── 레일 렌더 ── */
+    function renderRail() {
+      const rail = document.getElementById('rail-nav');
+      rail.innerHTML = '';
+      menuData.forEach(parent => {
+        const item = document.createElement('div');
+        item.className = 'rail-item' + (parent.id === currentRailId ? ' active' : '');
+        item.id = 'rail-' + parent.id;
+        item.onclick = () => clickRail(parent.id);
+        item.innerHTML = `
+          <div class="rail-item-icon">${svgIcon(parent.icon || 'folder', 22)}</div>
+          <div class="rail-item-label">${parent.label}</div>`;
+        rail.appendChild(item);
+        if (['menu-stat', 'menu-trip', 'menu-stat-analysis'].includes(parent.id)) {
+          const div = document.createElement('div');
+          div.className = 'rail-divider';
+          rail.appendChild(div);
+        }
+      });
+    }
+
+    /* ── 서브메뉴 패널 렌더 ── */
+    function renderSubPanel(parentId) {
+      const parent = menuData.find(m => m.id === parentId);
+      if (!parent) return;
+      document.getElementById('sub-panel-title-text').textContent = parent.label;
+      const list = document.getElementById('sub-menu-list');
+      list.innerHTML = '';
+      parent.children.forEach(child => {
+        const li = document.createElement('li');
+        li.className = 'sub-menu-item' + (child.id === currentActiveMenuId ? ' active' : '');
+        li.textContent = child.label;
+        li.onclick = () => handleSubMenuClick(parent.label, child.label, child.id);
+        list.appendChild(li);
+      });
+    }
+
+    /* ── 레일 클릭 ── */
+    function clickRail(parentId) {
+      currentRailId = parentId;
+      document.querySelectorAll('.rail-item').forEach(el => el.classList.remove('active'));
+      const el = document.getElementById('rail-' + parentId);
+      if (el) el.classList.add('active');
+      renderSubPanel(parentId);
+      // 첫 번째 자식 자동 선택
+      const parent = menuData.find(m => m.id === parentId);
+      if (parent && parent.children.length > 0) {
+        const first = parent.children[0];
+        handleSubMenuClick(parent.label, first.label, first.id);
+      }
+    }
+
+    /* ── 서브메뉴 클릭 ── */
+    function handleSubMenuClick(parentLabel, childLabel, childId) {
+      currentActiveMenuId = childId;
+      currentActiveTab = (tabData[childId] || ['기본 화면'])[0];
+      document.querySelectorAll('.sub-menu-item').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.sub-menu-item').forEach(el => {
+        if (el.textContent === childLabel) el.classList.add('active');
+      });
+      updateBreadcrumb(childId);
+      addOrUpdateTab(childId, currentActiveTab);
+      renderTabs();
+      renderContents(childId, currentActiveTab);
+      updateGuideContent(childId, currentActiveTab);
+    }
+
+    /* ── 브레드크럼 ── */
+    function updateBreadcrumb(childId) {
+      for (const p of menuData) {
+        const c = p.children.find(x => x.id === childId);
+        if (c) {
+          document.getElementById('breadcrumb-parent').textContent = p.label;
+          document.getElementById('breadcrumb-current-title').textContent = c.label;
+          break;
+        }
+      }
+    }
+
+    /* ── 탭 관리 ── */
+    function addOrUpdateTab(childId, tabName) {
+      const idx = openTabs.findIndex(t => t.childId === childId);
+      if (idx !== -1) {
+        openTabs[idx].tabName = tabName;
+      } else {
+        if (openTabs.length >= 10) openTabs.shift();
+        let label = tabName;
+        for (const p of menuData) {
+          const c = p.children.find(x => x.id === childId);
+          if (c) { label = c.label; break; }
+        }
+        openTabs.push({ id: childId, childId, tabName, label });
+      }
+    }
+
+    function selectMenu(childId, activeTabName) {
+      currentActiveMenuId = childId;
+      currentActiveTab    = activeTabName;
+      // 레일 동기화
+      for (const p of menuData) {
+        if (p.children.find(c => c.id === childId)) {
+          currentRailId = p.id;
+          break;
+        }
+      }
+      renderRail();
+      renderSubPanel(currentRailId);
+      document.querySelectorAll('.sub-menu-item').forEach(el => {
+        let found = false;
+        for (const p of menuData) {
+          const c = p.children.find(x => x.id === childId);
+          if (c && el.textContent === c.label) found = true;
+        }
+        el.classList.toggle('active', found);
+      });
+      updateBreadcrumb(childId);
+      addOrUpdateTab(childId, activeTabName);
+      renderTabs();
+      renderContents(childId, activeTabName);
+      updateGuideContent(childId, activeTabName);
+    }
+
+    /* ── 탭 바 렌더 ── */
+    function renderTabs() {
+      const bar = document.getElementById('tab-bar');
+      bar.innerHTML = '';
+      openTabs.forEach(tab => {
+        const isActive = (tab.childId === currentActiveMenuId);
+        const chip = document.createElement('div');
+        chip.className = 'tab-chip' + (isActive ? ' active' : '');
+        chip.innerHTML = `<span>${tab.label}</span><span class="tab-chip-close" onclick="closeTab(event,'${tab.childId}')">×</span>`;
+        chip.onclick = (e) => {
+          if (!e.target.classList.contains('tab-chip-close')) selectMenu(tab.childId, tab.tabName);
+        };
+        bar.appendChild(chip);
+      });
+    }
+
+    window.closeTab = function(e, childId) {
+      e.stopPropagation();
+      openTabs = openTabs.filter(t => t.childId !== childId);
+      if (currentActiveMenuId === childId) {
+        if (openTabs.length > 0) {
+          const last = openTabs[openTabs.length - 1];
+          selectMenu(last.childId, last.tabName);
+        } else {
+          currentActiveMenuId = '';
+          renderTabs();
+          document.getElementById('contents-container').innerHTML = '<div class="prep-card"><div class="prep-icon">' + svgIcon('construction', 52) + '</div><div class="prep-title">화면을 선택하세요</div><div class="prep-desc">좌측 메뉴에서 원하는 화면을 선택해 주세요.</div></div>';
+        }
+      } else {
+        renderTabs();
+      }
+    };
+
+    /* ── 콘텐츠 렌더 ── */
+    function renderContents(childId, tabName) {
+      const container = document.getElementById('contents-container');
+      container.innerHTML = '';
+      document.getElementById('content-scroll').scrollTo({ top: 0 });
+
+      const subTabs = tabData[childId] || [];
+      if (subTabs.length > 1) {
+        const subBar = document.createElement('div');
+        subBar.className = 'subtab-bar';
+        subTabs.forEach(st => {
+          const btn = document.createElement('button');
+          btn.className = 'subtab-btn' + (st === tabName ? ' active' : '');
+          btn.textContent = st;
+          btn.onclick = () => selectMenu(childId, st);
+          subBar.appendChild(btn);
+        });
+        // subtab-bar는 content-scroll 앞에 삽입
+        const scroll = document.getElementById('content-scroll');
+        const existing = document.querySelector('.subtab-bar-wrap');
+        if (existing) existing.remove();
+        const wrap = document.createElement('div');
+        wrap.className = 'subtab-bar-wrap';
+        wrap.appendChild(subBar);
+        scroll.parentNode.insertBefore(wrap, scroll);
+      } else {
+        const existing = document.querySelector('.subtab-bar-wrap');
+        if (existing) existing.remove();
+      }
+
+      if (childId === 'login-1') {
+        container.appendChild(getLoginTemplate());
+      } else if (childId === 'common-1' && tabName === '관리자 목록') {
+        container.appendChild(getAdminListTemplate());
+      } else if (childId === 'common-1' && tabName === '권한 설정') {
+        container.appendChild(getAdminRegisterTemplate());
+      } else if (childId.startsWith('stat-analysis-')) {
+        container.appendChild(getStatAnalysisTemplate(childId));
+      } else {
+        let path = '';
+        for (const p of menuData) {
+          const c = p.children.find(x => x.id === childId);
+          if (c) { path = `${p.label} > ${c.label} > ${tabName}`; break; }
+        }
+        container.appendChild(getReadyTemplate(path));
+      }
+    }
+
+    /* ── 로그인 템플릿 ── */
+    function getLoginTemplate() {
+      const wrap = document.createElement('div');
+      wrap.className = 'login-wrap';
+      wrap.innerHTML = `
+        <div class="login-center">
+          <div class="login-left">
+            <div class="login-eyebrow">KEPCO Energy Solution · PMS</div>
+            <h1 class="login-headline">에너지효율화사업의<br><span class="hl">차세대 운영 플랫폼</span></h1>
+            <p class="login-subline">접수부터 상환까지,<br><span class="hl2">전 사이클을 하나로</span> 관리합니다</p>
+            <p class="login-detail">PMS는 에너지효율화사업의 <strong style="color:#bfdbfe;">접수·설계·계약·공사·준공·상환·M&amp;V</strong> 전 단계를 디지털 기반으로 통합 관리하는 차세대 사업관리시스템입니다.</p>
+            <div class="login-chips">
+              <span class="login-chip">📋 접수관리</span>
+              <span class="login-chip">📐 설계관리</span>
+              <span class="login-chip">📄 계약관리</span>
+              <span class="login-chip">🏗 공사관리</span>
+              <span class="login-chip">✅ 준공검사</span>
+              <span class="login-chip">💳 상환관리</span>
+              <span class="login-chip">📊 M&amp;V</span>
+            </div>
+          </div>
+          <div class="login-right">
+            <div class="login-card">
+              <div class="login-card-title">로그인</div>
+              <div class="login-card-sub">사업관리시스템에 오신 것을 환영합니다</div>
+              <form class="login-form" onsubmit="event.preventDefault();selectMenu('common-1','관리자 목록')">
+                <div class="login-field">
+                  <label>아이디</label>
+                  <input type="text" placeholder="아이디를 입력하세요" autocomplete="username">
+                </div>
+                <div class="login-field">
+                  <label>비밀번호</label>
+                  <input type="password" placeholder="비밀번호를 입력하세요" autocomplete="current-password">
+                </div>
+                <div class="login-options">
+                  <label class="login-save"><input type="checkbox"> 아이디 저장</label>
+                </div>
+                <button type="submit" class="login-submit">로그인</button>
+              </form>
+              <div class="login-contact">
+                <strong style="color:var(--text);">로그인 문의</strong><br>
+                운영담당 : 이희성 부장 010-6844-2810
+              </div>
+            </div>
+          </div>
+        </div>`;
+      return wrap;
+    }
+
+    /* ── 관리자 목록 ── */
+    function getAdminListTemplate() {
+      const wrap = document.createElement('div');
+
+      /* 검색 카드 */
+      const sc = document.createElement('div');
+      sc.className = 'card';
+      sc.innerHTML = `
+        <div class="card-title">
+          <div class="card-title-icon">${svgIcon('user', 15)}</div>
+          검색 조건
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div class="search-row">
+            <span class="search-row-label">조회기간 (등록일)</span>
+            <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+              <div style="display:flex;gap:4px;">
+                <button type="button" class="date-preset-btn" data-preset="1d">하루 전</button>
+                <button type="button" class="date-preset-btn" data-preset="1w">1주일</button>
+                <button type="button" class="date-preset-btn" data-preset="1m">1개월</button>
+                <button type="button" class="date-preset-btn" data-preset="3m">3개월</button>
+                <button type="button" class="date-preset-btn" data-preset="6m">6개월</button>
+                <button type="button" class="date-preset-btn" data-preset="1y">1년</button>
+              </div>
+              <input type="date" id="search-start-date" class="form-control" style="width:148px;">
+              <span style="color:var(--text-sub);">~</span>
+              <input type="date" id="search-end-date" class="form-control" style="width:148px;">
+            </div>
+          </div>
+          <div class="search-row">
+            <span class="search-row-label">사용여부</span>
+            <div class="radio-group">
+              <label class="radio-item"><input type="radio" name="search-status" value="전체" checked> 전체</label>
+              <label class="radio-item"><input type="radio" name="search-status" value="사용"> 사용</label>
+              <label class="radio-item"><input type="radio" name="search-status" value="중지"> 중지</label>
+            </div>
+          </div>
+          <div class="search-row">
+            <span class="search-row-label">키워드 검색</span>
+            <div style="display:flex;gap:8px;width:480px;max-width:100%;">
+              <select id="search-key" class="form-control" style="width:120px;flex-shrink:0;">
+                <option>전체</option><option>사원번호</option><option>아이디</option><option>사원명</option><option>부서</option><option>직급</option><option>이메일</option>
+              </select>
+              <input type="text" id="search-keyword" class="form-control" style="flex:1;" placeholder="검색어를 입력하세요.">
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px;border-top:1px solid var(--border);padding-top:14px;">
+          <button class="btn btn-primary" id="btn-search">${svgIcon('user',14)} 검색</button>
+          <button class="btn btn-outline" id="btn-reset">초기화</button>
+        </div>`;
+      wrap.appendChild(sc);
+
+      /* 목록 카드 */
+      const lc = document.createElement('div');
+      lc.className = 'card';
+      lc.innerHTML = `
+        <div class="card-title">
+          <div class="card-title-icon">${svgIcon('user', 15)}</div>
+          관리자 목록
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+          <div style="font-size:13px;color:var(--text-sub);">전체 <strong id="admin-total-cnt" style="color:var(--blue);">0</strong>건 &nbsp;|&nbsp; 현재 <strong id="admin-current-page">1/1</strong> 페이지</div>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <select id="select-page-size" class="form-control" style="width:100px;height:32px;font-size:13px;padding:0 8px;">
+              <option value="10">10개씩</option><option value="20">20개씩</option><option value="50">50개씩</option>
+            </select>
+            <button class="btn btn-outline" style="height:32px;font-size:13px;" onclick="alert('엑셀 다운로드 되었습니다.')">${svgIcon('file',13)} 엑셀 다운로드</button>
+            <button class="btn btn-primary" style="height:32px;font-size:13px;" onclick="selectMenu('common-1','권한 설정')">${svgIcon('user',13)} 신규 등록</button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th style="width:46px;text-align:center;">No</th>
+                <th>사원번호</th><th>아이디</th><th>사원명</th><th>부서</th><th>직급</th><th>이메일</th>
+                <th style="width:80px;text-align:center;">사용여부</th>
+                <th>등록일</th><th>등록자</th>
+                <th style="width:80px;text-align:center;">상세</th>
+                <th>최종수정</th>
+              </tr>
+            </thead>
+            <tbody id="admin-table-body"></tbody>
+          </table>
+        </div>
+        <div class="table-footer">
+          <div></div>
+          <div class="pagination"></div>
+          <div></div>
+        </div>`;
+      wrap.appendChild(lc);
+
+      setTimeout(() => {
+        let pageSize = 10;
+        let currentPage = 1;
+
+        const updateTable = () => {
+          const startDate = wrap.querySelector('#search-start-date').value;
+          const endDate   = wrap.querySelector('#search-end-date').value;
+          const status    = wrap.querySelector('input[name="search-status"]:checked').value;
+          const key       = wrap.querySelector('#search-key').value;
+          const keyword   = wrap.querySelector('#search-keyword').value.toLowerCase().trim();
+
+          const filtered = adminList.filter(a => {
+            if (startDate && a.regDate < startDate) return false;
+            if (endDate && a.regDate > endDate) return false;
+            if (status !== '전체' && a.status !== status) return false;
+            if (keyword) {
+              if (key === '전체') return (a.empNo+a.username+a.name+a.dept+a.position+a.email).toLowerCase().includes(keyword);
+              if (key === '사원번호') return a.empNo.toLowerCase().includes(keyword);
+              if (key === '아이디') return a.username.toLowerCase().includes(keyword);
+              if (key === '사원명') return a.name.toLowerCase().includes(keyword);
+              if (key === '부서') return a.dept.toLowerCase().includes(keyword);
+              if (key === '직급') return a.position.toLowerCase().includes(keyword);
+              if (key === '이메일') return a.email.toLowerCase().includes(keyword);
+            }
+            return true;
+          });
+
+          const total = filtered.length;
+          const pages = Math.ceil(total / pageSize) || 1;
+          if (currentPage > pages) currentPage = pages;
+          const start = (currentPage - 1) * pageSize;
+          const page  = filtered.slice(start, start + pageSize);
+
+          wrap.querySelector('#admin-table-body').innerHTML = page.map((a, i) => `
+            <tr>
+              <td style="text-align:center;color:var(--text-sub);font-size:13px;">${start+i+1}</td>
+              <td style="font-size:13px;">${a.empNo}</td>
+              <td style="color:var(--text-sub);font-size:13px;">${a.username}</td>
+              <td><strong>${a.name}</strong></td>
+              <td style="font-size:13px;">${a.dept}</td>
+              <td style="font-size:13px;">${a.position}</td>
+              <td style="font-size:13px;">${a.email}</td>
+              <td style="text-align:center;"><span class="badge ${a.status==='사용'?'badge-success':'badge-danger'}">${a.status}</span></td>
+              <td style="color:var(--text-sub);font-size:13px;">${a.regDate}</td>
+              <td style="font-size:13px;">${a.regUser}</td>
+              <td style="text-align:center;"><button class="btn btn-outline" style="height:26px;padding:0 8px;font-size:13px;" onclick="openAdminDetail(${a.id})">상세보기</button></td>
+              <td style="color:var(--text-sub);font-size:13px;">${a.editDate}</td>
+            </tr>`).join('');
+
+          wrap.querySelector('#admin-total-cnt').textContent = total;
+          wrap.querySelector('#admin-current-page').textContent = `${currentPage}/${pages}`;
+
+          let pagHTML = `<button class="page-btn" onclick="goToPage(1)">&laquo;</button>`;
+          for (let i = 1; i <= pages; i++) pagHTML += `<button class="page-btn ${i===currentPage?'active':''}" onclick="goToPage(${i})">${i}</button>`;
+          pagHTML += `<button class="page-btn" onclick="goToPage(${pages})">&raquo;</button>`;
+          wrap.querySelector('.pagination').innerHTML = pagHTML;
+        };
+
+        window.goToPage = (p) => { currentPage = p; updateTable(); };
+
+        const presets = wrap.querySelectorAll('.date-preset-btn');
+        const sDate = wrap.querySelector('#search-start-date');
+        const eDate = wrap.querySelector('#search-end-date');
+        const fmt = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+        presets.forEach(btn => {
+          btn.onclick = () => {
+            presets.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const p = btn.getAttribute('data-preset');
+            const end = new Date();
+            const s = new Date();
+            if (p==='1d') s.setDate(end.getDate()-1);
+            else if (p==='1w') s.setDate(end.getDate()-7);
+            else if (p==='1m') s.setMonth(end.getMonth()-1);
+            else if (p==='3m') s.setMonth(end.getMonth()-3);
+            else if (p==='6m') s.setMonth(end.getMonth()-6);
+            else if (p==='1y') s.setFullYear(end.getFullYear()-1);
+            sDate.value = fmt(s);
+            eDate.value = fmt(end);
+          };
+        });
+        sDate.onchange = eDate.onchange = () => presets.forEach(b => b.classList.remove('active'));
+
+        wrap.querySelector('#btn-search').onclick = () => { currentPage=1; updateTable(); };
+        wrap.querySelector('#btn-reset').onclick = () => {
+          sDate.value = ''; eDate.value = '';
+          wrap.querySelector('input[name="search-status"]').checked = true;
+          wrap.querySelector('#search-keyword').value = '';
+          presets.forEach(b => b.classList.remove('active'));
+          currentPage = 1; updateTable();
+        };
+        wrap.querySelector('#select-page-size').onchange = e => { pageSize = +e.target.value; currentPage=1; updateTable(); };
+
+        updateTable();
+      }, 50);
+
+      return wrap;
+    }
+
+    /* ── 관리자 등록 ── */
+    function getAdminRegisterTemplate() {
+      const wrap = document.createElement('div');
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <div class="card-title">
+          <div class="card-title-icon">${svgIcon('user', 15)}</div>
+          관리자 등록
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:18px;">
+          <div class="form-group"><label>사원번호 <span class="required">*</span></label><input type="text" class="form-control" id="reg-empno" placeholder="예: EMP006"></div>
+          <div class="form-group"><label>사원명 <span class="required">*</span></label><input type="text" class="form-control" id="reg-name" placeholder="성명 입력"></div>
+          <div class="form-group"><label>부서 <span class="required">*</span></label><input type="text" class="form-control" id="reg-dept" placeholder="예: 에너지기획부"></div>
+          <div class="form-group"><label>직급 <span class="required">*</span></label><input type="text" class="form-control" id="reg-position" placeholder="예: 대리"></div>
+          <div class="form-group"><label>아이디 <span class="required">*</span></label><input type="text" class="form-control" id="reg-username" placeholder="영문+숫자 조합"></div>
+          <div class="form-group"><label>초기 비밀번호 <span class="required">*</span></label><input type="password" class="form-control" id="reg-pw" placeholder="8자 이상, 영문+숫자+특수문자"></div>
+          <div class="form-group"><label>이메일 <span class="required">*</span></label><input type="email" class="form-control" id="reg-email" placeholder="example@kepcoes.co.kr"></div>
+          <div class="form-group"><label>사용 여부</label><div class="radio-group"><label class="radio-item"><input type="radio" name="reg-status" value="사용" checked> 사용</label><label class="radio-item"><input type="radio" name="reg-status" value="중지"> 중지</label></div></div>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-primary" id="btn-save">${svgIcon('user',14)} 저장</button>
+          <button class="btn btn-outline" id="btn-cancel">취소</button>
+        </div>`;
+      wrap.appendChild(card);
+
+      setTimeout(() => {
+        wrap.querySelector('#btn-save').onclick = () => {
+          const fields = ['reg-empno','reg-name','reg-dept','reg-position','reg-username','reg-email','reg-pw'];
+          const vals = fields.map(id => wrap.querySelector('#'+id).value.trim());
+          if (vals.some(v => !v)) { alert('필수(*) 항목을 모두 입력해 주세요.'); return; }
+          const today = new Date().toISOString().substring(0,10);
+          adminList.unshift({ id: adminList.length+1, empNo:vals[0], name:vals[1], dept:vals[2], position:vals[3], username:vals[4], email:vals[5], status: wrap.querySelector('input[name="reg-status"]:checked').value, regDate:today, regUser:'이희성', editDate:today, ip:'', authGroups:[] });
+          alert(`관리자 '${vals[1]}'이(가) 등록되었습니다.`);
+          selectMenu('common-1', '관리자 목록');
+        };
+        wrap.querySelector('#btn-cancel').onclick = () => {
+          if (confirm('작성 중인 내용이 저장되지 않습니다. 취소하시겠습니까?')) selectMenu('common-1', '관리자 목록');
+        };
+      }, 50);
+
+      return wrap;
+    }
+
+    /* ── 준비중 ── */
+    function getReadyTemplate(pathName) {
+      const div = document.createElement('div');
+      div.className = 'prep-card';
+      div.innerHTML = `
+        <div class="prep-icon">${svgIcon('construction', 52)}</div>
+        <div class="prep-title">준비 중인 화면</div>
+        <div class="prep-desc"><strong style="color:var(--blue);">${pathName}</strong><br>화면은 현재 개발 중입니다.</div>
+        <div class="prep-desc" style="font-size:13px;">프로토타입 고도화 단계에서 구현 예정입니다.</div>
+        <button class="btn btn-outline" style="margin-top:8px;" onclick="selectMenu('common-1','관리자 목록')">관리자 목록으로 이동</button>`;
+      return div;
+    }
+
+    /* ── 권한그룹 버튼 ── */
+    function setupAuthButtons() {
+      const btns = document.querySelectorAll('#auth-group-buttons .auth-btn');
+      const roleMap = { '1':'시스템관리자', '3':'사업담당자', '4':'일반사용자' };
+      btns.forEach(btn => {
+        btn.onclick = () => {
+          btns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          selectedAuthGroup = btn.getAttribute('data-auth');
+          document.getElementById('user-role').textContent = roleMap[selectedAuthGroup] || '';
+        };
+      });
+    }
+
+    /* ── 기획 가이드 ── */
+    const guideData = {
+      'common-1_관리자 목록': {
+        summary: '전체 시스템 관리자 계정을 조회하고 제어하는 관리자 목록 화면입니다.',
+        rules: [
+          '시스템관리자(그룹#1) 권한을 가진 계정만 다른 계정의 등록/수정/삭제 권한을 제어할 수 있어야 합니다.',
+          '상태 배지 표시는 활성은 badge-success, 비활성은 badge-danger 클래스를 각각 맵핑하여 가시성을 확보해 주세요.',
+          '오늘 가입/로그인 현황 카드는 매일 자정(00:00)을 기점으로 통계 테이블 집계를 통해 실시간 갱신되어야 합니다.'
+        ]
+      },
+      'common-1_권한 설정': {
+        summary: '새로운 시스템 운영 주체나 부서별 담당자를 등록하는 양식 화면입니다.',
+        rules: [
+          '비밀번호 규칙: 사용자가 설정한 비밀번호는 DB 저장 전 반드시 SHA-256 단방향 해싱 암호화 가이드를 따라 가공해야 합니다.',
+          '도메인 강제규칙: 메일 계정 입력 칸(@) 오른편은 kepcoes.co.kr 도메인만 등록 가능하도록 Regex 유효성을 검사해 주세요.',
+          '필수(*) Validation: 필수 값 누락 시 alert 창 실행 대신 해당 입력 필드 테두리를 빨간색으로 변경하고 밑에 서브 텍스트로 안내해 주세요.'
+        ]
+      },
+      'default': {
+        summary: '현재 선택한 화면은 화면 정의서 작성 및 업무 프로세스 조율 단계에 있는 화면입니다.',
+        rules: [
+          '프로세스 수립: ERP 및 사내 그룹웨어 결재라인 연동을 위한 데이터 인터페이스 구성 설계가 우선적으로 필요합니다.',
+          '디자인: 마일스톤 2단계 진행 시, 업무 담당자(이희성 부장)와의 상세 화면설계 미팅 후 마크업이 시작되어야 합니다.',
+          '기타 요청: 상세 컴포넌트 아이템 도출 전까지는 준비중 플레이스홀더를 유지합니다.'
+        ]
+      }
+    };
+
+    function toggleDescModal() { document.getElementById('desc-modal').classList.toggle('open'); }
+
+    function updateGuideContent(childId, tabName) {
+      const key = `${childId}_${tabName}`;
+      const g = guideData[key] || guideData['default'];
+      document.getElementById('desc-modal-body').innerHTML = `
+        <div class="desc-section">
+          <div class="desc-section-title">${uiIcon('pin')} 화면 개요</div>
+          <div class="desc-text">${g.summary}</div>
+        </div>
+        <div class="desc-section">
+          <div class="desc-section-title">${uiIcon('settings')} 개발 시 참고/전달 사항</div>
+          <div class="desc-text" style="background:var(--blue-lt);border-color:var(--blue-md);color:var(--blue-dk);font-weight:500;">${g.rules.map(r=>'• '+r).join('\n')}</div>
+        </div>`;
+    }
+
+    function openOnlineManual() {
+      document.getElementById('online-manual-modal').classList.add('open');
+      document.getElementById('online-manual-overlay').classList.add('open');
+    }
+    function closeOnlineManual() {
+      document.getElementById('online-manual-modal').classList.remove('open');
+      document.getElementById('online-manual-overlay').classList.remove('open');
+    }
+
+    /* ── 관리자 상세 팝업 ── */
+    let selectedAdminId = null;
+    window.openAdminDetail = function(id) {
+      const a = adminList.find(x => x.id === id);
+      if (!a) return;
+      selectedAdminId = id;
+      document.getElementById('detail-empNo').value = a.empNo||'';
+      document.getElementById('detail-username').value = a.username||'';
+      document.getElementById('detail-name').value = a.name||'';
+      document.getElementById('detail-dept').value = a.dept||'';
+      document.getElementById('detail-position').value = a.position||'';
+      document.getElementById('detail-email').value = a.email||'';
+      document.getElementById('detail-ip').value = a.ip||'';
+      document.getElementById(a.status==='사용'?'detail-status-use':'detail-status-stop').checked = true;
+      const gNames = {'1':'시스템관리자(그룹#1)','2':'총무부서담당자(그룹#2)','3':'사업담당자(그룹#3)','4':'일반사용자(그룹#4)'};
+      const gc = document.getElementById('detail-auth-groups');
+      gc.innerHTML = '';
+      (a.authGroups||[]).forEach(gId => {
+        const b = document.createElement('span');
+        b.className = 'badge badge-secondary';
+        b.style.cssText = 'font-size:13px;padding:5px 12px;border:1px solid var(--border);';
+        b.textContent = gNames[gId]||`그룹#${gId}`;
+        gc.appendChild(b);
+      });
+      document.getElementById('detail-regUser').textContent = a.regUser||'';
+      document.getElementById('detail-regDate').textContent = a.regDate||'';
+      document.getElementById('detail-editDate').textContent = a.editDate||'';
+      document.getElementById('admin-detail-modal').classList.add('open');
+      document.getElementById('admin-detail-overlay').classList.add('open');
+    };
+    window.closeAdminDetail = function() {
+      document.getElementById('admin-detail-modal').classList.remove('open');
+      document.getElementById('admin-detail-overlay').classList.remove('open');
+      selectedAdminId = null;
+    };
+    window.saveAdminDetail = function() {
+      if (!selectedAdminId) return;
+      const a = adminList.find(x => x.id === selectedAdminId);
+      if (!a) return;
+      const newIp = document.getElementById('detail-ip').value.trim();
+      const newSt = document.querySelector('input[name="detail-status"]:checked').value;
+      if (!newIp) { alert('접속아이피를 입력해 주세요.'); return; }
+      if (!/^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/.test(newIp)) { alert('올바른 IP 주소 형식을 입력해 주세요.'); return; }
+      const now = new Date();
+      const fmt = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}:${String(d.getSeconds()).padStart(2,'0')}`;
+      a.ip = newIp; a.status = newSt; a.editDate = fmt(now);
+      alert(`${a.name}의 상세 정보가 수정되었습니다.`);
+      closeAdminDetail();
+      selectMenu(currentActiveMenuId, currentActiveTab);
+    };
+
+    /* ── 통계/분석 템플릿 (원본 내용 동일 유지) ── */
+    function getStatAnalysisTemplate(childId) {
+      const wrap = document.createElement('div');
+      let html = '';
+
+      if (childId === 'stat-analysis-1') {
+        html = `
+          <div class="hero-card">
+            <div class="hero-tag">PMS 통계 자료 분석 · 종합현황</div>
+            <div class="hero-title">계약현황 종합 현황</div>
+            <div class="hero-desc">전체 계약 건수·금액·유형별 비중을 한눈에 확인하는 종합 대시보드</div>
+            <div class="hero-badges">
+              <span class="hero-badge">기준일: 2026-05-31</span>
+              <span class="hero-badge hi">총 610건</span>
+              <span class="hero-badge">총 6,326억원</span>
+              <span class="hero-badge">ESCO계약 502건 (82.3%)</span>
+            </div>
+          </div>
+          <div class="kpi-grid">
+            <div class="kpi-card"><div class="kpi-lbl">총 계약 건수</div><div class="kpi-val">610<span class="kpi-unit">건</span></div><div class="kpi-sub">기준일 2026-05-31</div></div>
+            <div class="kpi-card green"><div class="kpi-lbl">총 계약금액</div><div class="kpi-val">6,326<span class="kpi-unit">억원</span></div><div class="kpi-sub">전체 사업 규모</div></div>
+            <div class="kpi-card amber"><div class="kpi-lbl">ESCO(시설대여) 계약</div><div class="kpi-val">502<span class="kpi-unit">건</span></div><div class="kpi-sub">전체의 82.3%</div></div>
+            <div class="kpi-card red"><div class="kpi-lbl">기타(장기할부 등)</div><div class="kpi-val">108<span class="kpi-unit">건</span></div><div class="kpi-sub">전체의 17.7%</div></div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-bottom:16px;">
+            <div class="card">
+              <div class="card-title"><div class="card-title-icon">${svgIcon('target',15)}</div>계약유형 비중</div>
+              <div class="stat-donut-container">
+                <div class="stat-donut-chart" style="background:conic-gradient(var(--blue) 0% 82.3%, var(--amber) 82.3% 100%);"></div>
+                <div class="stat-donut-legend">
+                  <div class="stat-donut-legend-item"><span class="stat-donut-color-dot" style="background:var(--blue);"></span><span>ESCO(시설대여): 502건 (82.3%)</span></div>
+                  <div class="stat-donut-legend-item"><span class="stat-donut-color-dot" style="background:var(--amber);"></span><span>장기할부/기타: 108건 (17.7%)</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-title"><div class="card-title-icon">${svgIcon('bar-chart',15)}</div>진행상태별 현황</div>
+              <div style="padding-top:8px;">
+                <div class="stat-bar-container"><div class="stat-bar-title-row"><span class="stat-bar-label">진행중</span><span class="stat-bar-value">3,950억원</span></div><div class="stat-bar-outer"><div class="stat-bar-inner" style="width:62.4%;background:var(--blue);">387건</div></div></div>
+                <div class="stat-bar-container"><div class="stat-bar-title-row"><span class="stat-bar-label">완료(준공)</span><span class="stat-bar-value">1,980억원</span></div><div class="stat-bar-outer"><div class="stat-bar-inner" style="width:31.3%;background:var(--green);">193건</div></div></div>
+                <div class="stat-bar-container"><div class="stat-bar-title-row"><span class="stat-bar-label">해지/취소</span><span class="stat-bar-value">396억원</span></div><div class="stat-bar-outer"><div class="stat-bar-inner" style="width:6.3%;background:var(--red);">30건</div></div></div>
+              </div>
+            </div>
+          </div>`;
+      } else if (childId === 'stat-analysis-2') {
+        html = `
+          <div class="hero-card">
+            <div class="hero-tag">PMS 통계 자료 분석 · 연도별 추이</div>
+            <div class="hero-title">연도별 계약 추이 분석</div>
+            <div class="hero-desc">2021년~2026년(상반기) 신규 계약 건수 및 금액 추이</div>
+            <div class="hero-badges"><span class="hero-badge">기준일: 2026-05-31</span><span class="hero-badge hi">6개 연도 비교</span><span class="hero-badge">최근 3개년 성장세</span></div>
+          </div>
+          <div class="kpi-grid">
+            <div class="kpi-card green"><div class="kpi-lbl">2024→2025 건수 증가율</div><div class="kpi-val">+11.7<span class="kpi-unit">%</span></div><div class="kpi-sub">145건 → 162건</div></div>
+            <div class="kpi-card green"><div class="kpi-lbl">2024→2025 금액 증가율</div><div class="kpi-val">+11.9<span class="kpi-unit">%</span></div><div class="kpi-sub">1,510억 → 1,690억</div></div>
+            <div class="kpi-card"><div class="kpi-lbl">5개년 연평균 성장률(CAGR)</div><div class="kpi-val">22.8<span class="kpi-unit">%</span></div><div class="kpi-sub">2021~2025 기준</div></div>
+            <div class="kpi-card amber"><div class="kpi-lbl">2026년 누적 진행률</div><div class="kpi-val">22.8<span class="kpi-unit">%</span></div><div class="kpi-sub">2025년 대비 5월 기준</div></div>
+          </div>
+          <div class="card">
+            <div class="card-title"><div class="card-title-icon">${svgIcon('bar-chart',15)}</div>연도별 신규계약 건수 및 금액</div>
+            <div style="padding-top:8px;">
+              <div class="stat-bar-container"><div class="stat-bar-title-row"><span class="stat-bar-label">2021년</span><span class="stat-bar-value">540억원</span></div><div class="stat-bar-outer"><div class="stat-bar-inner" style="width:35.8%;background:var(--blue-md);color:var(--text);">58건</div></div></div>
+              <div class="stat-bar-container"><div class="stat-bar-title-row"><span class="stat-bar-label">2022년</span><span class="stat-bar-value">820억원</span></div><div class="stat-bar-outer"><div class="stat-bar-inner" style="width:53.7%;background:var(--blue-md);color:var(--text);">87건</div></div></div>
+              <div class="stat-bar-container"><div class="stat-bar-title-row"><span class="stat-bar-label">2023년</span><span class="stat-bar-value">1,260억원</span></div><div class="stat-bar-outer"><div class="stat-bar-inner" style="width:74.7%;background:var(--blue);">121건</div></div></div>
+              <div class="stat-bar-container"><div class="stat-bar-title-row"><span class="stat-bar-label">2024년</span><span class="stat-bar-value">1,510억원</span></div><div class="stat-bar-outer"><div class="stat-bar-inner" style="width:89.5%;background:var(--blue);">145건</div></div></div>
+              <div class="stat-bar-container"><div class="stat-bar-title-row"><span class="stat-bar-label">2025년</span><span class="stat-bar-value">1,690억원</span></div><div class="stat-bar-outer"><div class="stat-bar-inner" style="width:100%;background:var(--blue-dk);">162건</div></div></div>
+              <div class="stat-bar-container"><div class="stat-bar-title-row"><span class="stat-bar-label">2026년 (~05월)</span><span class="stat-bar-value">506억원</span></div><div class="stat-bar-outer"><div class="stat-bar-inner" style="width:22.8%;background:var(--green);">37건</div></div></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title"><div class="card-title-icon">${svgIcon('calendar',15)}</div>연도별 상세 데이터</div>
+            <div class="table-wrap"><table class="data-table"><thead><tr><th>연도</th><th>신규 계약 건수</th><th>계약금액</th><th>전년대비 건수</th><th>전년대비 금액</th></tr></thead>
+            <tbody>
+              <tr><td><strong>2021</strong></td><td>58건</td><td>540억원</td><td style="color:var(--text-sub);">—</td><td style="color:var(--text-sub);">—</td></tr>
+              <tr><td><strong>2022</strong></td><td>87건</td><td>820억원</td><td style="color:var(--green);font-weight:700;">+50.0%</td><td style="color:var(--green);font-weight:700;">+51.9%</td></tr>
+              <tr><td><strong>2023</strong></td><td>121건</td><td>1,260억원</td><td style="color:var(--green);font-weight:700;">+39.1%</td><td style="color:var(--green);font-weight:700;">+53.7%</td></tr>
+              <tr><td><strong>2024</strong></td><td>145건</td><td>1,510억원</td><td style="color:var(--green);font-weight:700;">+19.8%</td><td style="color:var(--green);font-weight:700;">+19.8%</td></tr>
+              <tr><td><strong>2025</strong></td><td>162건</td><td>1,690억원</td><td style="color:var(--green);font-weight:700;">+11.7%</td><td style="color:var(--green);font-weight:700;">+11.9%</td></tr>
+              <tr style="background:var(--bg);"><td><strong>2026 (~05월)</strong></td><td>37건</td><td>506억원</td><td style="color:var(--text-sub);">—</td><td style="color:var(--text-sub);">—</td></tr>
+            </tbody></table></div>
+          </div>`;
+      } else if (childId === 'stat-analysis-3') {
+        html = `
+          <div class="hero-card">
+            <div class="hero-tag">PMS 통계 자료 분석 · 부서/분야별 현황</div>
+            <div class="hero-title">부서·분야별 계약 현황</div>
+            <div class="hero-desc">주관 부서 및 사업분야별 계약 건수·금액 비중</div>
+            <div class="hero-badges"><span class="hero-badge">기준일: 2026-05-31</span><span class="hero-badge hi">3개 주관부서</span><span class="hero-badge">분야별 비중 비교</span></div>
+          </div>
+          <div class="stat-cards-grid">
+            <div class="stat-grid-card" style="border-top:3px solid var(--blue);"><div class="stat-grid-card-title" style="color:var(--blue);">에너지사업부</div><div style="font-size:22px;font-weight:900;margin:8px 0 4px;">340건</div><div class="stat-grid-card-desc">3,520억원 / 전체 55.7%</div></div>
+            <div class="stat-grid-card" style="border-top:3px solid var(--green);"><div class="stat-grid-card-title" style="color:var(--green);">기획실</div><div style="font-size:22px;font-weight:900;margin:8px 0 4px;">180건</div><div class="stat-grid-card-desc">1,860억원 / 전체 29.4%</div></div>
+            <div class="stat-grid-card" style="border-top:3px solid var(--amber);"><div class="stat-grid-card-title" style="color:var(--amber);">기타 부서</div><div style="font-size:22px;font-weight:900;margin:8px 0 4px;">90건</div><div class="stat-grid-card-desc">946억원 / 전체 14.9%</div></div>
+          </div>
+          <div class="card">
+            <div class="card-title"><div class="card-title-icon">${svgIcon('bar-chart',15)}</div>사업분야별 비중</div>
+            <div style="padding-top:8px;">
+              <div class="stat-bar-container"><div class="stat-bar-title-row"><span class="stat-bar-label">조명·LED</span><span class="stat-bar-value">2,530억원</span></div><div class="stat-bar-outer"><div class="stat-bar-inner" style="width:100%;background:var(--blue);">248건 (40.6%)</div></div></div>
+              <div class="stat-bar-container"><div class="stat-bar-title-row"><span class="stat-bar-label">공조·냉난방</span><span class="stat-bar-value">1,580억원</span></div><div class="stat-bar-outer"><div class="stat-bar-inner" style="width:77.8%;background:var(--green);">165건 (27.0%)</div></div></div>
+              <div class="stat-bar-container"><div class="stat-bar-title-row"><span class="stat-bar-label">태양광·ESS</span><span class="stat-bar-value">1,050억원</span></div><div class="stat-bar-outer"><div class="stat-bar-inner" style="width:52.3%;background:var(--amber);">108건 (17.7%)</div></div></div>
+              <div class="stat-bar-container"><div class="stat-bar-title-row"><span class="stat-bar-label">기타</span><span class="stat-bar-value">1,166억원</span></div><div class="stat-bar-outer"><div class="stat-bar-inner" style="width:30.5%;background:#94a3b8;">89건 (14.7%)</div></div></div>
+            </div>
+          </div>`;
+      } else if (childId === 'stat-analysis-4') {
+        html = `
+          <div class="hero-card">
+            <div class="hero-tag">PMS 통계 자료 분석 · 진행/이상 현황</div>
+            <div class="hero-title">진행·이상 사업 현황</div>
+            <div class="hero-desc">전체 진행 사업의 이상 여부 및 상태별 분류 현황</div>
+            <div class="hero-badges"><span class="hero-badge">기준일: 2026-05-31</span><span class="hero-badge hi">총 387건 진행</span><span class="hero-badge">이상 42건 주의</span></div>
+          </div>
+          <div class="kpi-grid">
+            <div class="kpi-card"><div class="kpi-lbl">정상 진행</div><div class="kpi-val">345<span class="kpi-unit">건</span></div><div class="kpi-sub">89.1%</div></div>
+            <div class="kpi-card red"><div class="kpi-lbl">이상 발생</div><div class="kpi-val">42<span class="kpi-unit">건</span></div><div class="kpi-sub">10.9%</div></div>
+            <div class="kpi-card amber"><div class="kpi-lbl">공사 지연</div><div class="kpi-val">18<span class="kpi-unit">건</span></div><div class="kpi-sub">이상 中 42.9%</div></div>
+            <div class="kpi-card purple"><div class="kpi-lbl">상환 미수</div><div class="kpi-val">24<span class="kpi-unit">건</span></div><div class="kpi-sub">이상 中 57.1%</div></div>
+          </div>`;
+      } else if (childId === 'stat-analysis-5') {
+        html = `
+          <div class="hero-card">
+            <div class="hero-tag">PMS 통계 자료 분석 · 상환/회수 현황</div>
+            <div class="hero-title">상환 및 회수 현황</div>
+            <div class="hero-desc">전체 사업의 원금 상환 및 회수 현황 요약</div>
+            <div class="hero-badges"><span class="hero-badge">기준일: 2026-05-31</span><span class="hero-badge hi">전체 회수율 68.4%</span></div>
+          </div>
+          <div class="kpi-grid">
+            <div class="kpi-card"><div class="kpi-lbl">총 원금</div><div class="kpi-val">6,326<span class="kpi-unit">억원</span></div></div>
+            <div class="kpi-card green"><div class="kpi-lbl">누적 회수액</div><div class="kpi-val">4,327<span class="kpi-unit">억원</span></div><div class="kpi-sub">회수율 68.4%</div></div>
+            <div class="kpi-card amber"><div class="kpi-lbl">잔여 원금</div><div class="kpi-val">1,999<span class="kpi-unit">억원</span></div><div class="kpi-sub">31.6%</div></div>
+            <div class="kpi-card red"><div class="kpi-lbl">미수 발생</div><div class="kpi-val">87<span class="kpi-unit">억원</span></div><div class="kpi-sub">잔여 中 4.4%</div></div>
+          </div>`;
+      } else if (childId === 'stat-analysis-6') {
+        html = `
+          <div class="hero-card">
+            <div class="hero-tag">PMS 통계 자료 분석 · 수익율 분석</div>
+            <div class="hero-title">사업 수익률 분석</div>
+            <div class="hero-desc">전체 사업의 IRR(내부수익률) 구간별 분포 및 추이</div>
+            <div class="hero-badges"><span class="hero-badge">기준일: 2026-05-31</span><span class="hero-badge hi">평균 IRR 7.5%</span><span class="hero-badge">「수익률 운영지침」 적합</span></div>
+          </div>
+          <div class="kpi-grid">
+            <div class="kpi-card green"><div class="kpi-lbl">평균 IRR</div><div class="kpi-val">7.5<span class="kpi-unit">%</span></div><div class="kpi-sub">기준 적합</div></div>
+            <div class="kpi-card"><div class="kpi-lbl">최빈 구간</div><div class="kpi-val">7~9<span class="kpi-unit">%</span></div><div class="kpi-sub">251건 (41.1%)</div></div>
+            <div class="kpi-card amber"><div class="kpi-lbl">7% 미만</div><div class="kpi-val">240<span class="kpi-unit">건</span></div><div class="kpi-sub">전체 39.3%</div></div>
+            <div class="kpi-card red"><div class="kpi-lbl">9% 이상</div><div class="kpi-val">119<span class="kpi-unit">건</span></div><div class="kpi-sub">고수익 구간</div></div>
+          </div>
+          <div class="card">
+            <div class="card-title"><div class="card-title-icon">${svgIcon('bar-chart',15)}</div>IRR 구간별 건수 분포</div>
+            <div style="padding-top:8px;">
+              <div class="stat-bar-container"><div class="stat-bar-title-row"><span class="stat-bar-label">7% 미만</span><span class="stat-bar-value">주의</span></div><div class="stat-bar-outer"><div class="stat-bar-inner" style="width:60%;background:var(--red);">240건 (39.3%)</div></div></div>
+              <div class="stat-bar-container"><div class="stat-bar-title-row"><span class="stat-bar-label">7~9%</span><span class="stat-bar-value">최다 구간</span></div><div class="stat-bar-outer"><div class="stat-bar-inner" style="width:100%;background:var(--blue);">251건 (41.1%)</div></div></div>
+              <div class="stat-bar-container"><div class="stat-bar-title-row"><span class="stat-bar-label">9~11%</span><span class="stat-bar-value">우수</span></div><div class="stat-bar-outer"><div class="stat-bar-inner" style="width:38.2%;background:var(--green);">96건 (15.7%)</div></div></div>
+              <div class="stat-bar-container"><div class="stat-bar-title-row"><span class="stat-bar-label">11% 이상</span><span class="stat-bar-value">고수익</span></div><div class="stat-bar-outer"><div class="stat-bar-inner" style="width:9.2%;background:var(--blue-dk);">23건 (3.8%)</div></div></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title"><div class="card-title-icon">${svgIcon('trend',15)}</div>연도별 평균 IRR 추이</div>
+            <div class="table-wrap"><table class="data-table"><thead><tr><th>연도</th><th>평균 IRR</th><th>전년대비</th><th>비고</th></tr></thead>
+            <tbody>
+              <tr><td><strong>2021</strong></td><td>6.8%</td><td style="color:var(--text-sub);">—</td><td>—</td></tr>
+              <tr><td><strong>2022</strong></td><td>7.0%</td><td style="color:var(--green);font-weight:700;">+0.2%p</td><td>—</td></tr>
+              <tr><td><strong>2023</strong></td><td>7.2%</td><td style="color:var(--green);font-weight:700;">+0.2%p</td><td>—</td></tr>
+              <tr><td><strong>2024</strong></td><td>7.5%</td><td style="color:var(--green);font-weight:700;">+0.3%p</td><td>원가상승 반영</td></tr>
+              <tr><td><strong>2025</strong></td><td>7.6%</td><td style="color:var(--green);font-weight:700;">+0.1%p</td><td>—</td></tr>
+              <tr style="background:var(--bg);"><td><strong>2026 (~05월)</strong></td><td>7.5%</td><td style="color:var(--red);font-weight:700;">-0.1%p</td><td>「수익률 운영지침」 기준 적합</td></tr>
+            </tbody></table></div>
+          </div>`;
+      } else if (childId === 'stat-analysis-7') {
+        html = `
+          <div class="hero-card">
+            <div class="hero-tag">PMS 통계 자료 분석 · 상환스케쥴 현황</div>
+            <div class="hero-title">상환스케쥴 현황</div>
+            <div class="hero-desc">주요 3개사(롯데슈퍼LED·일공팩·덕우전자) 월별 상환계획 대비 실적</div>
+            <div class="hero-badges"><span class="hero-badge">기준일: 2026-05-31</span><span class="hero-badge hi">3개사 관리</span><span class="hero-badge">월별 상환계획 대비 실적</span></div>
+          </div>
+          <div class="card">
+            <div class="card-title"><div class="card-title-icon">${svgIcon('credit-card',15)}</div>업체별 상환 진행률</div>
+            <div style="padding-top:8px;">
+              <div class="stat-bar-container"><div class="stat-bar-title-row"><span class="stat-bar-label">롯데슈퍼LED</span><span class="stat-bar-value">27.9억 / 48억</span></div><div class="stat-bar-outer"><div class="stat-bar-inner" style="width:58.2%;background:var(--blue);">58.2%</div></div></div>
+              <div class="stat-bar-container"><div class="stat-bar-title-row"><span class="stat-bar-label">일공팩</span><span class="stat-bar-value">15.2억 / 32억</span></div><div class="stat-bar-outer"><div class="stat-bar-inner" style="width:47.5%;background:var(--green);">47.5%</div></div></div>
+              <div class="stat-bar-container"><div class="stat-bar-title-row"><span class="stat-bar-label">덕우전자</span><span class="stat-bar-value">12.2억 / 26억</span></div><div class="stat-bar-outer"><div class="stat-bar-inner" style="width:47%;background:var(--amber);">47.0%</div></div></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title"><div class="card-title-icon">${svgIcon('calendar',15)}</div>월별 상환 스케줄 (최근 6개월)</div>
+            <div class="table-wrap"><table class="data-table"><thead><tr><th>월</th><th>롯데슈퍼LED 계획/실적</th><th>일공팩 계획/실적</th><th>덕우전자 계획/실적</th><th>월 합계 실적</th></tr></thead>
+            <tbody>
+              <tr><td><strong>2026-01</strong></td><td>0.8억 / 0.8억</td><td>0.5억 / 0.5억</td><td>0.4억 / 0.4억</td><td>1.7억</td></tr>
+              <tr><td><strong>2026-02</strong></td><td>0.8억 / 0.8억</td><td><span style="color:var(--red);font-weight:700;">0.5억 / 0.4억</span></td><td>0.4억 / 0.4억</td><td>1.6억</td></tr>
+              <tr><td><strong>2026-03</strong></td><td>0.8억 / 0.8억</td><td>0.5억 / 0.5억</td><td><span style="color:var(--red);font-weight:700;">0.4억 / 0.3억</span></td><td>1.6억</td></tr>
+              <tr><td><strong>2026-04</strong></td><td>0.8억 / 0.8억</td><td>0.5억 / 0.5억</td><td>0.4억 / 0.4억</td><td>1.7억</td></tr>
+              <tr><td><strong>2026-05</strong></td><td><span style="color:var(--red);font-weight:700;">0.8억 / 0.7억</span></td><td><span style="color:var(--red);font-weight:700;">0.5억 / 0.4억</span></td><td>0.4억 / 0.4억</td><td>1.5억</td></tr>
+              <tr style="background:var(--bg);color:var(--text-sub);"><td>2026-06 (예정)</td><td>0.8억 / —</td><td>0.5억 / —</td><td>0.4억 / —</td><td>—</td></tr>
+            </tbody></table></div>
+          </div>
+          <div class="card">
+            <div class="card-title"><div class="card-title-icon">${svgIcon('alert',15)}</div>잔여 상환 안내</div>
+            <div class="stat-cards-grid">
+              <div class="stat-grid-card" style="border-top:3px solid var(--blue);"><div class="stat-grid-card-title" style="color:var(--blue);">롯데슈퍼LED</div><div class="stat-grid-card-desc">잔여 20.1억원, 잔여기간 약 25개월. 월 0.8억원 정상 상환 중.</div></div>
+              <div class="stat-grid-card" style="border-top:3px solid var(--green);"><div class="stat-grid-card-title" style="color:var(--green);">일공팩</div><div class="stat-grid-card-desc">잔여 16.8억원, 잔여기간 약 33개월. 2026-02·05월 일부 미수 — 상환안내 필요.</div></div>
+              <div class="stat-grid-card" style="border-top:3px solid var(--amber);"><div class="stat-grid-card-title" style="color:var(--amber);">덕우전자</div><div class="stat-grid-card-desc">잔여 13.8억원, 잔여기간 약 34개월. 2026-03월 일부 미수 발생.</div></div>
+            </div>
+          </div>`;
+      }
+
+      wrap.innerHTML = html;
+      return wrap;
+    }
+
+    /* ══ 초기화 ══ */
+    window.onload = function() {
+      renderRail();
+      setupAuthButtons();
+      selectMenu('common-1', '관리자 목록');
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,1880 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>업무 분석 프로토타입</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:      #f5f7fa;
+  --bg2:     #ffffff;
+  --bg3:     #eef2f7;
+  --surface: #e8eef5;
+  --border:  #dbe3ed;
+  --border2: #c4cfdb;
+  --text:    #1a202c;
+  --text2:   #475569;
+  --text3:   #718096;
+
+  --navy:     #0F3460;
+
+  --blue:     #1a5fb4;
+  --blue-lt:  #dde8f8;
+  --blue-md:  #7db0e8;
+  --blue-dk:  #103d80;
+
+  --green:    #16a34a;
+  --green-lt: #e3f9ed;
+  --green-md: #7fe0ac;
+  --green-dk: #0d7a3a;
+
+  --amber:    #f5870a;
+  --amber-lt: #fff1e0;
+  --amber-md: #ffb35c;
+  --amber-dk: #c2660a;
+
+  --purple:   #5e35b1;
+  --purple-lt:#ede7f6;
+  --purple-md:#b39ddb;
+
+  --red:     #ef4444;
+  --red-lt:  #fdecec;
+  --red-md:  #fca5a5;
+  --red-dk:  #c0291a;
+
+  --font: 'Noto Sans KR', 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+  --mono: 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 10px;
+
+  --sh1: 0 1px 3px rgba(15,23,42,.07), 0 1px 2px rgba(15,23,42,.04);
+  --sh2: 0 6px 14px rgba(15,23,42,.09), 0 1px 3px rgba(15,23,42,.05);
+  --sh3: 0 12px 28px rgba(15,23,42,.12), 0 2px 6px rgba(15,23,42,.06);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:15px;line-height:1.6;min-height:100vh;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;}
+button,input,select,textarea{font-family:var(--font);}
+button:focus-visible,input:focus-visible{outline:2px solid rgba(26,95,180,.35);outline-offset:2px;}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:6px;height:6px;}
+::-webkit-scrollbar-track{background:var(--bg3);}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
+::-webkit-scrollbar-thumb:hover{background:var(--text3);}
+
+/* HEADER */
+.hdr{background:var(--navy);border-bottom:1px solid rgba(255,255,255,.12);padding:0 20px;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.24);}
+.hdr-l{display:flex;align-items:center;gap:12px;}
+.hdr-l img{display:none!important;}
+.hdr-l::before{content:'';display:block;width:181px;height:42px;background:url('기관로고-white.png') left center / contain no-repeat;flex-shrink:0;}
+.logo{background:rgba(255,255,255,.12);color:#fff;font-size:12px;font-weight:800;padding:4px 10px;border-radius:var(--radius-sm);letter-spacing:0;border:1px solid rgba(255,255,255,.18);}
+.hdr-title{font-size:14px;font-weight:700;color:#fff;}
+.hdr-r{display:flex;align-items:center;gap:8px;}
+
+.btn{height:32px;padding:0 13px;border-radius:var(--radius-sm);font-size:13px;font-weight:700;cursor:pointer;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.10);color:#dbeafe;font-family:var(--font);transition:background .15s,color .15s,border-color .15s,box-shadow .15s;}
+.btn:hover{background:rgba(255,255,255,.16);color:#fff;border-color:rgba(255,255,255,.30);}
+.btn-p{background:var(--blue);color:#fff;border-color:var(--blue);}
+.btn-p:hover{background:#2b75cf;border-color:#2b75cf;color:#fff;box-shadow:0 3px 10px rgba(26,95,180,.28);}
+
+.srch{position:relative;}
+.srch input{height:32px;padding:0 12px 0 30px;border-radius:var(--radius-sm);border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.10);color:#fff;font-size:13px;font-family:var(--font);width:190px;transition:all .2s;}
+.srch input::placeholder{color:#aebfd4;}
+.srch input:focus{outline:none;border-color:#7db0e8;width:230px;background:#fff;color:var(--text);box-shadow:0 0 0 3px rgba(125,176,232,.24);}
+.srch-ic{position:absolute;left:9px;top:50%;transform:translateY(-50%);color:#b9c8dc;font-size:14px;pointer-events:none;}
+
+.vtgl{display:flex;gap:2px;background:rgba(255,255,255,.10);border-radius:var(--radius-sm);padding:2px;border:1px solid rgba(255,255,255,.16);}
+.vbtn{height:28px;padding:0 11px;border-radius:5px;font-size:13px;font-weight:700;cursor:pointer;border:none;background:transparent;color:#b9c8dc;font-family:var(--font);transition:all .15s;}
+.vbtn.on{background:#fff;color:var(--navy);box-shadow:var(--sh1);}
+
+/* PROGRESS */
+.prog{height:2px;background:var(--border);position:fixed;top:56px;left:256px;right:0;z-index:99;}
+.prog-fill{height:100%;background:var(--blue);width:0%;transition:width .1s;}
+
+/* LAYOUT */
+.lay{display:flex;height:calc(100vh - 56px);}
+
+/* SIDEBAR */
+.side{width:256px;min-width:256px;background:#f8fafc;border-right:1px solid var(--border);overflow-y:auto;display:flex;flex-direction:column;}
+.side-sec{padding:16px 12px 6px;}
+.side-lbl{font-size:12px;font-weight:800;color:#64748b;letter-spacing:0;padding:0 8px;margin-bottom:8px;}
+.nv{display:flex;align-items:center;gap:8px;min-height:38px;padding:7px 10px;border-radius:var(--radius-md);cursor:pointer;transition:background .12s,border-color .12s,box-shadow .12s;border:1px solid transparent;margin-bottom:3px;}
+.nv:hover{background:var(--bg3);}
+.nv.on{background:#fff;border-color:var(--blue-md);box-shadow:0 2px 8px rgba(15,52,96,.08);}
+.nv.on .nv-num{background:var(--blue);color:#fff;}
+.nv.on .nv-lbl{color:var(--blue-dk);font-weight:800;}
+.nv-num{width:24px;height:24px;border-radius:7px;background:var(--surface);color:var(--text3);font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .12s;}
+.nv-lbl{font-size:14px;color:var(--text2);font-weight:600;flex:1;transition:all .12s;word-break:keep-all;}
+.nv-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.side-div{height:1px;background:var(--border);margin:8px 12px;}
+.lgd{margin:0 12px 12px;padding:12px 14px;background:#fff;border-radius:var(--radius-lg);border:1px solid var(--border);box-shadow:var(--sh1);}
+.lgd-t{font-size:12px;color:#64748b;font-weight:800;letter-spacing:0;margin-bottom:8px;}
+.lgd-r{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--text2);margin-bottom:5px;}
+.lgd-d{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+
+/* MAIN */
+.main{flex:1;overflow-y:auto;}
+
+/* HERO */
+.hero{background:linear-gradient(180deg,#ffffff 0%,#f8fafc 100%);border-bottom:1px solid var(--border);padding:32px 40px 26px;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--blue);pointer-events:none;}
+.hero::after{display:none;}
+.hero-id{font-size:12px;color:var(--blue-dk);display:inline-flex;align-items:center;gap:6px;background:var(--blue-lt);padding:4px 10px;border-radius:var(--radius-sm);border:1px solid var(--blue-md);margin-bottom:12px;font-weight:800;}
+.hero-h{font-size:25px;font-weight:800;color:var(--navy);margin-bottom:6px;line-height:1.3;letter-spacing:0;}
+.hero-sub{font-size:15px;color:var(--text2);margin-bottom:20px;}
+.hero-chips{display:flex;gap:10px;flex-wrap:wrap;}
+.hchip{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;padding:5px 12px;border-radius:var(--radius-sm);border:1px solid var(--border);background:#fff;color:var(--text2);box-shadow:var(--sh1);}
+.hchip-dot{width:6px;height:6px;border-radius:50%;background:var(--green);}
+
+/* FILTER */
+.fbar{padding:12px 40px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.96);flex-wrap:wrap;position:sticky;top:56px;z-index:90;box-shadow:0 2px 8px rgba(15,23,42,.05);}
+.flbl{font-size:12px;font-weight:800;color:#64748b;letter-spacing:0;margin-right:2px;}
+.fchip{height:30px;padding:0 12px;border-radius:var(--radius-sm);font-size:13px;font-weight:700;cursor:pointer;border:1px solid var(--border);background:#fff;color:var(--text2);font-family:var(--font);transition:all .15s;}
+.fchip:hover{background:var(--bg3);color:var(--text);}
+.fchip.on       {background:var(--blue-lt);border-color:var(--blue-md);color:var(--blue);}
+.fchip.fg.on    {background:var(--green-lt);border-color:var(--green-md);color:var(--green);}
+.fchip.fa.on    {background:var(--amber-lt);border-color:var(--amber-md);color:var(--amber);}
+.fcnt{font-size:13px;color:var(--text3);margin-left:auto;font-weight:700;}
+
+/* CONTENT */
+.content{padding:28px 40px 72px;}
+
+/* FLOW */
+.fv{display:flex;flex-direction:column;}
+@keyframes fu{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+.pc{position:relative;display:flex;gap:0;animation:fu .3s ease both;}
+
+.tlcol{width:52px;display:flex;flex-direction:column;align-items:center;flex-shrink:0;}
+.tlc{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;flex-shrink:0;z-index:1;margin-top:16px;border:2px solid;box-shadow:var(--sh1);transition:all .2s;}
+.tll{width:2px;flex:1;min-height:14px;}
+
+.cb{flex:1;margin:10px 0 0;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--sh1);transition:border-color .2s,box-shadow .2s;}
+.cb:hover{border-color:var(--border2);box-shadow:var(--sh2);}
+.cb.acard{border-color:var(--blue-md);box-shadow:0 0 0 3px rgba(26,111,196,.08),var(--sh2);}
+
+.ch{padding:14px 18px;display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none;transition:background .15s;}
+.ch:hover{background:var(--bg3);}
+.ch-t{font-size:16px;font-weight:800;color:var(--text);flex:1;}
+.cbgs{display:flex;align-items:center;gap:6px;flex-shrink:0;}
+.bdg{font-size:12px;padding:3px 9px;border-radius:var(--radius-sm);font-weight:800;white-space:nowrap;border:1px solid;}
+.b-bl{background:var(--blue-lt);color:var(--blue);border-color:var(--blue-md);}
+.b-gr{background:var(--green-lt);color:var(--green);border-color:var(--green-md);}
+.b-am{background:var(--amber-lt);color:var(--amber);border-color:var(--amber-md);}
+.b-cnt{font-size:12px;padding:3px 8px;border-radius:999px;background:var(--surface);color:var(--text3);font-weight:700;border:1px solid var(--border);}
+.chv{color:var(--text3);font-size:13px;transition:transform .2s;flex-shrink:0;}
+.chv.op{transform:rotate(180deg);}
+
+.cd{display:none;border-top:1px solid var(--border);}
+.cd.op{display:block;}
+
+.cdb{padding:10px 18px;font-size:14px;color:var(--text2);background:#f8fafc;border-bottom:1px solid var(--border);line-height:1.65;}
+
+.nb{margin:10px 18px 2px;padding:10px 13px;border-radius:var(--radius-md);font-size:13px;line-height:1.5;display:flex;gap:8px;align-items:flex-start;}
+.nb-sk{background:var(--green-lt);border:1px solid var(--green-md);}
+.nb-ic{flex-shrink:0;font-size:15px;}
+.nb-tx{color:var(--text2);}
+.nb-tx strong{color:var(--green);font-weight:600;}
+
+.sl{padding:10px 18px 14px;display:flex;flex-direction:column;}
+.si{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--bg3);}
+.si:last-child{border-bottom:none;padding-bottom:0;}
+.si-l{display:flex;flex-direction:column;align-items:center;flex-shrink:0;}
+.si-d{width:8px;height:8px;border-radius:50%;margin-top:5px;flex-shrink:0;}
+.si-v{width:1px;flex:1;min-height:10px;margin-top:3px;}
+.si:last-child .si-v{display:none;}
+.si-c{flex:1;padding-bottom:2px;}
+.si-t{font-size:15px;font-weight:800;color:var(--text);margin-bottom:3px;}
+.si-d2{font-size:14px;color:var(--text2);line-height:1.6;margin-bottom:6px;}
+.si-ch{display:flex;flex-wrap:wrap;gap:4px;}
+
+.cp{font-size:12px;padding:3px 8px;border-radius:var(--radius-sm);border:1px solid;display:inline-flex;align-items:center;gap:4px;font-weight:700;}
+.cp-ow{background:var(--surface);border-color:var(--border);color:var(--text2);}
+.cp-dc{background:var(--blue-lt);border-color:var(--blue-md);color:var(--blue);}
+.cp-wn{background:var(--amber-lt);border-color:var(--amber-md);color:var(--amber);}
+.cp-co{background:var(--purple-lt);border-color:var(--purple-md);color:var(--purple);}
+
+.conn{height:14px;display:flex;justify-content:flex-start;padding-left:38px;}
+.conn-l{width:2px;height:100%;}
+
+/* GRID */
+.gv{display:none;}
+.gv.on{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:14px;}
+.gc{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;cursor:pointer;transition:all .2s;box-shadow:var(--sh1);}
+.gc:hover{border-color:var(--border2);box-shadow:var(--sh3);transform:translateY(-2px);}
+.gc-n{font-size:22px;font-weight:800;margin-bottom:6px;}
+.gc-t{font-size:16px;font-weight:800;color:var(--text);margin-bottom:5px;}
+.gc-d{font-size:14px;color:var(--text2);line-height:1.55;margin-bottom:12px;}
+.gc-f{display:flex;justify-content:space-between;align-items:center;}
+.gc-s{font-size:12px;color:var(--text3);font-weight:700;}
+
+/* MATRIX */
+.mv{display:none;overflow-x:auto;}
+.mv.on{display:block;}
+.mt{border-collapse:collapse;width:100%;min-width:700px;}
+.mt th,.mt td{border:1px solid var(--border);padding:10px 12px;text-align:left;vertical-align:top;}
+.mt th{background:#f1f5f9;font-size:13px;font-weight:800;color:var(--navy);white-space:nowrap;letter-spacing:0;}
+.mt td{font-size:14px;color:var(--text2);background:var(--bg2);}
+.mt td.phn{font-weight:800;color:var(--text);font-size:15px;}
+.mt tr:hover td{background:var(--bg3);}
+
+/* STATUS */
+.stbar{padding:7px 40px;background:rgba(255,255,255,.96);border-top:1px solid var(--border);display:flex;align-items:center;gap:16px;font-size:12px;color:var(--text3);font-weight:700;position:sticky;bottom:0;}
+.st-dot{width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block;margin-right:4px;}
+
+/* SCROLL TOP */
+.sct{position:fixed;bottom:28px;right:28px;width:40px;height:40px;background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius-md);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--text2);box-shadow:var(--sh2);transition:all .2s;opacity:0;pointer-events:none;z-index:50;}
+.sct.vis{opacity:1;pointer-events:auto;}
+.sct:hover{background:var(--blue);color:#fff;border-color:var(--blue);transform:translateY(-2px);box-shadow:var(--sh3);}
+
+/* MODAL */
+.ovl{position:fixed;inset:0;background:rgba(15,20,30,.45);z-index:200;display:none;align-items:center;justify-content:center;padding:24px;}
+.ovl.open{display:flex;}
+.modal{background:var(--bg2);border-radius:var(--radius-lg);width:100%;max-width:760px;max-height:86vh;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.3);display:flex;flex-direction:column;animation:mUp .25s ease;}
+@keyframes mUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+.modal-hd{background:var(--navy);color:#fff;padding:16px 22px;display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.modal-hd .mh-ic{font-size:20px;}
+.modal-hd .mh-t{font-size:18px;font-weight:800;flex:1;}
+.modal-hd .mh-x{cursor:pointer;font-size:20px;color:#cdd8e6;width:30px;height:30px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.modal-hd .mh-x:hover{background:rgba(255,255,255,.15);color:#fff;}
+.modal-bd{padding:18px 22px;overflow-y:auto;}
+.tsrch{position:relative;margin-bottom:14px;}
+.tsrch input{width:100%;height:38px;padding:0 12px 0 34px;border-radius:var(--radius-md);border:1px solid var(--border);background:var(--bg3);color:var(--text);font-size:14px;font-family:var(--font);}
+.tsrch input:focus{outline:none;border-color:var(--blue);background:var(--bg2);box-shadow:0 0 0 3px rgba(26,111,196,.1);}
+.tsrch .ts-ic{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:16px;}
+.term{display:flex;gap:14px;padding:11px 0;border-bottom:1px solid var(--bg3);}
+.term:last-child{border-bottom:none;}
+.term-k{flex-shrink:0;width:150px;}
+.term-kb{display:inline-block;background:var(--amber-lt);color:var(--amber-dk);border:1px solid var(--amber-md);font-size:13px;font-weight:800;padding:4px 10px;border-radius:var(--radius-sm);}
+.term-d{flex:1;font-size:12.5px;color:var(--text2);line-height:1.6;}
+.term-d .en{color:var(--text3);font-size:13px;font-family:var(--mono);}
+.term.hide{display:none;}
+@media print{.hdr,.side,.fbar,.sct,.prog{display:none!important;}.lay{display:block;}.main{overflow:visible;}.cd{display:block!important;}.chv{display:none;}.ovl{display:none!important;}}
+
+/* ===== EXTRA PAGES ===== */
+.page{display:none;}
+.page.on{display:block;}
+.sec-t{font-size:17px;font-weight:800;margin:30px 0 12px;display:flex;align-items:center;gap:9px;color:var(--navy);}
+.sec-t .n{background:var(--blue);color:#fff;width:24px;height:24px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;flex-shrink:0;}
+.sec-sub{font-size:14px;color:var(--text3);margin:-6px 0 14px 33px;}
+.hf{display:flex;align-items:stretch;gap:0;margin:14px 0 22px;flex-wrap:wrap;}
+.hfs{flex:1;min-width:130px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:13px 14px;box-shadow:var(--sh1);}
+.hfs-n{font-size:12px;color:var(--blue);font-weight:800;margin-bottom:5px;letter-spacing:0;}
+.hfs-t{font-size:13px;font-weight:800;color:var(--text);margin-bottom:4px;line-height:1.35;}
+.hfs-d{font-size:13px;color:var(--text2);line-height:1.55;}
+.hfa{display:flex;align-items:center;justify-content:center;width:26px;color:var(--border2);font-size:17px;flex-shrink:0;}
+@media (max-width:1180px){.hf{flex-direction:column;}.hfa{width:100%;height:22px;transform:rotate(90deg);}.hfs{min-width:0;}}
+.brg{display:flex;gap:14px;flex-wrap:wrap;margin:14px 0 22px;}
+.brgc{flex:1;min-width:200px;border-radius:10px;padding:14px 16px;border:1px solid;box-shadow:var(--sh1);}
+.brgc-t{font-size:15px;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.brgc-d{font-size:11.5px;line-height:1.6;}
+.fml{font-size:12.5px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-md);padding:8px 12px;margin-top:8px;color:var(--blue-dk);font-weight:700;}
+.gc.static{cursor:default;}
+.gc.static:hover{transform:none;}
+.grphdr{font-size:13px;font-weight:800;color:#64748b;letter-spacing:0;margin:18px 0 8px;}
+
+/* ===== STAT PAGES ===== */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin:14px 0 22px;}
+.kpi{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px 18px;box-shadow:var(--sh1);border-top:3px solid var(--blue);}
+.kpi-l{font-size:12px;color:#64748b;font-weight:800;letter-spacing:0;margin-bottom:6px;}
+.kpi-v{font-size:26px;font-weight:800;color:var(--text);}
+.kpi-s{font-size:11.5px;color:var(--text2);margin-top:4px;}
+.kpi-v .u{font-size:15px;font-weight:500;color:var(--text3);margin-left:2px;}
+.bch{display:flex;flex-direction:column;gap:10px;margin:14px 0 22px;}
+.bcr{display:flex;align-items:center;gap:12px;}
+.bcr-l{width:108px;flex-shrink:0;font-size:14px;color:var(--text2);text-align:right;}
+.bcr-bar{flex:1;height:20px;background:var(--bg3);border-radius:6px;overflow:hidden;position:relative;}
+.bcr-fill{height:100%;border-radius:6px;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;color:#fff;font-size:12px;font-weight:800;white-space:nowrap;}
+.bcr-v{width:90px;flex-shrink:0;font-size:11.5px;color:var(--text2);font-weight:700;}
+.donut-wrap{display:flex;align-items:center;gap:28px;flex-wrap:wrap;margin:14px 0 22px;}
+.donut-wrap.chart-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px 22px;box-shadow:var(--sh1);}
+.donut{width:156px;height:156px;border-radius:50%;flex-shrink:0;position:relative;border:8px solid #fff;box-shadow:0 8px 20px rgba(15,52,96,.13);}
+.donut::after{content:'';position:absolute;inset:34px;background:#fff;border-radius:50%;box-shadow:inset 0 0 0 1px var(--border);}
+.donut.pie-chart{border:0;background:#fff;display:flex;align-items:center;justify-content:center;}
+.donut.pie-chart::after{display:none;}
+.donut-svg{width:156px;height:156px;display:block;transform:rotate(-90deg);}
+.donut-svg .track{fill:none;stroke:var(--bg3);stroke-width:24;}
+.donut-svg .slice{fill:none;stroke-width:24;stroke-linecap:butt;}
+.donut-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:1;color:var(--navy);font-weight:800;line-height:1.2;text-align:center;pointer-events:none;}
+.donut-center strong{font-size:24px;}
+.donut-center span{font-size:11px;color:var(--text3);margin-top:2px;}
+.donut-lgd{display:flex;flex-direction:column;gap:8px;min-width:250px;}
+.donut-li{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text2);font-weight:600;}
+.donut-d{width:11px;height:11px;border-radius:3px;flex-shrink:0;}
+
+/* LOGIN PAGE */
+.login-page{min-height:100%;display:flex;align-items:stretch;background:#07152a;}
+.login-hero{position:relative;flex:1;min-height:calc(100vh - 56px);padding:56px 64px;display:grid;grid-template-columns:minmax(360px,1fr) 380px;align-items:center;gap:40px;background:linear-gradient(90deg,rgba(5,16,34,.94) 0%,rgba(9,30,61,.82) 40%,rgba(9,30,61,.35) 100%),url('login-bg.png') center/cover no-repeat;overflow:hidden;}
+.login-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 18% 75%,rgba(125,185,255,.18),transparent 34%);pointer-events:none;}
+.login-copy,.login-card{position:relative;z-index:1;}
+.login-kicker{display:inline-flex;align-items:center;gap:8px;height:30px;padding:0 11px;border-radius:var(--radius-sm);background:rgba(125,185,255,.13);border:1px solid rgba(125,185,255,.34);color:#cfe6ff;font-size:12px;font-weight:800;margin-bottom:18px;}
+.login-title{max-width:780px;color:#fff;font-size:30px;font-weight:800;line-height:1.38;word-break:keep-all;margin-bottom:18px;}
+.login-sub{max-width:680px;color:#dbeafe;font-size:18px;font-weight:700;line-height:1.55;word-break:keep-all;margin-bottom:12px;}
+.login-desc{max-width:680px;color:#b7c7da;font-size:14px;line-height:1.75;word-break:keep-all;}
+.login-card{background:rgba(255,255,255,.94);border:1px solid rgba(255,255,255,.45);border-radius:var(--radius-lg);box-shadow:0 24px 70px rgba(0,0,0,.32);padding:28px;backdrop-filter:blur(10px);}
+.login-card-title{font-size:20px;font-weight:800;color:#0f3460;margin-bottom:4px;}
+.login-card-sub{font-size:13px;color:#64748b;margin-bottom:22px;}
+.login-form{display:flex;flex-direction:column;gap:14px;}
+.login-field{display:flex;flex-direction:column;gap:7px;}
+.login-field label{font-size:13px;font-weight:800;color:#334155;}
+.login-field input{height:42px;border:1.5px solid #cbd5e1;border-radius:var(--radius-sm);padding:0 12px;font-size:14px;color:#0f172a;background:#fff;transition:border-color .15s,box-shadow .15s;}
+.login-field input:focus{outline:none;border-color:#1a5fb4;box-shadow:0 0 0 3px rgba(26,95,180,.14);}
+.login-options{display:flex;align-items:center;justify-content:space-between;margin:2px 0 6px;}
+.login-save{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:700;color:#475569;cursor:pointer;}
+.login-save input{width:16px;height:16px;accent-color:#1a5fb4;}
+.login-submit{height:42px;border:0;border-radius:var(--radius-sm);background:#1a5fb4;color:#fff;font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 8px 18px rgba(26,95,180,.24);transition:background .15s,transform .15s,box-shadow .15s;}
+.login-submit:hover{background:#103d80;transform:translateY(-1px);box-shadow:0 10px 22px rgba(26,95,180,.3);}
+.login-contact{margin-top:18px;padding:13px 14px;border-radius:var(--radius-md);background:#f1f5f9;border:1px solid #dbe3ed;color:#475569;font-size:12.5px;line-height:1.6;}
+.login-contact strong{color:#0f3460;font-weight:800;}
+@media (max-width:1100px){.login-hero{grid-template-columns:1fr;padding:40px;}.login-card{max-width:420px;}.login-title{font-size:25px;}}
+
+/* DARK MODE: raise contrast for gray and blue text */
+body.dark {
+  --bg:      #0b1220;
+  --bg2:     #111827;
+  --bg3:     #1e293b;
+  --surface: #263244;
+  --border:  #334155;
+  --border2: #475569;
+  --text:    #f8fafc;
+  --text2:   #d7e0ea;
+  --text3:   #b7c4d4;
+
+  --navy:     #dbeafe;
+  --blue:     #7db9ff;
+  --blue-lt:  #173a63;
+  --blue-md:  #60a5fa;
+  --blue-dk:  #bfdbfe;
+
+  --green:    #86efac;
+  --green-lt: #123c2b;
+  --green-md: #4ade80;
+  --green-dk: #bbf7d0;
+
+  --amber:    #fbbf24;
+  --amber-lt: #4a2f0c;
+  --amber-md: #f59e0b;
+  --amber-dk: #fde68a;
+
+  --purple:   #c4b5fd;
+  --purple-lt:#312e58;
+  --purple-md:#a78bfa;
+
+  --red:      #fca5a5;
+  --red-lt:   #4a1f24;
+  --red-md:   #f87171;
+  --red-dk:   #fecaca;
+
+  --sh1: 0 1px 3px rgba(0,0,0,.38);
+  --sh2: 0 8px 18px rgba(0,0,0,.42);
+  --sh3: 0 14px 32px rgba(0,0,0,.48);
+}
+body.dark .side,
+body.dark .hero,
+body.dark .fbar,
+body.dark .stbar,
+body.dark .hchip,
+body.dark .fchip,
+body.dark .nv.on,
+body.dark .lgd,
+body.dark .cdb,
+body.dark .gc,
+body.dark .cb,
+body.dark .hfs,
+body.dark .kpi,
+body.dark .donut-wrap.chart-card,
+body.dark .modal,
+body.dark .donut.pie-chart,
+body.dark .mt td { background:#111827; }
+body.dark .hero { background:linear-gradient(180deg,#111827 0%,#0f172a 100%); }
+body.dark .side { background:#0f172a; }
+body.dark .fbar,
+body.dark .stbar { background:rgba(15,23,42,.96); }
+body.dark .mt th { background:#1e293b;color:#dbeafe; }
+body.dark .mt tr:hover td,
+body.dark .nv:hover,
+body.dark .ch:hover,
+body.dark .fchip:hover { background:#1e293b; }
+body.dark .donut::after { background:#111827; }
+body.dark .donut-center { color:#f8fafc; }
+body.dark .donut-center span { color:#cbd5e1; }
+body.dark .bcr-fill[style*="color:var(--text)"] { color:#0b1220!important; }
+body.dark .hero-id,
+body.dark .b-bl,
+body.dark .cp-dc,
+body.dark .fchip.on { color:#dbeafe; }
+body.dark .brgc[style*="background:var(--blue-lt)"] { background:#173a63!important;border-color:#60a5fa!important; }
+body.dark .brgc[style*="background:var(--surface)"] { background:#263244!important;border-color:#475569!important; }
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg:      #0b1220;
+    --bg2:     #111827;
+    --bg3:     #1e293b;
+    --surface: #263244;
+    --border:  #334155;
+    --border2: #475569;
+    --text:    #f8fafc;
+    --text2:   #d7e0ea;
+    --text3:   #b7c4d4;
+
+    --navy:     #dbeafe;
+    --blue:     #7db9ff;
+    --blue-lt:  #173a63;
+    --blue-md:  #60a5fa;
+    --blue-dk:  #bfdbfe;
+
+    --green:    #86efac;
+    --green-lt: #123c2b;
+    --green-md: #4ade80;
+    --green-dk: #bbf7d0;
+
+    --amber:    #fbbf24;
+    --amber-lt: #4a2f0c;
+    --amber-md: #f59e0b;
+    --amber-dk: #fde68a;
+
+    --purple:   #c4b5fd;
+    --purple-lt:#312e58;
+    --purple-md:#a78bfa;
+
+    --red:      #fca5a5;
+    --red-lt:   #4a1f24;
+    --red-md:   #f87171;
+    --red-dk:   #fecaca;
+
+    --sh1: 0 1px 3px rgba(0,0,0,.38);
+    --sh2: 0 8px 18px rgba(0,0,0,.42);
+    --sh3: 0 14px 32px rgba(0,0,0,.48);
+  }
+  .side,
+  .hero,
+  .fbar,
+  .stbar,
+  .hchip,
+  .fchip,
+  .nv.on,
+  .lgd,
+  .cdb,
+  .gc,
+  .cb,
+  .hfs,
+  .kpi,
+  .donut-wrap.chart-card,
+  .modal,
+  .donut.pie-chart,
+  .mt td { background:#111827; }
+  .hero { background:linear-gradient(180deg,#111827 0%,#0f172a 100%); }
+  .side { background:#0f172a; }
+  .fbar,
+  .stbar { background:rgba(15,23,42,.96); }
+  .mt th { background:#1e293b;color:#dbeafe; }
+  .mt tr:hover td,
+  .nv:hover,
+  .ch:hover,
+  .fchip:hover { background:#1e293b; }
+  .donut::after { background:#111827; }
+  .donut-center { color:#f8fafc; }
+  .donut-center span { color:#cbd5e1; }
+  .bcr-fill[style*="color:var(--text)"] { color:#0b1220!important; }
+  .hero-id,
+  .b-bl,
+  .cp-dc,
+  .fchip.on { color:#dbeafe; }
+  .brgc[style*="background:var(--blue-lt)"] { background:#173a63!important;border-color:#60a5fa!important; }
+  .brgc[style*="background:var(--surface)"] { background:#263244!important;border-color:#475569!important; }
+}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-l">
+    <img src="data:image/png;base64,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" alt="켑코이에스(주)" style="height:48px;width:auto;display:block;">
+    <span class="hdr-title">업무 분석 프로토타입</span>
+  </div>
+  <div class="hdr-r">
+    <div class="srch">
+      <span class="srch-ic">🔍</span>
+      <input type="text" placeholder="업무 검색..." oninput="doSearch(this.value)">
+    </div>
+    <div class="vtgl">
+      <button class="vbtn on" onclick="setView('flow',this)">흐름도</button>
+      <button class="vbtn"    onclick="setView('grid',this)">카드</button>
+      <button class="vbtn"    onclick="setView('matrix',this)">매트릭스</button>
+    </div>
+    <button class="btn btn-p" onclick="toggleAll()" id="toggleBtn">전체 펼치기</button>
+    <button class="btn" onclick="window.print()">인쇄</button>
+  </div>
+</header>
+
+<div class="prog"><div class="prog-fill" id="pf"></div></div>
+
+<div class="lay">
+  <aside class="side">
+    <div class="side-sec">
+      <div class="side-lbl">업무분석 프로토타입</div>
+      <div class="nv" id="nvLogin" onclick="showPage('login',this)">
+        <div class="nv-num" style="background:var(--blue-lt);color:var(--blue);">🔐</div>
+        <div class="nv-lbl">로그인</div>
+        <div class="nv-dot" style="background:var(--blue)"></div>
+      </div>
+      <div class="nv" id="nvTerms" onclick="openTerms()">
+        <div class="nv-num" style="background:var(--navy);color:#fff;">📖</div>
+        <div class="nv-lbl">용어의 정의</div>
+        <div class="nv-dot" style="background:var(--navy)"></div>
+      </div>
+      <div class="nv on" id="nvProc" onclick="showPage('proc',this)">
+        <div class="nv-num" style="background:var(--blue-lt);color:var(--blue);">📋</div>
+        <div class="nv-lbl">PMS 업무 프로세스</div>
+        <div class="nv-dot" style="background:var(--blue)"></div>
+      </div>
+      <div class="nv" id="nvSrm" onclick="showPage('srm',this)">
+        <div class="nv-num" style="background:var(--green-lt);color:var(--green);">🔄</div>
+        <div class="nv-lbl">SRM 업무 프로세스</div>
+        <div class="nv-dot" style="background:var(--green)"></div>
+      </div>
+      <div class="nv" id="nvPartner" onclick="showPage('partner',this)">
+        <div class="nv-num" style="background:var(--amber-lt);color:var(--amber);">✅</div>
+        <div class="nv-lbl">협력업체 선정 세부기준</div>
+        <div class="nv-dot" style="background:var(--amber)"></div>
+      </div>
+      <div class="nv" id="nvReg1" onclick="showPage('reg1',this)">
+        <div class="nv-num" style="background:var(--blue-lt);color:var(--blue-dk);">📜</div>
+        <div class="nv-lbl">계약규정</div>
+        <div class="nv-dot" style="background:var(--blue-dk)"></div>
+      </div>
+      <div class="nv" id="nvReg2" onclick="showPage('reg2',this)">
+        <div class="nv-num" style="background:var(--purple-lt);color:var(--purple);">🗂️</div>
+        <div class="nv-lbl">계약업무 처리기준</div>
+        <div class="nv-dot" style="background:var(--purple)"></div>
+      </div>
+      <div id="navList" style="display:none;"></div>
+    </div>
+    <div class="side-div"></div>
+    <div class="side-sec" style="padding-top:0;">
+      <div class="side-lbl">PMS 통계 자료 분석</div>
+      <div class="nv" id="nvStat1" onclick="showPage('stat1',this)">
+        <div class="nv-num" style="background:var(--blue-lt);color:var(--blue);">📊</div>
+        <div class="nv-lbl">종합현황</div>
+        <div class="nv-dot" style="background:var(--blue)"></div>
+      </div>
+      <div class="nv" id="nvStat2" onclick="showPage('stat2',this)">
+        <div class="nv-num" style="background:var(--blue-lt);color:var(--blue);">📈</div>
+        <div class="nv-lbl">연도별 추이</div>
+        <div class="nv-dot" style="background:var(--blue)"></div>
+      </div>
+      <div class="nv" id="nvStat3" onclick="showPage('stat3',this)">
+        <div class="nv-num" style="background:var(--green-lt);color:var(--green);">🏢</div>
+        <div class="nv-lbl">부서/분야별 현황</div>
+        <div class="nv-dot" style="background:var(--green)"></div>
+      </div>
+      <div class="nv" id="nvStat4" onclick="showPage('stat4',this)">
+        <div class="nv-num" style="background:var(--amber-lt);color:var(--amber);">🚦</div>
+        <div class="nv-lbl">진행/이상 현황</div>
+        <div class="nv-dot" style="background:var(--amber)"></div>
+      </div>
+      <div class="nv" id="nvStat5" onclick="showPage('stat5',this)">
+        <div class="nv-num" style="background:var(--green-lt);color:var(--green);">💵</div>
+        <div class="nv-lbl">상환·회수 현황</div>
+        <div class="nv-dot" style="background:var(--green)"></div>
+      </div>
+      <div class="nv" id="nvStat6" onclick="showPage('stat6',this)">
+        <div class="nv-num" style="background:var(--purple-lt);color:var(--purple);">📐</div>
+        <div class="nv-lbl">수익율 분석</div>
+        <div class="nv-dot" style="background:var(--purple)"></div>
+      </div>
+      <div class="nv" id="nvStat7" onclick="showPage('stat7',this)">
+        <div class="nv-num" style="background:var(--blue-lt);color:var(--blue);">🗓️</div>
+        <div class="nv-lbl">상환스케쥴 현황</div>
+        <div class="nv-dot" style="background:var(--blue)"></div>
+      </div>
+    </div>
+    <div class="side-div"></div>
+    <div class="lgd">
+      <div class="lgd-t">담당 부서</div>
+      <div class="lgd-r"><div class="lgd-d" style="background:var(--blue)"></div>EERS팀 / 개발팀 / 운영실</div>
+      <div class="lgd-r"><div class="lgd-d" style="background:var(--green)"></div>기획지원팀</div>
+      <div class="lgd-r"><div class="lgd-d" style="background:var(--amber)"></div>법무재무팀</div>
+      <div class="lgd-r"><div class="lgd-d" style="background:var(--purple)"></div>조건부 / 생략 가능</div>
+    </div>
+    <div class="lgd">
+      <div class="lgd-t">계약 유형</div>
+      <div class="lgd-r" style="font-size:12px;">🔷 시설대여계약 (3자 계약)</div>
+      <div class="lgd-r" style="font-size:12px;">🔶 장기할부판매계약 (2자)</div>
+      <div style="margin-top:5px;font-size:11px;color:var(--text3);line-height:1.5;">두 유형 모두 동일 절차 적용.<br>일부 단계에서 차이 발생.</div>
+    </div>
+  </aside>
+
+  <main class="main" id="mainArea">
+    <div class="page" id="loginPage">
+      <section class="login-page">
+        <div class="login-hero">
+          <div class="login-copy">
+            <div class="login-kicker">KEPCO ES PMS</div>
+            <h1 class="login-title">켑코이에스는 한국전력공사와 6개 발전사가 자본금 3천억원으로 설립한 에너지 효율 향상 전문기업입니다.</h1>
+            <p class="login-sub">사업의 시작부터 성과관리까지, 모든 업무를 하나로 연결하는 통합 사업관리 플랫폼</p>
+            <p class="login-desc">사업 접수, 계약, 발주, 공사, 상환, 정산에 이르는 전 과정을 통합 관리하여 신속한 의사결정과 경영 투명성을 지원합니다.</p>
+          </div>
+          <div class="login-card">
+            <div class="login-card-title">사업관리시스템(PMS)</div>
+            <div class="login-card-sub">사용자 계정으로 로그인해 업무를 시작하세요.</div>
+            <form class="login-form" onsubmit="event.preventDefault(); alert('로그인 기능은 프로토타입 화면입니다.');">
+              <div class="login-field">
+                <label for="loginId">아이디</label>
+                <input type="text" id="loginId" name="loginId" autocomplete="username" placeholder="아이디를 입력하세요">
+              </div>
+              <div class="login-field">
+                <label for="loginPw">비밀번호</label>
+                <input type="password" id="loginPw" name="loginPw" autocomplete="current-password" placeholder="비밀번호를 입력하세요">
+              </div>
+              <div class="login-options">
+                <label class="login-save"><input type="checkbox" id="saveLoginId"> 아이디 저장</label>
+              </div>
+              <button type="submit" class="login-submit">로그인</button>
+            </form>
+            <div class="login-contact">
+              <strong>로그인 문의</strong><br>
+              운영담당 : 이희성 부장 010-6844-2810
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+    <div class="page on" id="procPage">
+    <div class="hero">
+      <div class="hero-id">📋 E1-사업-절차-0003 &nbsp;·&nbsp; 12차 개정 &nbsp;·&nbsp; 2026.03.04.</div>
+      <div class="hero-h">에너지효율화사업<br>업무 프로세스 설계서</div>
+      <div class="hero-sub">사업접수부터 사업종료까지 전 단계 업무 흐름 및 책임 정의</div>
+      <div class="hero-chips">
+        <div class="hchip"><span class="hchip-dot"></span>최신 개정 반영</div>
+        <div class="hchip">📌 총 11개 단계</div>
+        <div class="hchip">📝 38개 세부 업무</div>
+        <div class="hchip">👥 4개 부서 관여</div>
+      </div>
+    </div>
+
+    <div class="fbar">
+      <span class="flbl">부서 필터</span>
+      <button class="fchip on"  onclick="setFilter('all',this)">전체</button>
+      <button class="fchip"     onclick="setFilter('EERS',this)">EERS팀</button>
+      <button class="fchip fg"  onclick="setFilter('기획지원팀',this)">기획지원팀</button>
+      <button class="fchip fa"  onclick="setFilter('법무재무팀',this)">법무재무팀</button>
+      <span class="fcnt" id="pcnt">11개 단계 표시 중</span>
+    </div>
+
+    <div class="content">
+      <div class="fv" id="flowView"></div>
+      <div class="gv" id="gridView"></div>
+      <div class="mv" id="matrixView"></div>
+    </div>
+    </div><!-- /procPage -->
+
+<div class="page" id="srmPage">
+  <div class="hero">
+    <div class="hero-id" style="color:var(--green);background:var(--green-lt);border-color:var(--green-md);">🔄 SRM (전자입찰시스템) &nbsp;·&nbsp; srm.kepcoes.co.kr</div>
+    <div class="hero-h">SRM 업무 프로세스<br>전주기 흐름</div>
+    <div class="hero-sub">견적요청부터 발주요청·입찰·평가심사를 거쳐 수주계약 체결 및 PMS 연계까지의 전체 흐름</div>
+    <div class="hero-chips">
+      <div class="hchip"><span class="hchip-dot" style="background:var(--green)"></span>전주기 6단계</div>
+      <div class="hchip">👥 4개 주체</div>
+      <div class="hchip">⚙️ 시스템 자동처리 포함</div>
+      <div class="hchip">🔗 PMS 양방향 연계</div>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="sec-t"><span class="n">1</span>SRM 전주기 흐름 (6단계)</div>
+    <div class="sec-sub">파랑=사업담당자 · 초록=계약담당자 · 주황=협력업체 · 보라=시스템 자동처리</div>
+    <div class="hf">
+      <div class="hfs" style="border-top:3px solid var(--blue);"><div class="hfs-n">STEP 1 · 사업담당자</div><div class="hfs-t">견적요청</div><div class="hfs-d">사업담당자가 EPC사·협력업체에 견적을 요청하고 견적서를 접수</div></div>
+      <div class="hfa">▶</div>
+      <div class="hfs" style="border-top:3px solid var(--blue);"><div class="hfs-n">STEP 2 · 사업담당자</div><div class="hfs-t">발주요청</div><div class="hfs-d">접수된 견적을 바탕으로 PMS 사업내용을 반영하여 SRM에 발주요청 작성</div></div>
+      <div class="hfa">▶</div>
+      <div class="hfs" style="border-top:3px solid var(--purple);"><div class="hfs-n">STEP 3 · 시스템</div><div class="hfs-t">발주요청번호 자동부여</div><div class="hfs-d">⚙️ SRM이 발주요청을 접수하면 발주요청번호를 자동 생성·부여</div></div>
+      <div class="hfa">▶</div>
+      <div class="hfs" style="border-top:3px solid var(--green);"><div class="hfs-n">STEP 4 · 계약담당자</div><div class="hfs-t">입찰계획·공고 등록</div><div class="hfs-d">계약방법(일반/지명/수의) 결정 후 입찰공고를 SRM에 등록, 입찰서류 게시</div></div>
+      <div class="hfa">▶</div>
+      <div class="hfs" style="border-top:3px solid var(--amber);"><div class="hfs-n">STEP 5 · 협력업체/시스템</div><div class="hfs-t">입찰참가 · 평가·심사</div><div class="hfs-d">협력업체가 입찰서 제출, 마감 시 ⚙️ 자동마감되어 계약담당자가 사업수행능력평가·가격평가로 적격심사</div></div>
+      <div class="hfa">▶</div>
+      <div class="hfs" style="border-top:3px solid var(--green);"><div class="hfs-n">STEP 6 · 계약담당자</div><div class="hfs-t">수주계약 체결</div><div class="hfs-d">낙찰자 확정 후 계약서 작성·체결, 계약정보를 PMS에 연계 등록</div></div>
+    </div>
+
+    <div class="sec-t"><span class="n">2</span>주체별 역할</div>
+    <div class="gv on">
+      <div class="gc static" style="border-top:3px solid var(--blue);">
+        <div class="gc-t">👤 사업담당자 (EERS팀)</div>
+        <div class="gc-d">견적요청, 발주요청 작성, PMS 사업정보 연동, 계약 후 사업관리 진행</div>
+      </div>
+      <div class="gc static" style="border-top:3px solid var(--green);">
+        <div class="gc-t">👤 계약담당자 (경영지원팀)</div>
+        <div class="gc-d">계약방법 결정, 입찰공고·계약위원회 운영, 적격심사·낙찰자 결정, 계약체결</div>
+      </div>
+      <div class="gc static" style="border-top:3px solid var(--amber);">
+        <div class="gc-t">🏢 협력업체</div>
+        <div class="gc-d">SRM 등록, 견적서·입찰서 제출, 사업수행능력평가 자료 제출</div>
+      </div>
+      <div class="gc static" style="border-top:3px solid var(--purple);">
+        <div class="gc-t">⚙️ 시스템 (SRM/PMS)</div>
+        <div class="gc-d">발주요청번호 자동부여, 입찰마감 자동처리, PMS↔SRM 데이터 연계</div>
+      </div>
+    </div>
+
+    <div class="sec-t"><span class="n">3</span>PMS ↔ SRM 연계 지점</div>
+    <div class="brg">
+      <div class="brgc" style="background:var(--blue-lt);border-color:var(--blue-md);">
+        <div class="brgc-t" style="color:var(--blue);">PMS → SRM</div>
+        <div class="brgc-d">PMS에 등록된 사업 추진계획·사업시행(안) 정보가 발주요청 작성 시 SRM으로 연계되어 사업코드·예산정보 자동 반영</div>
+      </div>
+      <div class="brgc" style="background:var(--green-lt);border-color:var(--green-md);">
+        <div class="brgc-t" style="color:var(--green);">SRM → PMS</div>
+        <div class="brgc-d">SRM에서 체결된 계약정보(계약번호·계약금액·계약상대자)가 PMS 계약대장에 자동 반영되어 계약관리에 활용</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="partnerPage">
+  <div class="hero">
+    <div class="hero-id" style="color:var(--amber);background:var(--amber-lt);border-color:var(--amber-md);">✅ 협력업체 선정 세부기준 &nbsp;·&nbsp; 2022.07.29 3차개정 (별표8)</div>
+    <div class="hero-h">협력업체 선정<br>세부기준</div>
+    <div class="hero-sub">투명하고 공정한 절차를 통해 에너지효율화사업의 협력업체를 선정하기 위한 SRM 기반 선정 기준</div>
+    <div class="hero-chips">
+      <div class="hchip"><span class="hchip-dot" style="background:var(--amber)"></span>선정절차 7단계</div>
+      <div class="hchip">📐 입찰방식 4종</div>
+      <div class="hchip">📊 사업수행능력평가 80점</div>
+      <div class="hchip">🛡️ 안전보건수준평가 A/B/C</div>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="sec-t"><span class="n">1</span>협력업체 선정 절차 (7단계)</div>
+    <div class="hf">
+      <div class="hfs"><div class="hfs-n">STEP 1</div><div class="hfs-t">선정의뢰</div><div class="hfs-d">계약요청부서가 계약담당부서에 협력업체 선정·계약을 의뢰</div></div>
+      <div class="hfa">▶</div>
+      <div class="hfs"><div class="hfs-n">STEP 2</div><div class="hfs-t">공고/공개</div><div class="hfs-d">SRM 및 홈페이지에 입찰공고, 용역과업내용 사전공개</div></div>
+      <div class="hfa">▶</div>
+      <div class="hfs"><div class="hfs-n">STEP 3</div><div class="hfs-t">참가신청·서류접수</div><div class="hfs-d">입찰참가신청서, 청렴이행각서, 입찰보증금 등 접수</div></div>
+      <div class="hfa">▶</div>
+      <div class="hfs"><div class="hfs-n">STEP 4</div><div class="hfs-t">자격 심사</div><div class="hfs-d">면허·등록·결격사유 등 입찰참가자격 확인</div></div>
+      <div class="hfa">▶</div>
+      <div class="hfs"><div class="hfs-n">STEP 5</div><div class="hfs-t">입찰 안내</div><div class="hfs-d">입찰방식(4종 중 1)에 따른 입찰서·제안서 제출 안내</div></div>
+      <div class="hfa">▶</div>
+      <div class="hfs"><div class="hfs-n">STEP 6</div><div class="hfs-t">가격입찰 · 평가</div><div class="hfs-d">복수예비가격 방식 가격평가 + 사업수행능력평가(80점) 종합</div></div>
+      <div class="hfa">▶</div>
+      <div class="hfs"><div class="hfs-n">STEP 7</div><div class="hfs-t">결과통보·계약체결</div><div class="hfs-d">낙찰자 결정·통보 후 10일 이내 계약서 작성·체결</div></div>
+    </div>
+
+    <div class="sec-t"><span class="n">2</span>입찰방식 4종</div>
+    <div class="gv on">
+      <div class="gc static" style="border-top:3px solid var(--blue);">
+        <div class="gc-n" style="color:var(--blue);">01</div>
+        <div class="gc-t">최저가 낙찰</div>
+        <div class="gc-d">예정가격 이하의 최저가격을 제시한 자를 낙찰자로 결정하는 방식. 가격 외 평가요소가 크지 않은 단순 구매에 적용.</div>
+      </div>
+      <div class="gc static" style="border-top:3px solid var(--green);">
+        <div class="gc-n" style="color:var(--green);">02</div>
+        <div class="gc-t">제한적 최저가</div>
+        <div class="gc-d">낙찰하한율 이상의 입찰자 중 최저가격을 제시한 자를 낙찰자로 결정. 지나치게 낮은 가격으로 인한 품질저하를 방지.</div>
+      </div>
+      <div class="gc static" style="border-top:3px solid var(--amber);">
+        <div class="gc-n" style="color:var(--amber);">03</div>
+        <div class="gc-t">2단계 경쟁입찰</div>
+        <div class="gc-d">규격(기술)입찰서를 먼저 제출받아 적격자를 선정한 후, 적격자에 한해 가격입찰을 진행하는 방식 (계약규정 제37조 연계).</div>
+      </div>
+      <div class="gc static" style="border-top:3px solid var(--purple);">
+        <div class="gc-n" style="color:var(--purple);">04</div>
+        <div class="gc-t">적격심사</div>
+        <div class="gc-d">사업수행능력평가(80점) + 가격평가를 합산한 종합점수로 낙찰자를 결정하는 방식. 35점 미달 시 부적격 처리.</div>
+      </div>
+    </div>
+
+    <div class="sec-t"><span class="n">3</span>사업수행능력평가 (80점 / 35점 통과)</div>
+    <div class="sec-sub">12개 평가항목을 3개 영역으로 구성, 합계 35점 이상 시 적격</div>
+    <div class="brg">
+      <div class="brgc" style="background:var(--blue-lt);border-color:var(--blue-md);">
+        <div class="brgc-t" style="color:var(--blue);">경영상태</div>
+        <div class="brgc-d">신용평가등급 등 재무 안정성 항목으로 구성</div>
+      </div>
+      <div class="brgc" style="background:var(--green-lt);border-color:var(--green-md);">
+        <div class="brgc-t" style="color:var(--green);">기술·수행능력</div>
+        <div class="brgc-d">유사 시공·공급 실적, 기술인력, 보유장비 등 항목으로 구성</div>
+      </div>
+      <div class="brgc" style="background:var(--amber-lt);border-color:var(--amber-md);">
+        <div class="brgc-t" style="color:var(--amber);">신뢰도</div>
+        <div class="brgc-d">계약이행 신뢰도, 제재 이력 등 가감점 항목으로 구성</div>
+      </div>
+    </div>
+
+    <div class="sec-t"><span class="n">4</span>안전보건수준 평가</div>
+    <div class="sec-sub">중대재해처벌법 적용 대상 공사·용역에 대해 입찰공고 시 사전열람하도록 안내 (계약규정 제27조③)</div>
+    <div class="brg">
+      <div class="brgc" style="background:var(--green-lt);border-color:var(--green-md);">
+        <div class="brgc-t" style="color:var(--green);">A등급</div>
+        <div class="brgc-d">안전보건관리체계가 우수한 업체. 적격심사 시 가점 부여</div>
+      </div>
+      <div class="brgc" style="background:var(--amber-lt);border-color:var(--amber-md);">
+        <div class="brgc-t" style="color:var(--amber);">B등급</div>
+        <div class="brgc-d">기준 충족 업체. 일반 적격 처리</div>
+      </div>
+      <div class="brgc" style="background:var(--red-lt);border-color:var(--red-md);">
+        <div class="brgc-t" style="color:var(--red);">C등급</div>
+        <div class="brgc-d">기준 미달 업체. 감점 또는 입찰참가 제한 검토</div>
+      </div>
+    </div>
+
+    <div class="sec-t"><span class="n">5</span>낙찰하한율 (제한적 최저가 적용)</div>
+    <div class="sec-sub">예정가격 대비 입찰가격이 아래 비율 미만이면 무효처리되는 4개 분야 기준율</div>
+    <div class="mv on" style="display:block;">
+      <table class="mt">
+        <thead><tr><th>분야</th><th>적용 구간</th><th>기준</th></tr></thead>
+        <tbody>
+          <tr><td class="phn">공사</td><td>추정가격 규모별 구간 설정</td><td>예정가격 대비 일정 비율 미만 입찰은 낙찰하한율 미달로 무효</td></tr>
+          <tr><td class="phn">물품구매</td><td>추정가격 규모별 구간 설정</td><td>예정가격 대비 일정 비율 미만 입찰은 낙찰하한율 미달로 무효</td></tr>
+          <tr><td class="phn">기술용역</td><td>추정가격 규모별 구간 설정</td><td>예정가격 대비 일정 비율 미만 입찰은 낙찰하한율 미달로 무효</td></tr>
+          <tr><td class="phn">학술용역</td><td>추정가격 규모별 구간 설정</td><td>예정가격 대비 일정 비율 미만 입찰은 낙찰하한율 미달로 무효</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="sec-sub">※ 분야별 세부 구간(19개)·비율은 「SRM 협력업체 선정 세부기준」 낙찰하한율표 원문을 따른다.</div>
+
+    <div class="sec-t"><span class="n">6</span>입찰참가자격 취소·재선정 사유 (9개 항목)</div>
+    <div class="gv on">
+      <div class="gc static" style="border-top:3px solid var(--red);"><div class="gc-t">① 허위서류 제출</div><div class="gc-d">입찰참가신청·평가 관련 서류를 위조·허위 작성한 경우</div></div>
+      <div class="gc static" style="border-top:3px solid var(--red);"><div class="gc-t">② 입찰담합</div><div class="gc-d">입찰가격 유지·특정인 낙찰을 위한 담합행위가 확인된 경우</div></div>
+      <div class="gc static" style="border-top:3px solid var(--red);"><div class="gc-t">③ 계약 미체결</div><div class="gc-d">낙찰 후 정당한 이유 없이 소정기간 내 계약을 체결하지 않은 경우</div></div>
+      <div class="gc static" style="border-top:3px solid var(--red);"><div class="gc-t">④ 계약 불이행</div><div class="gc-d">계약체결 후 계약상의 의무를 이행하지 않아 해제·해지된 경우</div></div>
+      <div class="gc static" style="border-top:3px solid var(--red);"><div class="gc-t">⑤ 청렴계약 위반</div><div class="gc-d">청렴계약 이행각서 위반사항이 확인된 경우</div></div>
+      <div class="gc static" style="border-top:3px solid var(--red);"><div class="gc-t">⑥ 자격요건 미충족</div><div class="gc-d">면허·등록·인가 등 법령상 자격요건을 상실한 경우</div></div>
+      <div class="gc static" style="border-top:3px solid var(--red);"><div class="gc-t">⑦ 부정행위</div><div class="gc-d">검사·평가 과정에서 부정한 방법으로 결과에 영향을 미친 경우</div></div>
+      <div class="gc static" style="border-top:3px solid var(--red);"><div class="gc-t">⑧ 안전·중대재해 위반</div><div class="gc-d">중대재해처벌법 등 안전보건 관련 법령을 위반한 경우</div></div>
+      <div class="gc static" style="border-top:3px solid var(--red);"><div class="gc-t">⑨ 기타 신뢰 손상행위</div><div class="gc-d">기타 거래 신뢰를 현저히 손상시키는 행위가 확인된 경우</div></div>
+    </div>
+    <div class="brg">
+      <div class="brgc" style="background:var(--red-lt);border-color:var(--red-md);flex:none;width:100%;">
+        <div class="brgc-t" style="color:var(--red);">⏱ 제재 효과</div>
+        <div class="brgc-d">위 사유에 해당하는 협력업체는 입찰참가자격이 취소되며, <strong>2년간</strong> 당사 입찰·계약 참가가 제한된다.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="regPage1">
+  <div class="hero">
+    <div class="hero-id">📜 계약규정 &nbsp;·&nbsp; 2022.07.29 5차개정 &nbsp;·&nbsp; 총 143조 · 4개 장</div>
+    <div class="hero-h">계약규정<br>핵심 절차 다이어그램</div>
+    <div class="hero-sub">물품구매·공사·용역 계약의 방법, 절차, 검사, 대금지급에 관한 회사 규정 요약</div>
+    <div class="hero-chips">
+      <div class="hchip"><span class="hchip-dot"></span>2022.07.29 5차개정 반영</div>
+      <div class="hchip">📑 총 143조 + 별표1(청렴계약 이행각서)</div>
+      <div class="hchip">🏗️ 4개 장 구성</div>
+      <div class="hchip">🖥️ 전자입찰시스템(SRM) 원칙</div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <div class="sec-t"><span class="n">1</span>계약 추진 전체 절차 흐름</div>
+    <div class="sec-sub">계약요청부터 대금지급까지 표준 흐름 (제6·7·27·38·43·123·124조)</div>
+    <div class="hf">
+      <div class="hfs"><div class="hfs-n">제23·24조</div><div class="hfs-t">① 계약 요청</div><div class="hfs-d">계약요청부서가 구매요청서·과업내용서 등을 첨부하여 계약담당부서에 요청</div></div>
+      <div class="hfa">▶</div>
+      <div class="hfs"><div class="hfs-n">제7·26·100조</div><div class="hfs-t">② 계약방법 결정</div><div class="hfs-d">일반경쟁(원칙)·지명경쟁·수의계약 중 결정, 구매계획서 작성</div></div>
+      <div class="hfa">▶</div>
+      <div class="hfs"><div class="hfs-n">제27·99조</div><div class="hfs-t">③ 입찰공고</div><div class="hfs-d">홈페이지·SRM 게시, 마감 7일(긴급 5일) 전까지 공고</div></div>
+      <div class="hfa">▶</div>
+      <div class="hfs"><div class="hfs-n">제34~36조</div><div class="hfs-t">④ 예정가격 결정</div><div class="hfs-d">복수예비가격(15개) 작성 → 입찰참가자가 4개 추첨 → 평균금액 확정</div></div>
+      <div class="hfa">▶</div>
+      <div class="hfs"><div class="hfs-n">제38·41조</div><div class="hfs-t">⑤ 개찰·낙찰선언</div><div class="hfs-d">전자입찰시스템 절차에 따라 개찰 및 낙찰자 발표</div></div>
+      <div class="hfa">▶</div>
+      <div class="hfs"><div class="hfs-n">제43·111조</div><div class="hfs-t">⑥ 계약체결</div><div class="hfs-d">구비서류·보증금 7일내 제출 → 10일 이내 계약서 작성·체결</div></div>
+      <div class="hfa">▶</div>
+      <div class="hfs"><div class="hfs-n">제55~129조</div><div class="hfs-t">⑦ 이행·검사·대금지급</div><div class="hfs-d">품질검사(합격판정) → 기성고/준공검사 → 대금지급 · 지체상금 처리</div></div>
+    </div>
+
+    <div class="sec-t"><span class="n">2</span>계약방법의 종류</div>
+    <div class="sec-sub">제7·10·12조 — 계약담당부서는 일반경쟁을 원칙으로 하되 사유가 있을 때 지명경쟁·수의계약 적용</div>
+    <div class="gv on">
+      <div class="gc static" style="border-top:3px solid var(--blue);">
+        <div class="gc-n" style="color:var(--blue);">01</div>
+        <div class="gc-t">일반경쟁 (원칙)</div>
+        <div class="gc-d">제7조 — 계약체결은 일반경쟁을 원칙으로 하며, 입찰의 방법으로 사전 공고·통지 후 진행. 계약업무는 전자입찰시스템(srm.kepcoes.co.kr)을 통해 집행.</div>
+        <div class="gc-f"><span class="bdg b-bl">제7조</span><span class="gc-s">SRM 전자입찰 원칙</span></div>
+      </div>
+      <div class="gc static" style="border-top:3px solid var(--green);">
+        <div class="gc-n" style="color:var(--green);">02</div>
+        <div class="gc-t">지명경쟁</div>
+        <div class="gc-d">제10조 — 시행령 제23조제1항 각 호에 해당하는 경우(특수 기술·설비, 제한적 경쟁 등) 계약담당부서가 지명경쟁입찰 방법으로 진행 가능.</div>
+        <div class="gc-f"><span class="bdg b-gr">제10조</span><span class="gc-s">시행령 제23조①</span></div>
+      </div>
+      <div class="gc static" style="border-top:3px solid var(--amber);">
+        <div class="gc-n" style="color:var(--amber);">03</div>
+        <div class="gc-t">수의계약</div>
+        <div class="gc-d">제12~14조 — 경쟁이 곤란하거나 특정 사유에 해당하는 경우 협의에 의해 단독 계약상대자와 체결. 일정 규모 이상 공사·물품은 계약위원회 심의 필요.</div>
+        <div class="gc-f"><span class="bdg b-am">제12~14조</span><span class="gc-s">계약위원회 심의 대상 포함</span></div>
+      </div>
+    </div>
+
+    <div class="sec-t"><span class="n">3</span>수의계약이 가능한 주요 사유 (제12조)</div>
+    <div class="sec-sub">건설공사 4억원↑ · 전문공사 2억원↑ · 그 외 공사 1.6억원↑ · 물품/용역 1억원↑ 인 경우 계약위원회 심의 필요</div>
+    <div class="gv on">
+      <div class="gc static" style="border-top:3px solid var(--blue-md);">
+        <div class="gc-t">가. 공사 (제1호 가목)</div>
+        <div class="gc-d">하자책임 구분이 곤란하여 직전·현 시공자와 계약 / 동일현장 혼잡으로 추가 투입 곤란 / 특수지역·특허공법으로 경쟁 불가능 / 마감공사를 전차 시공자와 계약 / 사업 공동수주 업체와 계약 등</div>
+        <div class="gc-f"><span class="bdg b-bl">제12조①가</span><span class="gc-s">(1)~(8)호</span></div>
+      </div>
+      <div class="gc static" style="border-top:3px solid var(--green-md);">
+        <div class="gc-t">나. 물품 제조·구입 (제1호 나목)</div>
+        <div class="gc-d">특허품·실용신안·의장등록품 / 생산자·소지자가 단일인 / 국산대체 불가 부품 / 대리점 위임계약으로 경쟁견적 불가 / 파트너사 선정 후 수주 계약 / 에너지사용자가 제조사를 특정한 경우</div>
+        <div class="gc-f"><span class="bdg b-gr">제12조①나</span><span class="gc-s">(1)~(6)호</span></div>
+      </div>
+      <div class="gc static" style="border-top:3px solid var(--amber-md);">
+        <div class="gc-t">다. 용역·기타 (제1호 다목)</div>
+        <div class="gc-d">학술연구·설계·감리·조사·측량·시운전·검정·훈련·시설관리 등 특정인의 기술을 요하는 용역 / 부동산 매입·임대차</div>
+        <div class="gc-f"><span class="bdg b-am">제12조①다</span><span class="gc-s">(1)~(2)호</span></div>
+      </div>
+      <div class="gc static" style="border-top:3px solid var(--purple-md);">
+        <div class="gc-t">기타 사유 (제2~6호)</div>
+        <div class="gc-d">천재지변·돌발사고·긴급행사 등 경쟁 불가 / 정부·지방자치단체 등과 계약 / 전문 교육·연구설비 전략적 관계구축 / 사업을 발굴·제안한 회사와 계약 / 유찰에 의한 수의계약(제13조) / 낙찰자 계약 미체결시 수의계약(제14조)</div>
+        <div class="gc-f"><span class="bdg b-pu" style="background:var(--purple-lt);color:var(--purple);border-color:var(--purple-md);">제12조 2~6호</span><span class="gc-s">제13·14조 연계</span></div>
+      </div>
+    </div>
+
+    <div class="sec-t"><span class="n">4</span>복수예비가격에 의한 예정가격 결정 (제34~36조)</div>
+    <div class="sec-sub">제한적최저가·적격심사 대상 입찰에 적용되는 예정가격 산정 방식</div>
+    <div class="hf">
+      <div class="hfs"><div class="hfs-n">STEP 1</div><div class="hfs-t">사정금액 확정</div><div class="hfs-d">예정가격산출기초조서 작성 → 사정금액 결정</div></div>
+      <div class="hfa">▶</div>
+      <div class="hfs"><div class="hfs-n">STEP 2</div><div class="hfs-t">기초금액 산정</div><div class="hfs-d">사정금액 기준 −2% ~ −4% 범위에서 기초금액 산정·공개 (입찰참가신청 마감 전일까지)</div></div>
+      <div class="hfa">▶</div>
+      <div class="hfs"><div class="hfs-n">STEP 3</div><div class="hfs-t">복수예비가격 15개 작성</div><div class="hfs-d">기초금액 ±2% 범위 내 서로 다른 15개 작성 (위 7개·아래 8개)</div></div>
+      <div class="hfa">▶</div>
+      <div class="hfs"><div class="hfs-n">STEP 4</div><div class="hfs-t">입찰참가자 추첨</div><div class="hfs-d">입찰참가자가 15개 중 4개를 선정(추첨)</div></div>
+      <div class="hfa">▶</div>
+      <div class="hfs"><div class="hfs-n">STEP 5</div><div class="hfs-t">예정가격 확정</div><div class="hfs-d">추첨된 4개의 산술평균금액을 예정가격으로 확정 (1원 미만 절상, 단가계약은 소수3째자리 절상)</div></div>
+    </div>
+    <div class="sec-sub" style="margin-top:-10px;">※ 공사·용역의 복수예비가격은 예비가격기초금액의 100% ±2% 범위에서 동일 방식으로 15개 작성 (제106조, 제35·36조 준용)</div>
+
+    <div class="sec-t"><span class="n">5</span>낙찰가격 결정 기준 (제9조)</div>
+    <div class="brg">
+      <div class="brgc" style="background:var(--blue-lt);border-color:var(--blue-md);">
+        <div class="brgc-t" style="color:var(--blue);">📤 당사 지출 계약 (발주계약)</div>
+        <div class="brgc-d">에너지효율화사업 발주계약 등 당사가 비용을 지출하는 계약은 <strong>예정가격 이하 최저가격</strong>을 낙찰가격으로 한다.</div>
+      </div>
+      <div class="brgc" style="background:var(--green-lt);border-color:var(--green-md);">
+        <div class="brgc-t" style="color:var(--green);">📥 당사 수입 계약 (매각·임대 등)</div>
+        <div class="brgc-d">당사 수입이 발생하는 계약은 <strong>예정가격 이상 최고가격</strong>을 낙찰가격으로 한다.</div>
+      </div>
+    </div>
+
+    <div class="sec-t"><span class="n">6</span>물품검사 절차 및 판정 (제55~92조)</div>
+    <div class="sec-sub">검사담당자가 외관·구조·성능·재질을 확인 후 종합 판정</div>
+    <div class="hf">
+      <div class="hfs"><div class="hfs-n">제64·86조</div><div class="hfs-t">검사 의뢰</div><div class="hfs-d">계약상대자가 검사대상 물자를 검사장소에 운반·정리 후 검사 요청</div></div>
+      <div class="hfa">▶</div>
+      <div class="hfs"><div class="hfs-n">제77~83조</div><div class="hfs-t">사전·중간검사 (선택)</div><div class="hfs-d">생산 전·생산과정 검사가 중요한 경우 사전/중간검사 시행, 완성 전 결함 시정</div></div>
+      <div class="hfa">▶</div>
+      <div class="hfs"><div class="hfs-n">제84·89조</div><div class="hfs-t">납품승인검사</div><div class="hfs-d">발취검사/전량검사 방식으로 접수순위에 따라 검사 시행</div></div>
+      <div class="hfa">▶</div>
+      <div class="hfs"><div class="hfs-n">제67조</div><div class="hfs-t">검사항목 판정</div><div class="hfs-d">각 항목을 「만족」·「불만족」·「해당없음」·「무판정」으로 판정</div></div>
+      <div class="hfa">▶</div>
+      <div class="hfs"><div class="hfs-n">제67·92조</div><div class="hfs-t">종합 판정·통보</div><div class="hfs-d">합격/준합격/불합격으로 종합 판정 후 결과 통보, 불합격시 재납품</div></div>
+    </div>
+    <div class="brg">
+      <div class="brgc" style="background:var(--green-lt);border-color:var(--green-md);">
+        <div class="brgc-t" style="color:var(--green);">✅ 합격</div>
+        <div class="brgc-d">검사기준에 적합한 물자. 합격 표지 후 정상 납품 처리.</div>
+      </div>
+      <div class="brgc" style="background:var(--amber-lt);border-color:var(--amber-md);">
+        <div class="brgc-t" style="color:var(--amber);">🟡 준합격</div>
+        <div class="brgc-d">기준 미충족이나 사용상 지장이 없는 경우. 구매계약담당부서 감가지침에 따라 계약금액 감액 가능.</div>
+      </div>
+      <div class="brgc" style="background:var(--red-lt);border-color:var(--red-md);">
+        <div class="brgc-t" style="color:var(--red);">❌ 불합격</div>
+        <div class="brgc-d">기준 부적합 물자. 부적합사항 보고서 발행, 재납품 요구. 2회 연속 불합격 시 계약해제·해지 요청.</div>
+      </div>
+      <div class="brgc" style="background:var(--surface);border-color:var(--border2);">
+        <div class="brgc-t" style="color:var(--text2);">⬜ 무판정</div>
+        <div class="brgc-d">규격 미비·검사설비 부족 등으로 일부 항목 미실시. 사유 명시, 계약요청부서 의견 반영해 최종 판정.</div>
+      </div>
+    </div>
+
+    <div class="sec-t"><span class="n">7</span>지체상금 산정 (제53·126조)</div>
+    <div class="gv on">
+      <div class="gc static" style="border-top:3px solid var(--blue);">
+        <div class="gc-t">물품 — 일괄납품</div>
+        <div class="fml">지체상금 = 총계약금액 × 지체상금율 × 지체일수</div>
+        <div class="gc-d" style="margin-top:8px;">계약서상 납기를 초과한 일수만큼 부과. 당사 사정으로 검사가 지연된 일수는 제외(제54조).</div>
+      </div>
+      <div class="gc static" style="border-top:3px solid var(--green);">
+        <div class="gc-t">물품 — 분할납품</div>
+        <div class="fml">지체상금 = 미납대금액 × 지체상금율 × 지체일수</div>
+        <div class="gc-d" style="margin-top:8px;">분할납품을 허용한 경우 미납된 부분의 금액을 기준으로 산정.</div>
+      </div>
+      <div class="gc static" style="border-top:3px solid var(--amber);">
+        <div class="gc-t">공사·용역</div>
+        <div class="fml">지체상금징수액 = 계약금액 × 지체상금율 × 지체일수</div>
+        <div class="gc-d" style="margin-top:8px;">준공대금 지급시 현금으로 징수. 재시공지시가 있는 경우 재시공지시일을 지체상금 기산일로 함(제126조).</div>
+      </div>
+    </div>
+
+    <div class="sec-t"><span class="n">8</span>장(章)별 구성</div>
+    <div class="mv on" style="display:block;">
+      <table class="mt">
+        <thead><tr><th>장</th><th>구성 (절)</th><th>주요 내용</th><th>조문 범위</th></tr></thead>
+        <tbody>
+          <tr><td class="phn">제1장<br>총칙</td><td>총칙 / 계약의 방법과 절차 / 수의계약 / 견적 / 단가계약 / 계약관리</td><td>용어 정의, 계약위원회, 청렴계약, 계약방법 결정, 입찰참가자격, 낙찰가격, 수의계약 기준, 단가계약, 계약 해지·해제 절차</td><td>제1조~제22조</td></tr>
+          <tr><td class="phn">제2장<br>물품구매계약</td><td>계약절차 및 방법 / 계약이행·독촉·해약 / 대금지급</td><td>구매요청·검토, 입찰공고, 복수예비가격, 계약체결, 계약대장, 납기관리, 하자보증, 회계결의서·지체상금</td><td>제23조~제54조</td></tr>
+          <tr><td class="phn">제3장<br>물품검사</td><td>품질검사 일반 / 사전·중간검사 / 납품승인검사 / 납품 일반</td><td>검사기준·검사자, 검사장소·방법, 판정(합격/준합격/불합격/무판정), 위탁수송납품</td><td>제55조~제97조</td></tr>
+          <tr><td class="phn">제4장<br>공사 및 용역계약</td><td>계약일반 / 계약업무 집행기준 / 계약사후관리 위임 / 공동도급계약</td><td>계약의뢰, 현장설명, 예정가격, 계약체결, 기성고·준공대금, 하자담보, 계약사후관리 위임, 공동도급</td><td>제98조~제143조</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<div class="page" id="regPage2">
+  <div class="hero">
+    <div class="hero-id">📋 K0-지원-기준-0001 &nbsp;·&nbsp; 2023.12.08 4차개정 &nbsp;·&nbsp; 총 224 페이지</div>
+    <div class="hero-h">계약업무 처리기준<br>13개 별표 구성 다이어그램</div>
+    <div class="hero-sub">계약규정의 세부조건·절차 — 입찰유의서, 계약일반조건, 협력업체 선정 및 사업수행능력평가 세부기준</div>
+    <div class="hero-chips">
+      <div class="hchip"><span class="hchip-dot"></span>2023.12.08 4차개정 (선금·기성금 운영지침 편입)</div>
+      <div class="hchip">📑 별표 1~13</div>
+      <div class="hchip">🏢 주관: 경영지원팀</div>
+      <div class="hchip">🔁 유효성평가 1년 주기</div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <div class="sec-t"><span class="n">1</span>13개 별표(부록) 구성</div>
+    <div class="sec-sub">계약규정 제4·22조 등에서 위임한 세부 기준을 별표 형태로 운영 (목적: 계약규정의 세부조건·절차 규정)</div>
+
+    <div class="grphdr">① 입찰유의서 — 입찰 참가 전 공통 숙지사항</div>
+    <div class="gv on">
+      <div class="gc static" style="border-top:3px solid var(--blue);">
+        <div class="gc-n" style="color:var(--blue);">별표1</div>
+        <div class="gc-t">물품구매(제조) 입찰유의서</div>
+        <div class="gc-d">물품구매·제조 입찰 참가자가 숙지해야 할 입찰 절차·자격·서류 등 유의사항</div>
+        <div class="gc-f"><span class="bdg b-bl">물품</span><span class="gc-s">p.7~</span></div>
+      </div>
+      <div class="gc static" style="border-top:3px solid var(--green);">
+        <div class="gc-n" style="color:var(--green);">별표3</div>
+        <div class="gc-t">공사 입찰유의서</div>
+        <div class="gc-d">공사 입찰 참가자격, 현장설명, 입찰서 작성·제출 등 공사입찰 공통 유의사항</div>
+        <div class="gc-f"><span class="bdg b-gr">공사</span><span class="gc-s">p.34~</span></div>
+      </div>
+      <div class="gc static" style="border-top:3px solid var(--amber);">
+        <div class="gc-n" style="color:var(--amber);">별표5</div>
+        <div class="gc-t">용역 입찰유의서</div>
+        <div class="gc-d">용역 입찰 참가자격, 과업내용 사전공개, 제안서 제출 등 용역입찰 공통 유의사항</div>
+        <div class="gc-f"><span class="bdg b-am">용역</span><span class="gc-s">p.83~</span></div>
+      </div>
+      <div class="gc static" style="border-top:3px solid var(--purple);">
+        <div class="gc-n" style="color:var(--purple);">별표12</div>
+        <div class="gc-t">전자입찰유의서</div>
+        <div class="gc-d">전자입찰시스템(SRM)을 통한 업체등록·입찰참가신청·입찰서 제출·개찰 절차 (계약규정 제101조 연계)</div>
+        <div class="gc-f"><span class="bdg" style="background:var(--purple-lt);color:var(--purple);border-color:var(--purple-md);">전자입찰</span><span class="gc-s">p.211~</span></div>
+      </div>
+    </div>
+
+    <div class="grphdr">② 계약일반조건 — 계약체결 후 적용되는 표준 조건</div>
+    <div class="gv on">
+      <div class="gc static" style="border-top:3px solid var(--blue);">
+        <div class="gc-n" style="color:var(--blue);">별표2</div>
+        <div class="gc-t">물품구매(제조) 계약일반조건</div>
+        <div class="gc-d">납품·검사·대금지급·하자보수·계약변경·지체상금 등 물품계약 전반의 표준 조건</div>
+        <div class="gc-f"><span class="bdg b-bl">물품</span><span class="gc-s">p.18~</span></div>
+      </div>
+      <div class="gc static" style="border-top:3px solid var(--green);">
+        <div class="gc-n" style="color:var(--green);">별표4</div>
+        <div class="gc-t">공사계약일반조건</div>
+        <div class="gc-d">착공·하도급·기성고·준공·하자담보·계약변경 등 공사계약 전반의 표준 조건 (계약규정 제4장과 연계)</div>
+        <div class="gc-f"><span class="bdg b-gr">공사</span><span class="gc-s">p.46~</span></div>
+      </div>
+      <div class="gc static" style="border-top:3px solid var(--amber);">
+        <div class="gc-n" style="color:var(--amber);">별표6</div>
+        <div class="gc-t">용역계약일반조건</div>
+        <div class="gc-d">과업수행·산출물 검수·대금지급·계약변경 등 용역계약 전반의 표준 조건</div>
+        <div class="gc-f"><span class="bdg b-am">용역</span><span class="gc-s">p.93~</span></div>
+      </div>
+    </div>
+
+    <div class="grphdr">③ 운영·평가 기준 — 협력업체 선정 및 계약관리 운영기준</div>
+    <div class="gv on">
+      <div class="gc static" style="border-top:3px solid var(--navy);">
+        <div class="gc-n" style="color:var(--navy);">별표7</div>
+        <div class="gc-t">계약위원회 운영기준</div>
+        <div class="gc-d">계약방법·입찰참가자격·가격결정·협력업체 상벌 등 중요사항을 심의하는 계약위원회 구성·운영 절차 (계약규정 제3조 연계)</div>
+        <div class="gc-f"><span class="bdg" style="background:var(--surface);color:var(--text2);border-color:var(--border2);">운영기준</span><span class="gc-s">p.127~</span></div>
+      </div>
+      <div class="gc static" style="border-top:3px solid var(--blue-dk);">
+        <div class="gc-n" style="color:var(--blue-dk);">별표8</div>
+        <div class="gc-t">협력업체 선정 세부기준</div>
+        <div class="gc-d">7단계 협력업체 선정 절차, 4가지 입찰방법, 사업수행능력평가, 안전보건수준평가, 낙찰하한율, 결격사유 등 (SRM 협력업체 선정 문서 기준)</div>
+        <div class="gc-f"><span class="bdg b-bl">SRM 연계</span><span class="gc-s">p.131~</span></div>
+      </div>
+      <div class="gc static" style="border-top:3px solid var(--blue);">
+        <div class="gc-n" style="color:var(--blue);">별표9</div>
+        <div class="gc-t">물품구매(제조) 사업수행능력평가 세부기준</div>
+        <div class="gc-d">물품 입찰 적격심사를 위한 경영상태·기술능력·신뢰도 등 정량/정성 평가 항목 및 배점</div>
+        <div class="gc-f"><span class="bdg b-bl">물품 평가</span><span class="gc-s">p.144~</span></div>
+      </div>
+      <div class="gc static" style="border-top:3px solid var(--green);">
+        <div class="gc-n" style="color:var(--green);">별표10</div>
+        <div class="gc-t">공사계약 사업수행능력평가 세부기준</div>
+        <div class="gc-d">공사 입찰 적격심사를 위한 시공경험·기술능력·경영상태·신뢰도 등 평가 항목 및 배점</div>
+        <div class="gc-f"><span class="bdg b-gr">공사 평가</span><span class="gc-s">p.168~</span></div>
+      </div>
+      <div class="gc static" style="border-top:3px solid var(--amber);">
+        <div class="gc-n" style="color:var(--amber);">별표11</div>
+        <div class="gc-t">용역계약 사업수행능력평가 세부기준</div>
+        <div class="gc-d">용역 입찰 적격심사를 위한 수행실적·기술인력·경영상태·신뢰도 등 평가 항목 및 배점</div>
+        <div class="gc-f"><span class="bdg b-am">용역 평가</span><span class="gc-s">p.191~</span></div>
+      </div>
+      <div class="gc static" style="border-top:3px solid var(--purple);">
+        <div class="gc-n" style="color:var(--purple);">별표13</div>
+        <div class="gc-t">선금 및 기성금 운영지침</div>
+        <div class="gc-d">선금 신청·지급·정산, 기성고 청구·검사·지급 절차 및 한도, 4대보험 완납 확인 등 (2023.12.08 신설 편입)</div>
+        <div class="gc-f"><span class="bdg" style="background:var(--purple-lt);color:var(--purple);border-color:var(--purple-md);">2023.12 신설</span><span class="gc-s">p.216~</span></div>
+      </div>
+    </div>
+
+    <div class="sec-t"><span class="n">2</span>협력업체 선정 절차 (별표8 연계)</div>
+    <div class="sec-sub">SRM 전자입찰시스템을 통한 7단계 표준 선정 절차 — 기존 'SRM 협력업체 선정 세부기준' 산출물과 동일 체계</div>
+    <div class="hf">
+      <div class="hfs"><div class="hfs-n">STEP 1</div><div class="hfs-t">입찰공고/공개</div><div class="hfs-d">SRM 전자입찰시스템 공고, 용역과업내용 사전공개 (계약규정 제27·99조)</div></div>
+      <div class="hfa">▶</div>
+      <div class="hfs"><div class="hfs-n">STEP 2</div><div class="hfs-t">입찰참가 신청·접수</div><div class="hfs-d">입찰참가신청서, 청렴이행각서, 입찰보증금 등 서류 접수</div></div>
+      <div class="hfa">▶</div>
+      <div class="hfs"><div class="hfs-n">STEP 3</div><div class="hfs-t">자격 서류심사</div><div class="hfs-d">면허·등록·인감증명 등 자격요건 확인 및 적격 여부 판단</div></div>
+      <div class="hfa">▶</div>
+      <div class="hfs"><div class="hfs-n">STEP 4</div><div class="hfs-t">사업수행능력평가</div><div class="hfs-d">별표9·10·11에 따른 경영상태·기술능력·신뢰도 등 정량·정성 평가</div></div>
+      <div class="hfa">▶</div>
+      <div class="hfs"><div class="hfs-n">STEP 5</div><div class="hfs-t">가격평가 / 복수예비가격</div><div class="hfs-d">제35·106조 복수예비가격 방식으로 예정가격 확정 및 가격점수 산정</div></div>
+      <div class="hfa">▶</div>
+      <div class="hfs"><div class="hfs-n">STEP 6</div><div class="hfs-t">종합 적격심사</div><div class="hfs-d">사업수행능력평가 + 가격평가 종합, 안전보건수준평가·낙찰하한율 적용</div></div>
+      <div class="hfa">▶</div>
+      <div class="hfs"><div class="hfs-n">STEP 7</div><div class="hfs-t">선정통보·계약체결</div><div class="hfs-d">낙찰자 결정·통보 후 10일 이내 계약서 작성 및 체결 (제43·111조)</div></div>
+    </div>
+
+    <div class="sec-t"><span class="n">3</span>사업수행능력평가 체계 (별표9~11)</div>
+    <div class="sec-sub">물품·공사·용역 계약 유형별로 별도의 세부 평가기준을 운영하되 평가 영역 구성은 공통 골격을 따름</div>
+    <div class="gv on">
+      <div class="gc static" style="border-top:3px solid var(--blue-md);">
+        <div class="gc-t">경영상태 평가</div>
+        <div class="gc-d">신용평가등급, 재무비율 등 협력업체의 경영 안정성을 평가하는 영역. 신용정보회사 평가등급을 활용.</div>
+      </div>
+      <div class="gc static" style="border-top:3px solid var(--green-md);">
+        <div class="gc-t">기술·수행능력 평가</div>
+        <div class="gc-d">유사 시공·공급·수행 실적, 기술인력 보유 현황, 보유 장비·생산설비 등을 평가하는 영역 (별표10은 시공경험 비중↑).</div>
+      </div>
+      <div class="gc static" style="border-top:3px solid var(--amber-md);">
+        <div class="gc-t">신뢰도(결격·신인도) 평가</div>
+        <div class="gc-d">계약이행 신뢰도, 부정행위·제재 이력, 안전보건수준평가 결과(중대재해처벌법 대상) 등을 반영해 가감점 처리.</div>
+      </div>
+      <div class="gc static" style="border-top:3px solid var(--purple-md);">
+        <div class="gc-t">입찰가격 평가</div>
+        <div class="gc-d">복수예비가격으로 확정된 예정가격 대비 입찰가격 비율을 평가점수로 환산, 사업수행능력평가 점수와 합산하여 종합순위 결정.</div>
+      </div>
+    </div>
+    <div class="sec-sub">※ 세부 배점·항목은 별표9(물품, p.144)·별표10(공사, p.168)·별표11(용역, p.191) 원문 참조. 세부평가항목은 계약담당부서가 사업 특성에 따라 변경 가능 (4.2항).</div>
+
+    <div class="sec-t"><span class="n">4</span>선금 및 기성금 처리 흐름 (별표13)</div>
+    <div class="sec-sub">2023.12.08 4차개정으로 별도 운영지침을 계약업무 처리기준에 편입</div>
+    <div class="hf">
+      <div class="hfs"><div class="hfs-n">선금</div><div class="hfs-t">선금 신청</div><div class="hfs-d">계약상대자가 대금지급 조건에 따라 선금 청구</div></div>
+      <div class="hfa">▶</div>
+      <div class="hfs"><div class="hfs-n">선금</div><div class="hfs-t">보증서 확인</div><div class="hfs-d">선금보증서·계좌이체거래약정서(부록9) 등 확인 후 지급</div></div>
+      <div class="hfa">▶</div>
+      <div class="hfs"><div class="hfs-n">기성</div><div class="hfs-t">기성고 청구 (30일 주기)</div><div class="hfs-d">시행령 제58조③에 따라 적어도 30일마다 기성고 청구·지급 (제124조)</div></div>
+      <div class="hfa">▶</div>
+      <div class="hfs"><div class="hfs-n">기성</div><div class="hfs-t">기성검사</div><div class="hfs-d">감독자 검사로 시공부서 검사에 갈음 가능, 반입자재 50% 범위 인정(제123조)</div></div>
+      <div class="hfa">▶</div>
+      <div class="hfs"><div class="hfs-n">대금</div><div class="hfs-t">대금지급</div><div class="hfs-d">4대보험 완납증명서 확인 후 회계결의서 작성·지급(제124조③)</div></div>
+      <div class="hfa">▶</div>
+      <div class="hfs"><div class="hfs-n">준공</div><div class="hfs-t">준공정산·지체상금</div><div class="hfs-d">최종 정산금액 기준 지체상금 산정, 준공대금 지급시 입금조치(제126조)</div></div>
+    </div>
+
+    <div class="sec-t"><span class="n">5</span>계약일반조건 핵심 비교</div>
+    <div class="mv on" style="display:block;">
+      <table class="mt">
+        <thead><tr><th>구분</th><th>적용 별표</th><th>핵심 산출물/절차</th><th>하자담보</th><th>지체상금</th></tr></thead>
+        <tbody>
+          <tr><td class="phn">물품구매(제조)</td><td>별표1 입찰유의서 / 별표2 일반조건 / 별표9 평가기준</td><td>구매규격서, 검사(합격/준합격/불합격), 구입보고서</td><td>납품금액의 5% (계약규정 제51조, 3천만원 이하·1년 이내시 면제 가능)</td><td>일괄: 총계약금액 기준<br>분할: 미납대금액 기준</td></tr>
+          <tr><td class="phn">공사</td><td>별표3 입찰유의서 / 별표4 일반조건 / 별표10 평가기준</td><td>설계서·시방서, 현장설명, 기성고/준공검사, 공사계약관리카드</td><td>시행령 제60조 기준, 인수일·준공검사 완료일 중 빠른 날부터 산정</td><td>계약금액 × 지체상금율 × 지체일수 (정산금액 기준 재산정)</td></tr>
+          <tr><td class="phn">용역</td><td>별표5 입찰유의서 / 별표6 일반조건 / 별표11 평가기준</td><td>과업지시서·제안요청서, 과업내용 사전공개, 산출물 검수</td><td>계약별 특수조건에 따라 별도 정의</td><td>공사·용역 공통 산정방식 준용 (제126조)</td></tr>
+          <tr><td class="phn">전자입찰 공통</td><td>별표12 전자입찰유의서</td><td>SRM 업체등록·입찰참가신청·입찰서 제출·개찰</td><td>—</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+
+<div class="page" id="statPage1">
+  <div class="hero">
+    <div class="hero-id" style="color:var(--blue);background:var(--blue-lt);border-color:var(--blue-md);">📊 PMS 통계 자료 분석 &nbsp;·&nbsp; 종합현황</div>
+    <div class="hero-h">계약현황<br>종합 현황</div>
+    <div class="hero-sub">전체 계약 건수·금액·유형별 비중을 한눈에 확인하는 종합 대시보드</div>
+    <div class="hero-chips"><div class="hchip"><span class="hchip-dot" style="background:var(--blue)"></span>기준일 2026-05-31</div><div class="hchip">📄 총 610건</div><div class="hchip">💰 총 6,326억원</div><div class="hchip">🏗️ ESCO계약 502건 (82.3%)</div></div>
+  </div>
+  <div class="content">
+    <div class="sec-t"><span class="n">1</span>핵심 지표</div>
+    <div class="kpis">
+      <div class="kpi" style="border-top-color:var(--blue);"><div class="kpi-l">총 계약 건수</div><div class="kpi-v">610<span class="u">건</span></div><div class="kpi-s">기준일 2026-05-31</div></div>
+      <div class="kpi" style="border-top-color:var(--green);"><div class="kpi-l">총 계약금액</div><div class="kpi-v">6,326<span class="u">억원</span></div><div class="kpi-s">전체 사업 규모</div></div>
+      <div class="kpi" style="border-top-color:var(--amber);"><div class="kpi-l">ESCO(시설대여) 계약</div><div class="kpi-v">502<span class="u">건</span></div><div class="kpi-s">전체의 82.3%</div></div>
+      <div class="kpi" style="border-top-color:var(--purple);"><div class="kpi-l">기타(장기할부 등)</div><div class="kpi-v">108<span class="u">건</span></div><div class="kpi-s">전체의 17.7%</div></div>
+    </div>
+
+    <div class="sec-t"><span class="n">2</span>계약유형 비중</div>
+    <div class="donut-wrap">
+      <div class="donut" style="background:conic-gradient(var(--blue) 0% 82.3%, var(--amber) 82.3% 100%);"></div>
+      <div class="donut-lgd">
+        <div class="donut-li"><div class="donut-d" style="background:var(--blue)"></div>ESCO(시설대여)계약 — 502건 (82.3%)</div>
+        <div class="donut-li"><div class="donut-d" style="background:var(--amber)"></div>장기할부판매 등 기타 — 108건 (17.7%)</div>
+      </div>
+    </div>
+
+    <div class="sec-t"><span class="n">3</span>진행상태별 현황</div>
+    <div class="bch">
+      <div class="bcr"><div class="bcr-l">진행중</div><div class="bcr-bar"><div class="bcr-fill" style="width:63.6%;background:var(--blue);">388건 · 63.6%</div></div><div class="bcr-v">3,950억원</div></div>
+      <div class="bcr"><div class="bcr-l">준공완료(상환중)</div><div class="bcr-bar"><div class="bcr-fill" style="width:32.0%;background:var(--green);">195건 · 32.0%</div></div><div class="bcr-v">2,070억원</div></div>
+      <div class="bcr"><div class="bcr-l">해지/취소</div><div class="bcr-bar"><div class="bcr-fill" style="width:4.4%;background:var(--amber);">27건 · 4.4%</div></div><div class="bcr-v">306억원</div></div>
+    </div>
+
+    <div class="sec-t"><span class="n">4</span>종합 요약 테이블</div>
+    <div class="mv on" style="display:block;">
+      <table class="mt">
+        <thead><tr><th>구분</th><th>건수</th><th>비중</th><th>계약금액</th><th>비고</th></tr></thead>
+        <tbody>
+          <tr><td class="phn">ESCO(시설대여)계약</td><td>502건</td><td>82.3%</td><td>5,180억원</td><td>3자계약 (사업자·사용자·EPC사)</td></tr>
+          <tr><td class="phn">장기할부판매계약 등</td><td>108건</td><td>17.7%</td><td>1,146억원</td><td>2자계약 (사업자·사용자)</td></tr>
+          <tr><td class="phn">합계</td><td>610건</td><td>100%</td><td>6,326억원</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="statPage2">
+  <div class="hero">
+    <div class="hero-id" style="color:var(--blue);background:var(--blue-lt);border-color:var(--blue-md);">📈 PMS 통계 자료 분석 &nbsp;·&nbsp; 연도별 추이</div>
+    <div class="hero-h">연도별 계약<br>추이 분석</div>
+    <div class="hero-sub">2021년~2026년(상반기) 신규 계약 건수 및 금액 추이</div>
+    <div class="hero-chips"><div class="hchip"><span class="hchip-dot" style="background:var(--blue)"></span>기준일 2026-05-31</div><div class="hchip">📈 6개 연도 비교</div><div class="hchip">🚀 최근 3개년 성장세</div></div>
+  </div>
+  <div class="content">
+    <div class="sec-t"><span class="n">1</span>연도별 신규계약 건수</div>
+    <div class="bch">
+      <div class="bcr"><div class="bcr-l">2021년</div><div class="bcr-bar"><div class="bcr-fill" style="width:35.8%;background:var(--blue-md);color:var(--text);">58건</div></div><div class="bcr-v">540억원</div></div>
+      <div class="bcr"><div class="bcr-l">2022년</div><div class="bcr-bar"><div class="bcr-fill" style="width:53.7%;background:var(--blue-md);color:var(--text);">87건</div></div><div class="bcr-v">820억원</div></div>
+      <div class="bcr"><div class="bcr-l">2023년</div><div class="bcr-bar"><div class="bcr-fill" style="width:74.7%;background:var(--blue);">121건</div></div><div class="bcr-v">1,260억원</div></div>
+      <div class="bcr"><div class="bcr-l">2024년</div><div class="bcr-bar"><div class="bcr-fill" style="width:89.5%;background:var(--blue);">145건</div></div><div class="bcr-v">1,510억원</div></div>
+      <div class="bcr"><div class="bcr-l">2025년</div><div class="bcr-bar"><div class="bcr-fill" style="width:100%;background:var(--blue-dk);">162건</div></div><div class="bcr-v">1,690억원</div></div>
+      <div class="bcr"><div class="bcr-l">2026년(~05월)</div><div class="bcr-bar"><div class="bcr-fill" style="width:22.8%;background:var(--green);">37건</div></div><div class="bcr-v">506억원</div></div>
+    </div>
+
+    <div class="sec-t"><span class="n">2</span>전년 동기 대비</div>
+    <div class="kpis">
+      <div class="kpi" style="border-top-color:var(--green);"><div class="kpi-l">2024→2025 건수 증가율</div><div class="kpi-v">+11.7<span class="u">%</span></div><div class="kpi-s">145건 → 162건</div></div>
+      <div class="kpi" style="border-top-color:var(--green);"><div class="kpi-l">2024→2025 금액 증가율</div><div class="kpi-v">+11.9<span class="u">%</span></div><div class="kpi-s">1,510억 → 1,690억</div></div>
+      <div class="kpi" style="border-top-color:var(--blue);"><div class="kpi-l">5개년 연평균 성장률(CAGR)</div><div class="kpi-v">22.8<span class="u">%</span></div><div class="kpi-s">2021~2025 기준</div></div>
+      <div class="kpi" style="border-top-color:var(--amber);"><div class="kpi-l">2026년 누적 진행률</div><div class="kpi-v">22.8<span class="u">%</span></div><div class="kpi-s">2025년 대비 5월 기준</div></div>
+    </div>
+
+    <div class="sec-t"><span class="n">3</span>연도별 상세 테이블</div>
+    <div class="mv on" style="display:block;">
+      <table class="mt">
+        <thead><tr><th>연도</th><th>신규 계약 건수</th><th>계약금액</th><th>전년대비 건수</th><th>전년대비 금액</th></tr></thead>
+        <tbody>
+          <tr><td class="phn">2021</td><td>58건</td><td>540억원</td><td>—</td><td>—</td></tr>
+          <tr><td class="phn">2022</td><td>87건</td><td>820억원</td><td>+50.0%</td><td>+51.9%</td></tr>
+          <tr><td class="phn">2023</td><td>121건</td><td>1,260억원</td><td>+39.1%</td><td>+53.7%</td></tr>
+          <tr><td class="phn">2024</td><td>145건</td><td>1,510억원</td><td>+19.8%</td><td>+19.8%</td></tr>
+          <tr><td class="phn">2025</td><td>162건</td><td>1,690억원</td><td>+11.7%</td><td>+11.9%</td></tr>
+          <tr><td class="phn">2026 (~05월)</td><td>37건</td><td>506억원</td><td>—</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="statPage3">
+  <div class="hero">
+    <div class="hero-id" style="color:var(--blue);background:var(--blue-lt);border-color:var(--blue-md);">🏢 PMS 통계 자료 분석 &nbsp;·&nbsp; 부서/분야별 현황</div>
+    <div class="hero-h">부서·분야별<br>계약 현황</div>
+    <div class="hero-sub">주관 부서 및 사업분야별 계약 건수·금액 비중</div>
+    <div class="hero-chips"><div class="hchip"><span class="hchip-dot" style="background:var(--blue)"></span>기준일 2026-05-31</div><div class="hchip">🏢 3개 주관부서</div><div class="hchip">🏭 분야별 비중 비교</div></div>
+  </div>
+  <div class="content">
+    <div class="sec-t"><span class="n">1</span>주관부서별 현황</div>
+    <div class="bch">
+      <div class="bcr"><div class="bcr-l">EERS팀</div><div class="bcr-bar"><div class="bcr-fill" style="width:100%;background:var(--blue);">412건 · 67.5%</div></div><div class="bcr-v">4,150억원</div></div>
+      <div class="bcr"><div class="bcr-l">운영실</div><div class="bcr-bar"><div class="bcr-fill" style="width:33.5%;background:var(--green);">138건 · 22.6%</div></div><div class="bcr-v">1,520억원</div></div>
+      <div class="bcr"><div class="bcr-l">기획지원팀</div><div class="bcr-bar"><div class="bcr-fill" style="width:14.6%;background:var(--amber);">60건 · 9.9%</div></div><div class="bcr-v">656억원</div></div>
+    </div>
+
+    <div class="sec-t"><span class="n">2</span>사업분야별 비중</div>
+    <div class="donut-wrap chart-card">
+      <div class="donut pie-chart">
+        <svg class="donut-svg" viewBox="0 0 120 120" aria-label="사업분야별 비중 원 그래프">
+          <circle class="track" cx="60" cy="60" r="46"></circle>
+          <circle class="slice" cx="60" cy="60" r="46" pathLength="100" stroke="var(--blue)" stroke-dasharray="45 55" stroke-dashoffset="0"></circle>
+          <circle class="slice" cx="60" cy="60" r="46" pathLength="100" stroke="var(--green)" stroke-dasharray="27 73" stroke-dashoffset="-45"></circle>
+          <circle class="slice" cx="60" cy="60" r="46" pathLength="100" stroke="var(--amber)" stroke-dasharray="18 82" stroke-dashoffset="-72"></circle>
+          <circle class="slice" cx="60" cy="60" r="46" pathLength="100" stroke="var(--purple-md)" stroke-dasharray="10 90" stroke-dashoffset="-90"></circle>
+        </svg>
+        <div class="donut-center"><strong>610</strong><span>총 계약건수</span></div>
+      </div>
+      <div class="donut-lgd">
+        <div class="donut-li"><div class="donut-d" style="background:var(--blue)"></div>조명(LED) — 275건 (45.0%)</div>
+        <div class="donut-li"><div class="donut-d" style="background:var(--green)"></div>냉난방(공조) — 165건 (27.0%)</div>
+        <div class="donut-li"><div class="donut-d" style="background:var(--amber)"></div>보일러/열원설비 — 110건 (18.0%)</div>
+        <div class="donut-li"><div class="donut-d" style="background:var(--purple-md)"></div>기타(ZEB 등) — 60건 (10.0%)</div>
+      </div>
+    </div>
+
+    <div class="sec-t"><span class="n">3</span>부서 × 분야 상세 테이블</div>
+    <div class="mv on" style="display:block;">
+      <table class="mt">
+        <thead><tr><th>주관부서</th><th>건수</th><th>계약금액</th><th>주요 분야</th><th>비중</th></tr></thead>
+        <tbody>
+          <tr><td class="phn">EERS팀</td><td>412건</td><td>4,150억원</td><td>조명·냉난방 중심</td><td>67.5%</td></tr>
+          <tr><td class="phn">운영실</td><td>138건</td><td>1,520억원</td><td>보일러/열원설비 중심</td><td>22.6%</td></tr>
+          <tr><td class="phn">기획지원팀</td><td>60건</td><td>656억원</td><td>ZEB·신사업 분야</td><td>9.9%</td></tr>
+          <tr><td class="phn">합계</td><td>610건</td><td>6,326억원</td><td>—</td><td>100%</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="statPage4">
+  <div class="hero">
+    <div class="hero-id" style="color:var(--blue);background:var(--blue-lt);border-color:var(--blue-md);">🚦 PMS 통계 자료 분석 &nbsp;·&nbsp; 진행/이상 현황</div>
+    <div class="hero-h">사업 진행 및<br>이상 현황</div>
+    <div class="hero-sub">공사 진행 단계별 현황 및 지연·이상 발생 사업 모니터링</div>
+    <div class="hero-chips"><div class="hchip"><span class="hchip-dot" style="background:var(--blue)"></span>기준일 2026-05-31</div><div class="hchip">🟢 정상진행 다수</div><div class="hchip">🟠 이상현황 모니터링</div></div>
+  </div>
+  <div class="content">
+    <div class="sec-t"><span class="n">1</span>공사 진행단계별 현황</div>
+    <div class="bch">
+      <div class="bcr"><div class="bcr-l">계약체결</div><div class="bcr-bar"><div class="bcr-fill" style="width:100%;background:var(--blue-md);color:var(--text);">388건</div></div><div class="bcr-v">100%</div></div>
+      <div class="bcr"><div class="bcr-l">착공</div><div class="bcr-bar"><div class="bcr-fill" style="width:91.0%;background:var(--blue);">353건</div></div><div class="bcr-v">91.0%</div></div>
+      <div class="bcr"><div class="bcr-l">공사중(기성진행)</div><div class="bcr-bar"><div class="bcr-fill" style="width:62.6%;background:var(--blue-dk);">243건</div></div><div class="bcr-v">62.6%</div></div>
+      <div class="bcr"><div class="bcr-l">준공대기</div><div class="bcr-bar"><div class="bcr-fill" style="width:18.0%;background:var(--green);">70건</div></div><div class="bcr-v">18.0%</div></div>
+      <div class="bcr"><div class="bcr-l">이상현황(지연 등)</div><div class="bcr-bar"><div class="bcr-fill" style="width:6.4%;background:var(--amber);">25건</div></div><div class="bcr-v">6.4%</div></div>
+    </div>
+
+    <div class="sec-t"><span class="n">2</span>이상현황 유형별 분류</div>
+    <div class="gv on">
+      <div class="gc static" style="border-top:3px solid var(--amber);"><div class="gc-n" style="color:var(--amber);">14건</div><div class="gc-t">착공 지연</div><div class="gc-d">계약체결 후 사급물자 조달·현장여건 등으로 착공이 지연되고 있는 사업</div></div>
+      <div class="gc static" style="border-top:3px solid var(--amber);"><div class="gc-n" style="color:var(--amber);">7건</div><div class="gc-t">공정 지연</div><div class="gc-d">기성률이 계획 대비 10%p 이상 저조한 사업, 진척관리 강화 필요</div></div>
+      <div class="gc static" style="border-top:3px solid var(--red);"><div class="gc-n" style="color:var(--red);">3건</div><div class="gc-t">분쟁/클레임</div><div class="gc-d">계약변경·하도급 분쟁 등으로 법무재무팀 협의가 진행 중인 사업</div></div>
+      <div class="gc static" style="border-top:3px solid var(--red);"><div class="gc-n" style="color:var(--red);">1건</div><div class="gc-t">계약해지 검토</div><div class="gc-d">계약상대자 귀책으로 계약규정 제113조 절차 검토 중인 사업</div></div>
+    </div>
+
+    <div class="sec-t"><span class="n">3</span>모니터링 요약</div>
+    <div class="kpis">
+      <div class="kpi" style="border-top-color:var(--green);"><div class="kpi-l">정상 진행</div><div class="kpi-v">363<span class="u">건</span></div><div class="kpi-s">진행중 388건 중 93.6%</div></div>
+      <div class="kpi" style="border-top-color:var(--amber);"><div class="kpi-l">이상현황</div><div class="kpi-v">25<span class="u">건</span></div><div class="kpi-s">전체 진행중의 6.4%</div></div>
+      <div class="kpi" style="border-top-color:var(--red);"><div class="kpi-l">분쟁/해지 검토</div><div class="kpi-v">4<span class="u">건</span></div><div class="kpi-s">법무재무팀 협의중</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="statPage5">
+  <div class="hero">
+    <div class="hero-id" style="color:var(--blue);background:var(--blue-lt);border-color:var(--blue-md);">💵 PMS 통계 자료 분석 &nbsp;·&nbsp; 상환·회수 현황</div>
+    <div class="hero-h">상환금<br>회수 현황</div>
+    <div class="hero-sub">준공완료(상환중) 사업의 상환계획 대비 회수 진행률</div>
+    <div class="hero-chips"><div class="hchip"><span class="hchip-dot" style="background:var(--blue)"></span>기준일 2026-05-31</div><div class="hchip">📥 195건 상환중</div><div class="hchip">📊 평균 회수율 50.9%</div></div>
+  </div>
+  <div class="content">
+    <div class="sec-t"><span class="n">1</span>회수 현황 핵심 지표</div>
+    <div class="kpis">
+      <div class="kpi" style="border-top-color:var(--blue);"><div class="kpi-l">상환대상 계약금액</div><div class="kpi-v">2,070<span class="u">억원</span></div><div class="kpi-s">준공완료 195건</div></div>
+      <div class="kpi" style="border-top-color:var(--green);"><div class="kpi-l">회수 완료액</div><div class="kpi-v">1,054<span class="u">억원</span></div><div class="kpi-s">평균 회수율 50.9%</div></div>
+      <div class="kpi" style="border-top-color:var(--amber);"><div class="kpi-l">잔여 회수예정액</div><div class="kpi-v">1,016<span class="u">억원</span></div><div class="kpi-s">49.1% 잔여</div></div>
+      <div class="kpi" style="border-top-color:var(--red);"><div class="kpi-l">연체 발생 건</div><div class="kpi-v">3<span class="u">건</span></div><div class="kpi-s">상환업무 절차서 적용 대상</div></div>
+    </div>
+
+    <div class="sec-t"><span class="n">2</span>회수율 구간별 분포</div>
+    <div class="bch">
+      <div class="bcr"><div class="bcr-l">80% 이상</div><div class="bcr-bar"><div class="bcr-fill" style="width:18.5%;background:var(--green);">36건</div></div><div class="bcr-v">18.5%</div></div>
+      <div class="bcr"><div class="bcr-l">50~80%</div><div class="bcr-bar"><div class="bcr-fill" style="width:43.6%;background:var(--blue);">85건</div></div><div class="bcr-v">43.6%</div></div>
+      <div class="bcr"><div class="bcr-l">20~50%</div><div class="bcr-bar"><div class="bcr-fill" style="width:30.3%;background:var(--amber);">59건</div></div><div class="bcr-v">30.3%</div></div>
+      <div class="bcr"><div class="bcr-l">20% 미만</div><div class="bcr-bar"><div class="bcr-fill" style="width:7.7%;background:var(--red);">15건</div></div><div class="bcr-v">7.7%</div></div>
+    </div>
+
+    <div class="sec-t"><span class="n">3</span>3개사 상환현황 비교 (대표 사례)</div>
+    <div class="mv on" style="display:block;">
+      <table class="mt">
+        <thead><tr><th>업체명</th><th>계약금액</th><th>상환완료액</th><th>회수율</th><th>상태</th></tr></thead>
+        <tbody>
+          <tr><td class="phn">롯데슈퍼LED</td><td>48억원</td><td>27.9억원</td><td>58.2%</td><td><span class="bdg b-gr">정상</span></td></tr>
+          <tr><td class="phn">일공팩</td><td>32억원</td><td>15.2억원</td><td>47.5%</td><td><span class="bdg b-am">진행중</span></td></tr>
+          <tr><td class="phn">덕우전자</td><td>26억원</td><td>12.2억원</td><td>47.0%</td><td><span class="bdg b-am">진행중</span></td></tr>
+          <tr><td class="phn">3개사 평균</td><td>35.3억원</td><td>18.4억원</td><td>50.9%</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="sec-sub">※ 상세 월별 상환계획·실적은 「상환스케줄 현황」 메뉴 참조</div>
+  </div>
+</div>
+
+<div class="page" id="statPage6">
+  <div class="hero">
+    <div class="hero-id" style="color:var(--blue);background:var(--blue-lt);border-color:var(--blue-md);">📐 PMS 통계 자료 분석 &nbsp;·&nbsp; 수익률 분석</div>
+    <div class="hero-h">사업 수익률<br>(IRR) 분석</div>
+    <div class="hero-sub">계약별 내부수익률(IRR) 구간 분포 및 평균 수익률 추이</div>
+    <div class="hero-chips"><div class="hchip"><span class="hchip-dot" style="background:var(--blue)"></span>기준일 2026-05-31</div><div class="hchip">📊 평균 IRR 약 7.4%</div><div class="hchip">🎯 목표구간 7~9% 최다</div></div>
+  </div>
+  <div class="content">
+    <div class="sec-t"><span class="n">1</span>IRR 핵심 지표</div>
+    <div class="kpis">
+      <div class="kpi" style="border-top-color:var(--blue);"><div class="kpi-l">전체 평균 IRR</div><div class="kpi-v">7.4<span class="u">%</span></div><div class="kpi-s">610건 가중평균</div></div>
+      <div class="kpi" style="border-top-color:var(--green);"><div class="kpi-l">최다 분포 구간</div><div class="kpi-v">7~9<span class="u">%</span></div><div class="kpi-s">251건 (41.1%)</div></div>
+      <div class="kpi" style="border-top-color:var(--amber);"><div class="kpi-l">5% 미만 비중</div><div class="kpi-v">6.9<span class="u">%</span></div><div class="kpi-s">42건 — 수익률 적합성 재검토 대상</div></div>
+      <div class="kpi" style="border-top-color:var(--purple);"><div class="kpi-l">11% 이상 비중</div><div class="kpi-v">3.8<span class="u">%</span></div><div class="kpi-s">23건 — 고수익 사업</div></div>
+    </div>
+
+    <div class="sec-t"><span class="n">2</span>IRR 구간별 분포</div>
+    <div class="bch">
+      <div class="bcr"><div class="bcr-l">5% 미만</div><div class="bcr-bar"><div class="bcr-fill" style="width:16.7%;background:var(--red);">42건 · 6.9%</div></div><div class="bcr-v">재검토 대상</div></div>
+      <div class="bcr"><div class="bcr-l">5~7%</div><div class="bcr-bar"><div class="bcr-fill" style="width:78.9%;background:var(--amber);">198건 · 32.5%</div></div><div class="bcr-v">기준 충족</div></div>
+      <div class="bcr"><div class="bcr-l">7~9%</div><div class="bcr-bar"><div class="bcr-fill" style="width:100%;background:var(--blue);">251건 · 41.1%</div></div><div class="bcr-v">최다 구간</div></div>
+      <div class="bcr"><div class="bcr-l">9~11%</div><div class="bcr-bar"><div class="bcr-fill" style="width:38.2%;background:var(--green);">96건 · 15.7%</div></div><div class="bcr-v">우수</div></div>
+      <div class="bcr"><div class="bcr-l">11% 이상</div><div class="bcr-bar"><div class="bcr-fill" style="width:9.2%;background:var(--purple);">23건 · 3.8%</div></div><div class="bcr-v">고수익</div></div>
+    </div>
+
+    <div class="sec-t"><span class="n">3</span>연도별 평균 IRR 추이</div>
+    <div class="mv on" style="display:block;">
+      <table class="mt">
+        <thead><tr><th>연도</th><th>평균 IRR</th><th>전년대비</th><th>비고</th></tr></thead>
+        <tbody>
+          <tr><td class="phn">2021</td><td>6.8%</td><td>—</td><td>—</td></tr>
+          <tr><td class="phn">2022</td><td>7.0%</td><td>+0.2%p</td><td>—</td></tr>
+          <tr><td class="phn">2023</td><td>7.2%</td><td>+0.2%p</td><td>—</td></tr>
+          <tr><td class="phn">2024</td><td>7.5%</td><td>+0.3%p</td><td>원가상승 반영</td></tr>
+          <tr><td class="phn">2025</td><td>7.6%</td><td>+0.1%p</td><td>—</td></tr>
+          <tr><td class="phn">2026 (~05월)</td><td>7.5%</td><td>-0.1%p</td><td>「수익률 운영지침」 기준 적합</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="statPage7">
+  <div class="hero">
+    <div class="hero-id" style="color:var(--blue);background:var(--blue-lt);border-color:var(--blue-md);">🗓️ PMS 통계 자료 분석 &nbsp;·&nbsp; 상환스케줄 현황</div>
+    <div class="hero-h">상환스케줄<br>현황</div>
+    <div class="hero-sub">주요 3개사(롯데슈퍼LED·일공팩·덕우전자) 월별 상환계획 대비 실적</div>
+    <div class="hero-chips"><div class="hchip"><span class="hchip-dot" style="background:var(--blue)"></span>기준일 2026-05-31</div><div class="hchip">🏢 3개사 관리</div><div class="hchip">📅 월별 상환계획 대비 실적</div></div>
+  </div>
+  <div class="content">
+    <div class="sec-t"><span class="n">1</span>업체별 상환 진행률</div>
+    <div class="bch">
+      <div class="bcr"><div class="bcr-l">롯데슈퍼LED</div><div class="bcr-bar"><div class="bcr-fill" style="width:58.2%;background:var(--blue);">27.9억 / 48억</div></div><div class="bcr-v">58.2%</div></div>
+      <div class="bcr"><div class="bcr-l">일공팩</div><div class="bcr-bar"><div class="bcr-fill" style="width:47.5%;background:var(--green);">15.2억 / 32억</div></div><div class="bcr-v">47.5%</div></div>
+      <div class="bcr"><div class="bcr-l">덕우전자</div><div class="bcr-bar"><div class="bcr-fill" style="width:47.0%;background:var(--amber);">12.2억 / 26억</div></div><div class="bcr-v">47.0%</div></div>
+    </div>
+
+    <div class="sec-t"><span class="n">2</span>월별 상환 스케줄 (최근 6개월)</div>
+    <div class="mv on" style="display:block;">
+      <table class="mt">
+        <thead><tr><th>월</th><th>롯데슈퍼LED 계획/실적</th><th>일공팩 계획/실적</th><th>덕우전자 계획/실적</th><th>월 합계 실적</th></tr></thead>
+        <tbody>
+          <tr><td class="phn">2026-01</td><td>0.8억 / 0.8억</td><td>0.5억 / 0.5억</td><td>0.4억 / 0.4억</td><td>1.7억</td></tr>
+          <tr><td class="phn">2026-02</td><td>0.8억 / 0.8억</td><td>0.5억 / 0.4억</td><td>0.4억 / 0.4억</td><td>1.6억</td></tr>
+          <tr><td class="phn">2026-03</td><td>0.8억 / 0.8억</td><td>0.5억 / 0.5억</td><td>0.4억 / 0.3억</td><td>1.6억</td></tr>
+          <tr><td class="phn">2026-04</td><td>0.8억 / 0.8억</td><td>0.5억 / 0.5억</td><td>0.4억 / 0.4억</td><td>1.7억</td></tr>
+          <tr><td class="phn">2026-05</td><td>0.8억 / 0.7억</td><td>0.5억 / 0.4억</td><td>0.4억 / 0.4억</td><td>1.5억</td></tr>
+          <tr><td class="phn">2026-06 (예정)</td><td>0.8억 / —</td><td>0.5억 / —</td><td>0.4억 / —</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sec-t"><span class="n">3</span>잔여 상환 안내</div>
+    <div class="brg">
+      <div class="brgc" style="background:var(--blue-lt);border-color:var(--blue-md);">
+        <div class="brgc-t" style="color:var(--blue);">롯데슈퍼LED</div>
+        <div class="brgc-d">잔여 20.1억원, 잔여기간 약 25개월. 월 0.8억원 정상 상환 중.</div>
+      </div>
+      <div class="brgc" style="background:var(--green-lt);border-color:var(--green-md);">
+        <div class="brgc-t" style="color:var(--green);">일공팩</div>
+        <div class="brgc-d">잔여 16.8억원, 잔여기간 약 33개월. 2026-02·05월 일부 미수 발생 — 상환안내 필요.</div>
+      </div>
+      <div class="brgc" style="background:var(--amber-lt);border-color:var(--amber-md);">
+        <div class="brgc-t" style="color:var(--amber);">덕우전자</div>
+        <div class="brgc-d">잔여 13.8억원, 잔여기간 약 34개월. 2026-03월 일부 미수 — 상환업무 절차서에 따라 안내 진행.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="stbar">
+      <span><span class="st-dot"></span>운영 중</span>
+      <span>버전: 12차개정</span>
+      <span>주관: EERS팀 신형규 과장</span>
+      <span>승인: 사장 이현빈</span>
+      <span style="margin-left:auto;">유효성 평가 주기: 2년</span>
+    </div>
+  </main>
+</div>
+
+<button class="sct" id="sct" onclick="scrollToTop()" title="맨 위로">↑</button>
+
+<script>
+const PH = [
+  {id:1,title:"사업 접수",owner:"EERS팀",ot:"bl",tc:"var(--blue)",tbg:"var(--blue-lt)",tb:"var(--blue-md)",lc:"var(--blue-md)",
+   desc:"에너지사용자 또는 EPC사로부터 사업 신청을 받아 시스템에 등록하는 첫 관문. 홈페이지 등록과 PMS 등록 두 단계로 구성.",
+   steps:[
+    {t:"신청서 접수 및 홈페이지 등록",d:"에너지효율화사업 신청서[부록 2]를 접수하여 홈페이지에 등록한다.",ow:"사업담당자",doc:"부록2 신청서",type:"n"},
+    {t:"사업관리시스템(PMS) 등록",d:"접수된 신청서 중 사업 추진이 가능한 건에 한해 PMS '사업접수' 항목에 등록한다.",ow:"사업담당자",doc:"PMS 등록",type:"n"}
+   ]},
+  {id:2,title:"현장 컨설팅 및 예비제안",owner:"EERS팀",ot:"bl",tc:"var(--blue)",tbg:"var(--blue-lt)",tb:"var(--blue-md)",lc:"var(--blue-md)",
+   desc:"현장 방문 또는 자료 검토를 통해 사업 효과를 분석하고, 에너지사용자에게 예상 사업효과·사업규모·사업조건이 반영된 예비제안을 시행하는 단계.",
+   steps:[
+    {t:"사전 자료 수집 및 추진 여부 판단",d:"현장 방문 전 에너지사용자·EPC사로부터 자료를 확보하여 사업효과를 파악하고 추진 가능 여부를 판단한다. 사업 반려 시 사업본부장에게 보고 후 처리.",ow:"사업담당자",type:"n"},
+    {t:"현장 방문 및 컨설팅 시행",d:"요금체계·시설 등 에너지사용 전반을 컨설팅하고, 결과를 바탕으로 유선·이메일로 예비제안을 시행한다.",ow:"사업담당자",type:"n",wn:"현장방문 불필요 시 생략 가능"},
+    {t:"EPC사 추천 및 선정 지원",d:"EPC사 미선정 시, 사업 규모·특성·일정을 고려해 복수의 EPC사를 추천하고 에너지사용자가 선정한 EPC사를 통해 견적·자료를 접수한다.",ow:"사업담당자",type:"c",cn:"EPC사 미선정 시에만 해당"},
+    {t:"상환 안정성 방안 협의",d:"에너지사용자가 예비제안을 수용하는 경우, 보증보험 발급·담보·연대보증 등 상환 안정성 확보 방안을 협의한다.",ow:"사업담당자",type:"n"}
+   ]},
+  {id:3,title:"공사금액 산정",owner:"EERS팀",ot:"bl",tc:"var(--blue)",tbg:"var(--blue-lt)",tb:"var(--blue-md)",lc:"var(--blue-md)",
+   desc:"에너지사용자와 EPC사 간 합의된 공사금액의 적정성을 검토하고 확정하는 단계. 부적정 시 재협의 또는 반려 처리.",
+   steps:[
+    {t:"공사금액 적정성 검토",d:"에너지사용자·EPC사 간 최종 합의된 공사금액을 확인하고, 타견적서 또는 유사 사업과 비교하여 적정성을 검토한다.",ow:"사업담당자",type:"n"},
+    {t:"부적정 시 재협의 또는 반려",d:"공사금액이 부적정하다고 판단되면 재협의 후 진행하거나, 최종 부적정 판단 시 사업을 반려할 수 있다.",ow:"사업담당자",type:"c",cn:"부적정 판단 시 분기 처리"},
+    {t:"장기할부판매계약 시 공사금액 별도 산정",d:"장기할부판매계약인 경우, 공사 난이도·리스크·내부 인건비·제경비·이윤 등을 포함하여 적정 공사금액을 별도 산정한다.",ow:"사업담당자",type:"c",cn:"장기할부판매계약만 해당"}
+   ]},
+  {id:4,title:"사업 사전 검토(안) 보고 및 최종 제안",owner:"EERS팀",ot:"bl",tc:"var(--blue)",tbg:"var(--blue-lt)",tb:"var(--blue-md)",lc:"var(--blue-md)",
+   skip:"사업심의 면제 조건 해당 사업은 이 단계 전체를 생략할 수 있다. (2026.03.04 신설)",
+   desc:"수익률 적합성을 검토하고 내부 보고 후 에너지사용자에게 최종 조건을 제안하는 핵심 단계. 공사금액 1억 원 이상 시 사장 보고.",
+   steps:[
+    {t:"수익률 적합성 검토(안) 작성 및 승인",d:"에너지사용자와 최종 협의된 사업조건을 토대로 수익률 적합성 검토(안)[부록 4]을 작성하여 '수익률 운영지침'에 따라 승인을 득한다.",ow:"사업담당자",doc:"부록4 수익률검토(안)",type:"n"},
+    {t:"사업 사전 검토(안) 작성 및 보고",d:"사업 사전 검토(안)[부록 5]을 작성하여 추진한다. 공사금액 1억 원 이상인 경우 사장 보고를 한다.",ow:"사업담당자",doc:"부록5 사전검토(안)",type:"n"},
+    {t:"사업자문단 구성 및 운영 (ZEB 사업)",d:"제로에너지빌딩(ZEB) 사업은 외부 전문가 중심 사업자문단을 구성하고, 상환·공사 리스크 등에 대한 검토 의견을 수렴하여 반영한다. (2024.12.06 신설)",ow:"사업담당자",type:"c",cn:"ZEB 사업만 해당"},
+    {t:"최종 제안 시행",d:"사업 사전 검토(안) 보고에 따른 사업조건을 반영하여 유선·이메일 등으로 에너지사용자에게 최종 제안을 한다.",ow:"사업담당자",type:"n"}
+   ]},
+  {id:5,title:"사업 추진 계획(안) 수립",owner:"EERS팀",ot:"bl",tc:"var(--blue)",tbg:"var(--blue-lt)",tb:"var(--blue-md)",lc:"var(--blue-md)",
+   skip:"사업심의 면제 조건 해당 사업은 이 단계 전체를 생략할 수 있다. (2026.03.04 신설)",
+   desc:"최종 확정된 사업 내용을 바탕으로 공식 추진 계획서를 작성하고 결재를 받는 단계. 매출금액을 반드시 명시해야 한다.",
+   steps:[
+    {t:"사업 추진 계획(안) 작성 및 결재",d:"최종 확정된 사업 내용으로 사업 추진 계획(안)[부록 6]을 작성하고 '직무권한지침'에 따라 결재를 득한다. 매출금액 반드시 명시.",ow:"사업담당자",doc:"부록6 추진계획(안)",type:"n"},
+    {t:"PMS 등록",d:"결재가 완료된 사업 추진 계획(안)을 사업관리시스템(PMS)에 등록한다.",ow:"사업담당자",doc:"PMS 등록",type:"n"}
+   ]},
+  {id:6,title:"사업심의 · 일상감사 · 이사회 부의",owner:"기획지원팀",ot:"gr",tc:"var(--green)",tbg:"var(--green-lt)",tb:"var(--green-md)",lc:"var(--green-md)",
+   desc:"사업의 규모와 성격에 따라 사업심의, 일상감사, 이사회 보고/의결 등 내부 통제 절차를 거치는 단계. 공사금액에 따라 3가지 경로로 분기.",
+   steps:[
+    {t:"사업심의 요청 (PMS)",d:"사업심의 절차서에 따라 PMS를 통해 사업심의 담당부서에 사업심의를 요청한다.",ow:"기획지원팀",doc:"PMS 심의요청",type:"n"},
+    {t:"심의면제 시 계약체결 직접 요청",d:"사업심의 면제 조건에 해당하면 별도 심의 없이 PMS를 통해 계약체결 담당부서에 직접 계약체결을 요청한다. (2026.03.04 개정)",ow:"사업담당자",type:"c",cn:"심의면제 조건 해당 시"},
+    {t:"일상감사 시행",d:"사업심의 후 공사금액 기준 10억 원 이상 사업에 대해 '일상감사 업무절차서'에 따라 일상감사를 시행한다.",ow:"감사담당",type:"c",cn:"공사금액 10억 원 이상"},
+    {t:"이사회 보고",d:"공사금액 기준 20억 원 이상 50억 원 미만 사업은 이사회에 보고한다.",ow:"법무재무팀",type:"c",cn:"공사금액 20억~50억 미만"},
+    {t:"이사회 안건 부의",d:"공사금액 기준 50억 원 이상 사업은 이사회 안건으로 부의하며, 사업담당자는 안건작성·주주사 설명회·질의대응 등 제반 업무를 수행한다.",ow:"법무재무팀",type:"c",cn:"공사금액 50억 원 이상"}
+   ]},
+  {id:7,title:"사업 시행 보고",owner:"EERS팀",ot:"bl",tc:"var(--blue)",tbg:"var(--blue-lt)",tb:"var(--blue-md)",lc:"var(--blue-md)",
+   desc:"심의·감사·이사회의 의견을 반영하여 최종 사업 시행(안)을 작성하고 내부 결재를 받는 단계. 매출금액 명시 필수.",
+   steps:[
+    {t:"사업 시행(안) 작성 및 결재",d:"심의·감사·이사회 의견을 반영하여 사업 시행(안)[부록 7]을 작성하고 '직무권한지침'에 따라 결재를 득한다. 매출금액 반드시 명시. 공사금액 1억 원 이상 시 사장 보고.",ow:"사업담당자",doc:"부록7 사업시행(안)",type:"n"},
+    {t:"간소화 사업 시행(안) 대체",d:"심의면제 조건에 해당하는 사업은 사업 시행(안) 대신 간소화 사업 시행(안)[부록 10]으로 대체할 수 있다. (2026.03.04 신설)",ow:"사업담당자",doc:"부록10 간소화시행(안)",type:"c",cn:"심의면제 조건 해당 시 대체 가능"}
+   ]},
+  {id:8,title:"계약 요청 및 체결",owner:"기획지원팀",ot:"gr",tc:"var(--green)",tbg:"var(--green-lt)",tb:"var(--green-md)",lc:"var(--green-md)",
+   desc:"에너지효율화사업자·에너지사용자·EPC사 3자 간 계약서를 작성하고 공식 계약을 체결하는 단계. 필요시 외부 법률 검토 의뢰.",
+   steps:[
+    {t:"계약서 작성 (3자 합의)",d:"에너지효율화사업자·에너지사용자·EPC사 상호 합의 하에 계약서를 작성한다. 계약일반조건 변경 시 사업본부장 결재 필요.",ow:"사업담당자",type:"n"},
+    {t:"외부 법률 검토 의뢰",d:"필요 시 법률 검토 담당 부서에 그룹웨어를 통해 외부 법률 검토를 의뢰하여 계약서의 적정성을 확인한다.",ow:"법무재무팀",type:"c",cn:"필요 시 시행"},
+    {t:"PMS 등록 및 계약체결 요청",d:"계약서 초안을 PMS '사업접수' 항목에 등록하고 계약체결 및 관리 담당 부서에 계약체결을 요청한다.",ow:"사업담당자",doc:"PMS 등록",type:"n"},
+    {t:"계약내용 변경 처리",d:"공사금액 증감·공사기간 변경 등으로 변경계약이 필요한 경우, '일상감사 업무절차서'와 '이사회 규정'에 따라 처리하고 결재를 득한 후 계약변경을 요청한다.",ow:"기획지원팀",type:"c",cn:"계약 변경 발생 시"}
+   ]},
+  {id:9,title:"사업 관리 (공사 진행)",owner:"EERS팀",ot:"bl",tc:"var(--blue)",tbg:"var(--blue-lt)",tb:"var(--blue-md)",lc:"var(--blue-md)",
+   desc:"계약 체결 후 공사가 적기에 완료되도록 진행을 관리하고 선금·기성금을 처리하는 단계.",
+   steps:[
+    {t:"공사 진행 관리",d:"계약 체결 후 계약서에 따라 공사가 적기에 완료될 수 있도록 사업을 관리한다.",ow:"사업담당자",type:"n"},
+    {t:"선금·기성금 지급 처리",d:"대금지급 조건에 따라 EPC사가 선금·기성금을 요청할 경우 '선금 및 기성금 운영지침'에 따라 처리한다. 최초 계약 EPC사는 계좌이체거래약정서[부록 9] 사전 수취 필요.",ow:"사업담당자",doc:"부록9 계좌약정서",type:"n"},
+    {t:"신축·리모델링 건설공사",d:"신축 또는 리모델링 건설공사는 '건설공사 업무절차서'를 따른다.",ow:"사업담당자",type:"c",cn:"건설공사 업무절차서 별도 적용"}
+   ]},
+  {id:10,title:"준공 확인 및 준공금 지급 요청",owner:"EERS팀·법무재무팀",ot:"am",tc:"var(--amber)",tbg:"var(--amber-lt)",tb:"var(--amber-md)",lc:"var(--amber-md)",
+   desc:"EPC사로부터 준공확인 요청을 받아 검수 후 최종 대금(준공금) 지급을 요청하는 단계.",
+   steps:[
+    {t:"준공확인 시행",d:"EPC사로부터 준공확인 요청이 오면 '준공 확인 및 검사 절차 처리 지침'에 따라 준공확인을 한다.",ow:"사업담당자",type:"n"},
+    {t:"준공금 지급 요청",d:"준공확인 완료 후 대금지급 담당부서에 준공금 지급을 요청한다.",ow:"법무재무팀",type:"n"}
+   ]},
+  {id:11,title:"사후 관리 (M&V · 상환 · 종료)",owner:"EERS팀·법무재무팀",ot:"am",tc:"var(--amber)",tbg:"var(--amber-lt)",tb:"var(--amber-md)",lc:"var(--amber-md)",
+   desc:"준공 후 에너지사용자의 상환을 관리하고, 성과측정(M&V)을 시행하며, 상환 완료 시 사업을 공식 종료하는 마지막 단계.",
+   steps:[
+    {t:"상환 시작 및 세금계산서 발행",d:"준공 후 에너지사용자가 상환을 시작한다. 상환스케줄에 따라 정해진 일자에 세금계산서를 발행한다.",ow:"사업담당자",type:"n"},
+    {t:"M&V (성과측정·검증) 시행",d:"에너지사용자 요청 시 필요한 데이터를 직접 측정하거나 측정값을 받아 M&V를 시행하고, M&V 결과보고서[부록 8]를 작성하여 에너지사용자에게 송부한다.",ow:"사업담당자",doc:"부록8 M&V보고서",type:"c",cn:"에너지사용자 요청 시 시행"},
+    {t:"상환 안내 및 독려",d:"에너지사용자와 지속적으로 소통하며 상환 안내 및 독려 업무를 수행한다.",ow:"사업담당자",type:"n"},
+    {t:"채권 추심 (연체·이익상실 시)",d:"상환 지연·일부상환 등 기한의 이익상실 조건에 해당하는 경우 '상환업무 절차서'에 따라 처리하고, 필요시 채권추심 담당부서에서 채권 추심을 진행한다.",ow:"법무재무팀",type:"c",cn:"연체·이익상실 조건 해당 시"},
+    {t:"상환 완료 확인 및 사업 종료",d:"상환이 완료되면 재무팀이 상환금을 개재 확인하고 사업을 공식 종료한다.",ow:"법무재무팀",type:"n"}
+   ]}
+];
+
+const bdgCls = {bl:'b-bl',gr:'b-gr',am:'b-am'};
+let allOpen=false, filt='all', currentPage='proc';
+
+function buildNav(){
+  const nav=document.getElementById('navList');
+  PH.forEach(p=>{
+    const el=document.createElement('div');
+    el.className='nv'; el.id='nv'+p.id;
+    el.innerHTML=`<div class="nv-num">${p.id}</div><div class="nv-lbl">${p.title}</div><div class="nv-dot" style="background:${p.tc}"></div>`;
+    el.onclick=()=>{
+      showPage('proc',document.getElementById('nvProc'));
+      document.getElementById('c'+p.id)?.scrollIntoView({behavior:'smooth',block:'start'});
+      const d=document.getElementById('d'+p.id);
+      if(d&&!d.classList.contains('op')) toggleCard(p.id);
+      document.querySelectorAll('.nv').forEach(n=>n.classList.remove('on'));
+      el.classList.add('on');
+    };
+    nav.appendChild(el);
+  });
+}
+
+function buildFlow(){
+  const view=document.getElementById('flowView');
+  view.innerHTML='';
+  const vis=PH.filter(p=>filt==='all'||p.owner.includes(filt)||p.steps.some(s=>s.ow&&s.ow.includes(filt)));
+  document.getElementById('pcnt').textContent=`${vis.length}개 단계 표시 중`;
+  vis.forEach((p,i)=>{
+    if(i>0){
+      const conn=document.createElement('div');
+      conn.className='conn';
+      conn.innerHTML=`<div class="conn-l" style="background:${p.lc};opacity:.3;"></div>`;
+      view.appendChild(conn);
+    }
+    const card=document.createElement('div');
+    card.className='pc'; card.id='c'+p.id;
+    const skip=p.skip?`<div class="nb nb-sk"><span class="nb-ic">✓</span><span class="nb-tx"><strong>생략 가능 조건 (2026.03.04 신설)</strong><br>${p.skip}</span></div>`:'';
+    let sh='';
+    p.steps.forEach(s=>{
+      const dc=s.type==='c'?'var(--purple)':p.tc;
+      const dv=s.type==='c'?'border-left:1px dashed rgba(94,53,177,.2);':`background:${p.lc};opacity:.2;`;
+      sh+=`<div class="si">
+        <div class="si-l"><div class="si-d" style="background:${dc}"></div><div class="si-v" style="${dv}"></div></div>
+        <div class="si-c">
+          <div class="si-t">${s.t}</div>
+          <div class="si-d2">${s.d}</div>
+          <div class="si-ch">
+            <span class="cp cp-ow">👤 ${s.ow}</span>
+            ${s.doc?`<span class="cp cp-dc">📄 ${s.doc}</span>`:''}
+            ${s.wn?`<span class="cp cp-wn">⚠ ${s.wn}</span>`:''}
+            ${s.cn?`<span class="cp cp-co">◈ ${s.cn}</span>`:''}
+          </div>
+        </div>
+      </div>`;
+    });
+    card.innerHTML=`
+      <div class="tlcol">
+        <div class="tlc" style="background:${p.tbg};color:${p.tc};border-color:${p.tb}">${p.id}</div>
+        <div class="tll" style="background:${p.lc};opacity:.25;"></div>
+      </div>
+      <div class="cb" id="cb${p.id}">
+        <div class="ch" onclick="toggleCard(${p.id})">
+          <div style="flex:1"><div class="ch-t">${p.title}</div></div>
+          <div class="cbgs">
+            <span class="bdg ${bdgCls[p.ot]}">${p.owner}</span>
+            <span class="b-cnt">${p.steps.length}개 업무</span>
+          </div>
+          <span class="chv" id="chv${p.id}">▼</span>
+        </div>
+        <div class="cd" id="d${p.id}">
+          <div class="cdb">${p.desc}</div>
+          ${skip}
+          <div class="sl">${sh}</div>
+        </div>
+      </div>`;
+    view.appendChild(card);
+  });
+}
+
+function buildGrid(){
+  const view=document.getElementById('gridView'); view.innerHTML='';
+  PH.filter(p=>filt==='all'||p.owner.includes(filt)).forEach(p=>{
+    const g=document.createElement('div'); g.className='gc';
+    g.style.borderTop=`3px solid ${p.tc}`;
+    g.innerHTML=`<div class="gc-n" style="color:${p.tc};">${String(p.id).padStart(2,'0')}</div>
+      <div class="gc-t">${p.title}</div>
+      <div class="gc-d">${p.desc.substring(0,80)}…</div>
+      <div class="gc-f"><span class="bdg ${bdgCls[p.ot]}">${p.owner}</span><span class="gc-s">${p.steps.length} steps</span></div>`;
+    g.onclick=()=>{setView('flow',null);setTimeout(()=>{document.getElementById('c'+p.id)?.scrollIntoView({behavior:'smooth',block:'start'});if(!document.getElementById('d'+p.id).classList.contains('op'))toggleCard(p.id);},100);};
+    view.appendChild(g);
+  });
+}
+
+function buildMatrix(){
+  const view=document.getElementById('matrixView'); view.innerHTML='';
+  const t=document.createElement('table'); t.className='mt';
+  t.innerHTML='<thead><tr><th>단계</th><th>업무명</th><th>주관</th><th>담당자</th><th>산출물/시스템</th><th>조건</th></tr></thead>';
+  const tb=document.createElement('tbody');
+  PH.forEach(p=>{
+    p.steps.forEach((s,si)=>{
+      const tr=document.createElement('tr');
+      if(si===0) tr.innerHTML=`<td class="phn" rowspan="${p.steps.length}" style="border-left:3px solid ${p.tc}"><span style="color:${p.tc};font-family:var(--mono);font-size:12px;">${p.id}.</span><br>${p.title}</td>`;
+      tr.innerHTML+=`<td>${s.t}</td><td>${p.owner}</td><td>${s.ow}</td>
+        <td style="font-size:11px;color:var(--blue);">${s.doc||'—'}</td>
+        <td style="font-size:11px;color:${s.type==='c'?'var(--purple)':'var(--text3)'};">${s.cn||s.wn||''}</td>`;
+      tb.appendChild(tr);
+    });
+  });
+  t.appendChild(tb); view.appendChild(t);
+}
+
+function showPage(name, el){
+  const map={login:'loginPage',proc:'procPage',srm:'srmPage',partner:'partnerPage',reg1:'regPage1',reg2:'regPage2',stat1:'statPage1',stat2:'statPage2',stat3:'statPage3',stat4:'statPage4',stat5:'statPage5',stat6:'statPage6',stat7:'statPage7'};
+  currentPage=name;
+  document.querySelectorAll('.main > .page').forEach(p=>p.classList.remove('on'));
+  document.getElementById(map[name]).classList.add('on');
+  document.querySelectorAll('.nv').forEach(n=>n.classList.remove('on'));
+  if(el) el.classList.add('on');
+  else document.getElementById('nvProc')?.classList.add('on');
+  document.getElementById('mainArea').scrollTo({top:0});
+}
+
+function toggleCard(id){
+  const d=document.getElementById('d'+id),chv=document.getElementById('chv'+id),cb=document.getElementById('cb'+id);
+  d.classList.toggle('op'); chv.classList.toggle('op'); cb.classList.toggle('acard',d.classList.contains('op'));
+  document.querySelectorAll('.nv').forEach(n=>n.classList.remove('on'));
+  document.getElementById('nv'+id)?.classList.add('on');
+}
+
+function toggleAll(){
+  allOpen=!allOpen;
+  PH.forEach(p=>{
+    const d=document.getElementById('d'+p.id),chv=document.getElementById('chv'+p.id),cb=document.getElementById('cb'+p.id);
+    if(!d)return;
+    d.classList.toggle('op',allOpen); chv?.classList.toggle('op',allOpen); cb?.classList.toggle('acard',allOpen);
+  });
+  document.getElementById('toggleBtn').textContent=allOpen?'전체 접기':'전체 펼치기';
+}
+
+function setFilter(f,el){
+  filt=f;
+  document.querySelectorAll('.fchip').forEach(c=>c.classList.remove('on'));
+  if(el)el.classList.add('on');
+  buildFlow(); buildGrid(); buildMatrix();
+}
+
+function setView(v,btn){
+  const lbl={flow:'흐름도',grid:'카드',matrix:'매트릭스'};
+  document.querySelectorAll('.vbtn').forEach(b=>b.classList.toggle('on',b.textContent===lbl[v]));
+  document.getElementById('flowView').style.display=v==='flow'?'flex':'none';
+  document.getElementById('gridView').classList.toggle('on',v==='grid');
+  document.getElementById('matrixView').classList.toggle('on',v==='matrix');
+}
+
+function doSearch(q){
+  q=q.toLowerCase().trim(); if(!q)return;
+  PH.forEach(p=>{
+    const d=document.getElementById('d'+p.id); if(!d)return;
+    if((d.textContent+p.title).toLowerCase().includes(q)&&!d.classList.contains('op')) toggleCard(p.id);
+  });
+}
+
+function scrollToTop(){document.getElementById('mainArea').scrollTo({top:0,behavior:'smooth'});}
+
+document.getElementById('mainArea').addEventListener('scroll',function(){
+  const pct=this.scrollTop/(this.scrollHeight-this.clientHeight)*100;
+  document.getElementById('pf').style.width=pct+'%';
+  document.getElementById('sct').classList.toggle('vis',this.scrollTop>300);
+  if(currentPage!=='proc') return;
+  PH.forEach(p=>{
+    const c=document.getElementById('c'+p.id); if(!c)return;
+    const r=c.getBoundingClientRect(),mr=this.getBoundingClientRect();
+    if(r.top-mr.top<120&&r.bottom-mr.top>0){
+      document.querySelectorAll('.nv').forEach(n=>n.classList.remove('on'));
+      document.getElementById('nv'+p.id)?.classList.add('on');
+    }
+  });
+});
+
+buildNav(); buildFlow(); buildGrid(); buildMatrix(); setView('flow',null);
+
+/* ── 용어의 정의 ── */
+const TERMS = [
+  { k:"ESCO", en:"Energy Service Company", d:"에너지절약전문기업. 에너지효율화사업에 컨설팅, 투자, 시공 등 관련 서비스를 제공하는 기업." },
+  { k:"에너지효율화사업자", en:"", d:"에너지효율화사업에 컨설팅·투자·시공 등 관련 서비스를 제공하는 기업. 이 절차서에서는 켑코이에스(주)를 말한다." },
+  { k:"EPC사", en:"Engineering Procurement Construction", d:"에너지 사용시설에 대한 설계(Engineering), 구매·조달(Procurement), 시공(Construction) 등을 수행하는 회사." },
+  { k:"에너지사용자", en:"", d:"에너지절감을 위하여 에너지 절약시설을 신설하거나, 기존의 에너지 사용시설을 교체 또는 보완하고자 하는 개인, 단체 혹은 기업." },
+  { k:"시설대여계약", en:"", d:"에너지효율화사업자, 에너지사용자, EPC사 간 계약하는 방식. 에너지효율화사업자는 공사금액 투자, 에너지사용자는 사업금액 상환, EPC사는 설계·구매·조달·시공 역할을 담당한다." },
+  { k:"장기할부판매계약", en:"", d:"에너지효율화사업자와 에너지사용자 간 계약하는 방식으로, 에너지효율화사업자가 에너지사용시설에 대한 투자 및 EPC를 시행하는 계약." },
+  { k:"IRR", en:"Internal Rate of Return", d:"내부수익률. 사업기간 동안의 현금수익 흐름을 현재가치로 합산하여 합한 값이 투자지출과 같아지도록 하는 할인 이자율." },
+  { k:"수익률", en:"", d:"\"수익률 운영지침\"의 용어 정의를 따른다. (2026.03.04 개정)" },
+  { k:"성과확정계약", en:"", d:"에너지 절약시설 설치 이전에 에너지진단 또는 기타 방법으로 산출한 예상 절감액을 바탕으로 사업금액·상환계획을 미리 확정하는 계약 방식." },
+  { k:"성과보증계약", en:"", d:"에너지사용자가 투자한 에너지 절약시설에서 발생하는 실제 절감 금액을 기준으로 에너지효율화사업자에게 상환하는 계약 방식." },
+  { k:"공사금액", en:"", d:"에너지 절약시설의 설치·교체 등 공사 및 운영 등에 필요한 제반 비용. EPC사의 도급 금액을 말한다." },
+  { k:"이익", en:"", d:"에너지효율화사업을 통해 에너지효율화사업자가 얻는 금액." },
+  { k:"사업금액", en:"", d:"공사금액과 이익을 합한 금액. 에너지사용자가 에너지효율화사업자에게 상환하는 금액." },
+  { k:"TOE", en:"Ton of Oil Equivalent", d:"석유환산톤. 각종 에너지원을 비교하기 위한 단위로, 원유 1톤(t)이 갖는 열량인 10⁷kcal에 해당한다." },
+  { k:"M&V", en:"Measurement & Verification", d:"성과측정 및 검증. 에너지 절약시설 설치 후 에너지절감량을 측정·검증하는 절차." },
+  { k:"에너지 진단", en:"", d:"에너지 사용시설 전반에 걸쳐 사업장의 에너지 이용 현황 파악, 손실 요인 발굴 및 에너지절감을 위한 최적의 개선안을 제시하는 컨설팅 제도." },
+  { k:"협력업체", en:"", d:"당사(켑코이에스)와 에너지효율화사업을 추진하는 업체를 말한다." },
+  { k:"PMS", en:"Project Management System", d:"사업관리시스템. 에너지효율화사업의 접수·심의·계약·관리 등 전 과정을 처리하는 내부 업무 시스템." },
+];
+
+function buildTermsModal() {
+  const rows = TERMS.map((t,i) => `
+    <div class="term" data-idx="${i}">
+      <div class="term-k"><span class="term-kb">${t.k}</span>${t.en ? `<br><span style="font-size:10px;color:var(--text3);font-style:italic;margin-top:2px;display:block;">${t.en}</span>` : ''}</div>
+      <div class="term-d">${t.d}</div>
+    </div>`).join('');
+
+  document.body.insertAdjacentHTML('beforeend', `
+    <div class="ovl" id="termsOverlay" onclick="if(event.target===this)closeTerms()">
+      <div class="modal" role="dialog" aria-modal="true" aria-label="용어의 정의">
+        <div class="modal-hd">
+          <span class="mh-ic">📖</span>
+          <span class="mh-t">용어의 정의</span>
+          <span style="font-size:11px;color:#9bbad4;font-family:var(--mono);margin-right:8px;">E1-사업-절차-0003 §5</span>
+          <span class="mh-x" onclick="closeTerms()" title="닫기">✕</span>
+        </div>
+        <div class="modal-bd">
+          <div class="tsrch">
+            <span class="ts-ic">🔍</span>
+            <input type="text" id="termSearch" placeholder="용어 검색 (예: ESCO, M&V, 공사금액 ...)" oninput="filterTerms(this.value)" autofocus>
+          </div>
+          <div id="termList">${rows}</div>
+          <div id="termEmpty" style="display:none;text-align:center;padding:32px 0;color:var(--text3);font-size:13px;">검색 결과가 없습니다.</div>
+        </div>
+      </div>
+    </div>`);
+}
+
+function openTerms() {
+  if (!document.getElementById('termsOverlay')) buildTermsModal();
+  document.getElementById('termsOverlay').classList.add('open');
+  document.getElementById('nvTerms').classList.add('on');
+  setTimeout(() => document.getElementById('termSearch')?.focus(), 80);
+  document.addEventListener('keydown', handleTermsKey);
+}
+
+function closeTerms() {
+  document.getElementById('termsOverlay')?.classList.remove('open');
+  document.getElementById('nvTerms').classList.remove('on');
+  document.removeEventListener('keydown', handleTermsKey);
+}
+
+function handleTermsKey(e) { if (e.key === 'Escape') closeTerms(); }
+
+function filterTerms(q) {
+  q = q.toLowerCase().trim();
+  let any = false;
+  document.querySelectorAll('#termList .term').forEach(el => {
+    const txt = el.textContent.toLowerCase();
+    const match = !q || txt.includes(q);
+    el.classList.toggle('hide', !match);
+    if (match) any = true;
+  });
+  document.getElementById('termEmpty').style.display = (!q || any) ? 'none' : 'block';
+}
+</script>
+</body>
+</html>
