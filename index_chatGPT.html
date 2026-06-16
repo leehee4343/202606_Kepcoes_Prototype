@@ -1022,8 +1022,27 @@
     }
 
     /* ─── 상세정보 모달 추가 스타일 ─── */
-    #admin-detail-modal {
+    #admin-detail-modal, #ip-add-modal, #code-value-modal {
       width: 580px;
+    }
+
+    /* 차트 및 툴팁 스타일 */
+    .chart-grid-line { stroke: var(--border); stroke-dasharray: 4,4; }
+    .chart-line { stroke: var(--blue); stroke-width: 3; fill: none; }
+    .chart-point { fill: var(--navy); stroke: #ffffff; stroke-width: 2.5; cursor: pointer; transition: r 0.2s, fill 0.2s; }
+    .chart-point:hover { r: 8; fill: var(--amber); }
+    .chart-tooltip-el {
+      position: absolute;
+      background: var(--navy);
+      color: #ffffff;
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 700;
+      pointer-events: none;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+      display: none;
+      z-index: 1000;
     }
 
     /* ─── 통계/분석용 추가 레이아웃 및 차트 스타일 ─── */
@@ -1153,7 +1172,7 @@
       padding: 56px 64px;
       background:
         linear-gradient(90deg, rgba(255,255,255,0.96) 0%, rgba(255,255,255,0.82) 42%, rgba(255,255,255,0.22) 100%),
-        url('login-bg-life.png') center / cover no-repeat;
+        url('assets/images/login-bg-life.png') center / cover no-repeat;
       position: relative;
       overflow: hidden;
     }
@@ -1651,7 +1670,7 @@
       min-height: calc(100vh - 64px - 56px - 54px);
       background:
         linear-gradient(90deg, rgba(255,255,255,0.97) 0%, rgba(255,255,255,0.84) 43%, rgba(255,255,255,0.22) 100%),
-        url('login-bg-life.png') center / cover no-repeat;
+        url('assets/images/login-bg-life.png') center / cover no-repeat;
     }
     .login-main-copy { color: var(--navy); }
     .login-main-copy .highlight { color: var(--green-dk); }
@@ -2774,6 +2793,179 @@
       height: 30px;
       font-weight: 700;
     }
+    .auth-dashboard {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .auth-summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .auth-summary-card {
+      padding: 16px;
+      border: 1px solid #dfe8f2;
+      border-radius: 10px;
+      background: #fbfdff;
+    }
+    .auth-summary-card strong {
+      display: block;
+      margin-top: 6px;
+      color: var(--navy);
+      font-size: 22px;
+      font-weight: 900;
+    }
+    .auth-summary-card span {
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+    .auth-toolbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .auth-info-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 1.6fr;
+      gap: 16px;
+      align-items: start;
+    }
+    .auth-meta-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 12px;
+      padding: 12px;
+      border: 1px dashed #cbd8e6;
+      border-radius: 10px;
+      background: #f8fbff;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+    .auth-permission-tree {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .auth-tree-group {
+      min-height: 100%;
+      padding: 14px;
+      border: 1px solid #dfe8f2;
+      border-radius: 10px;
+      background: #ffffff;
+      text-align: left;
+    }
+    .auth-tree-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+      color: var(--navy);
+      font-size: 14px;
+      font-weight: 800;
+    }
+    .auth-tree-list,
+    .auth-tree-list ul {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .auth-tree-list ul {
+      gap: 6px;
+      margin-top: 7px;
+      margin-left: 24px;
+    }
+    .auth-tree-list label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+    .auth-notice {
+      margin-top: 12px;
+      padding: 12px 14px;
+      border-left: 4px solid var(--green);
+      border-radius: 8px;
+      background: #f2fbf7;
+      color: var(--text-label);
+      font-size: 13px;
+      line-height: 1.6;
+      text-align: left;
+    }
+    .auth-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 2500;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: rgba(15, 23, 42, 0.45);
+    }
+    .auth-modal-backdrop.open { display: flex; }
+    .auth-employee-modal {
+      width: min(920px, 100%);
+      max-height: 86vh;
+      overflow: auto;
+      border-radius: 14px;
+      background: var(--bg2);
+      box-shadow: 0 24px 60px rgba(15, 23, 42, 0.28);
+    }
+    .auth-employee-modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 22px;
+      border-bottom: 1px solid var(--border);
+    }
+    .auth-employee-modal-header h3 {
+      margin: 0;
+      color: var(--navy);
+      font-size: 18px;
+    }
+    .auth-modal-close {
+      width: 34px;
+      height: 34px;
+      border: 0;
+      border-radius: 50%;
+      background: #eef3f8;
+      color: var(--text-label);
+      cursor: pointer;
+      font-size: 20px;
+      line-height: 1;
+    }
+    .auth-employee-modal-body { padding: 20px 22px 22px; }
+    body.dark .auth-summary-card,
+    body.dark .auth-tree-group,
+    body.dark .auth-employee-modal {
+      background: #172033;
+      border-color: #34445c;
+    }
+    body.dark .auth-meta-list {
+      background: #111827;
+      border-color: #34445c;
+    }
+    body.dark .auth-notice {
+      background: rgba(20, 184, 166, 0.12);
+      color: #dce7f5;
+    }
+    @media (max-width: 980px) {
+      .auth-summary-grid,
+      .auth-info-grid,
+      .auth-permission-tree {
+        grid-template-columns: 1fr;
+      }
+    }
     .tab-navigation {
       height: 58px;
       align-items: flex-end;
@@ -3186,7 +3378,7 @@
     <div class="header-left">
       <div class="logo-container">
         <div class="logo-wrapper">
-          <img src="기관로고-transparent.png" alt="기관로고" class="logo-img">
+          <img src="assets/images/기관로고-transparent.png" alt="기관로고" class="logo-img">
         </div>
         <span class="system-title">사업관리시스템(PMS)</span>
       </div>
@@ -3268,10 +3460,10 @@
     <span>온라인 매뉴얼</span>
   </button>
 
-  <!-- 기획 상세 가이드 모달 -->
+  <!-- Description 모달 -->
   <div class="desc-modal" id="desc-modal">
     <div class="desc-modal-header">
-      <h3><span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M8 14a6 6 0 1 1 8 0c-.8.7-1 1.4-1 2H9c0-.6-.2-1.3-1-2z"/></svg></span> 개발 참고 가이드 (PM & 기획 메모)</h3>
+      <h3><span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M8 14a6 6 0 1 1 8 0c-.8.7-1 1.4-1 2H9c0-.6-.2-1.3-1-2z"/></svg></span> Description</h3>
       <button class="desc-modal-close" onclick="toggleDescModal()">×</button>
     </div>
     <div class="desc-modal-body" id="desc-modal-body"></div>
@@ -3368,6 +3560,78 @@
   </div>
   <div class="manual-modal-overlay" id="admin-detail-overlay" onclick="closeAdminDetail()"></div>
 
+  <!-- 접속 아이피(IP) 추가하기 모달 -->
+  <div class="manual-modal" id="ip-add-modal">
+    <div class="manual-modal-header" style="background-color: var(--navy);">
+      <h3><span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 21s7-5.3 7-12a7 7 0 0 0-14 0c0 6.7 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/></svg></span> 접속 아이피(IP) 추가하기</h3>
+      <button class="manual-modal-close" onclick="closeIpAddModal()">×</button>
+    </div>
+    <div class="manual-modal-body" style="padding: 20px;">
+      <h4 style="font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 16px; border-bottom: 1.5px solid var(--border); padding-bottom: 8px;">| 접속 아이피(IP) 추가하기</h4>
+      <div style="display:flex; flex-direction:column; gap:16px;">
+        <div class="form-group">
+          <label>아이피(IP) <span class="required">*</span></label>
+          <input type="text" id="ip-add-address" class="form-control" placeholder="예) 211.215.111.2">
+        </div>
+        <div class="form-group">
+          <label>아이피(IP) 추가 사유 <span class="required">*</span></label>
+          <input type="text" id="ip-add-reason" class="form-control" placeholder="100자 이내로 간략히 작성해주세요.">
+        </div>
+      </div>
+      <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:20px; border-top:1px solid var(--border); padding-top:16px;">
+        <button class="btn btn-primary" onclick="submitIpAdd()" style="background-color: var(--blue);">접속 아이피(IP) 추가하기</button>
+        <button class="btn btn-outline" onclick="closeIpAddModal()">취소</button>
+      </div>
+    </div>
+  </div>
+  <div class="manual-modal-overlay" id="ip-add-overlay" onclick="closeIpAddModal()"></div>
+
+  <!-- 코드 내 값 관리 모달 -->
+  <div class="manual-modal" id="code-value-modal">
+    <div class="manual-modal-header" style="background-color: var(--navy);">
+      <h3><span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v8"/><path d="M8 12h8"/></svg></span> 코드 내 값 관리</h3>
+      <button class="manual-modal-close" onclick="closeCodeValueModal()">×</button>
+    </div>
+    <div class="manual-modal-body" style="padding: 20px;">
+      <h4 style="font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 16px; border-bottom: 1.5px solid var(--border); padding-bottom: 8px;">| 코드 내 값 관리</h4>
+      <div style="display:flex; flex-direction:column; gap:14px; margin-bottom:20px;">
+        <div class="form-group">
+          <label>코드</label>
+          <input type="text" id="val-modal-code" class="form-control" readonly style="background-color:var(--bg); color:var(--text-muted); cursor:not-allowed;">
+        </div>
+        <div class="form-group">
+          <label>값(논리명) <span class="required">*</span></label>
+          <input type="text" id="val-modal-name" class="form-control" placeholder="20자 이내로 작성해주세요.">
+        </div>
+        <div class="form-group">
+          <label>사용여부</label>
+          <div class="radio-group">
+             <label class="radio-item"><input type="radio" name="val-modal-status" id="val-modal-status-y" value="사용(Y)" checked> 사용(Y)</label>
+             <label class="radio-item"><input type="radio" name="val-modal-status" id="val-modal-status-n" value="중지(N)"> 중지(N)</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>등록일시</label>
+          <input type="text" id="val-modal-regdate" class="form-control" readonly style="background-color:var(--bg); color:var(--text-muted); cursor:not-allowed;">
+        </div>
+        <div class="form-group">
+          <label>등록자</label>
+          <input type="text" id="val-modal-reguser" class="form-control" readonly style="background-color:var(--bg); color:var(--text-muted); cursor:not-allowed;" value="이희성">
+        </div>
+        <div class="form-group">
+          <label>최종수정일시</label>
+          <input type="text" id="val-modal-editdate" class="form-control" readonly style="background-color:var(--bg); color:var(--text-muted); cursor:not-allowed;">
+        </div>
+      </div>
+      <div style="display:flex; gap:8px; justify-content:flex-end; border-top:1px solid var(--border); padding-top:16px;">
+        <button class="btn btn-primary" id="btn-val-modal-add" onclick="saveCodeValue(false)" style="background-color: var(--blue);">값 추가하기</button>
+        <button class="btn btn-primary" id="btn-val-modal-edit" onclick="saveCodeValue(true)" style="background-color: var(--blue);">수정</button>
+        <button class="btn btn-outline" id="btn-val-modal-delete" onclick="deleteCodeValue()" style="color:var(--red-dk); border-color:var(--red-md);">삭제</button>
+      </div>
+    </div>
+  </div>
+  <div class="manual-modal-overlay" id="code-value-overlay" onclick="closeCodeValueModal()"></div>
+
   <div class="manual-modal-overlay" id="online-manual-overlay" onclick="closeOnlineManual()"></div>
 
   <script>
@@ -3442,7 +3706,9 @@
           { id: 'common-1', label: '관리자 관리' },
           { id: 'common-2', label: '권한그룹 및 권한 관리' },
           { id: 'common-3', label: '접속 아이피(IP) 관리' },
-          { id: 'common-4', label: '개인정보 수정' }
+          { id: 'common-4', label: '코드관리' },
+          { id: 'common-5', label: '로그인 현황' },
+          { id: 'common-6', label: '메뉴별 접속현황' }
         ]
       },
       {
@@ -3470,9 +3736,11 @@
       'stat-analysis-6': ['수익율 분석'],
       'stat-analysis-7': ['상환스케쥴 현황'],
       'common-1': ['관리자 목록', '권한 설정', '이력 조회'],
-      'common-2': ['권한그룹 목록', '권한 항목 설정'],
+      'common-2': ['검색/조회', '권한그룹 추가하기'],
       'common-3': ['IP 목록', 'IP 등록'],
-      'common-4': ['기본 정보', '비밀번호 변경'],
+      'common-4': ['코드 목록', '코드 등록'],
+      'common-5': ['로그인 현황'],
+      'common-6': ['메뉴별 접속현황'],
       'config-1': ['시스템 옵션', '코드 관리'],
     };
 
@@ -3488,6 +3756,47 @@
       });
     }
     addPrototypeSubMenus();
+
+    // Mock databases for new screens
+    let accessIpList = [
+      { id: 1, ip: '211.215.111.2', reason: '회사 아이피(IP) – 내부 접속용', regDate: '2026. 06. 09', regUser: '이희성' },
+      { id: 2, ip: '1.112.11.2', reason: '2026년 1년간 홍길동 차장의 재택근무 지원용', regDate: '2026. 06. 09', regUser: '이희성' }
+    ];
+    for (let i = 3; i <= 55; i++) {
+      accessIpList.push({
+        id: i,
+        ip: `192.168.10.${10 + i}`,
+        reason: `개발부서 운영 업무 접속용 IP #${i}`,
+        regDate: '2026. 06. 12',
+        regUser: '이희성'
+      });
+    }
+
+    let codeList = [
+      { id: 1, code: 'KepcoES0001', codeName: '사업구분', codeDesc: '사업접수 시 사용하는 사업구분', useStatus: '사용(Y)', regDate: '2026. 06. 09', regUser: '이희성', editDate: '2026.06.10(이희성)', values: [
+        { id: 1, valCode: 'KepcoES0001_001', valName: '산업체', useStatus: '사용(Y)', regDate: '2026. 06. 09', regUser: '이희성', order: 1, editDate: '2026.06.10(이희성)' },
+        { id: 2, valCode: 'KepcoES0001_002', valName: '건축물', useStatus: '중지(N)', regDate: '2026. 06. 09', regUser: '이희성', order: 2, editDate: '' },
+        { id: 3, valCode: 'KepcoES0001_003', valName: '공공', useStatus: '사용(Y)', regDate: '2026. 06. 09', regUser: '이희성', order: 3, editDate: '' },
+        { id: 4, valCode: 'KepcoES0001_004', valName: '한전고효율', useStatus: '사용(Y)', regDate: '2026. 06. 09', regUser: '이희성', order: 4, editDate: '' },
+        { id: 5, valCode: 'KepcoES0001_005', valName: '자가소비형', useStatus: '사용(Y)', regDate: '2026. 06. 09', regUser: '이희성', order: 5, editDate: '' }
+      ]}
+    ];
+    for (let i = 2; i <= 55; i++) {
+      codeList.push({
+        id: i,
+        code: `KepcoES${String(i).padStart(4, '0')}`,
+        codeName: `공통코드_${i}`,
+        codeDesc: `시스템 표준 분류를 위한 공통코드 ${i}`,
+        useStatus: i % 5 === 0 ? '중지(N)' : '사용(Y)',
+        regDate: '2026. 06. 12',
+        regUser: '이희성',
+        editDate: '2026.06.12(이희성)',
+        values: [
+          { id: 1, valCode: `KepcoES${String(i).padStart(4, '0')}_001`, valName: '기본값A', useStatus: '사용(Y)', regDate: '2026. 06. 12', regUser: '이희성', order: 1, editDate: '' },
+          { id: 2, valCode: `KepcoES${String(i).padStart(4, '0')}_002`, valName: '기본값B', useStatus: '사용(Y)', regDate: '2026. 06. 12', regUser: '이희성', order: 2, editDate: '' }
+        ]
+      });
+    }
 
     let adminList = [
       { id: 1, empNo: 'EMP001', username: 'hslee', name: '이희성', dept: '에너지사업부', position: '부장', email: 'hslee@kepcoes.co.kr', status: '사용', regDate: '2026-06-01 09:15:30', regUser: '관리자A', editDate: '2026-06-15 14:30:22', ip: '192.168.10.11', authGroups: ['1', '3'] },
@@ -3550,6 +3859,11 @@
         menu: '<path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/>',
         left: '<path d="M15 18l-6-6 6-6"/>',
         right: '<path d="M9 18l6-6-6-6"/>',
+        plus: '<path d="M12 5v14"/><path d="M5 12h14"/>',
+        download: '<path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/>',
+        trash: '<path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v5"/><path d="M14 11v5"/>',
+        shield: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-5"/>',
+        users: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
         folder: '<path d="M3 7a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>'
       };
       const safeName = String(name || 'folder').replace(/[^a-z0-9-]/gi, '');
@@ -3885,10 +4199,26 @@
 
       if (childId === 'login-1') {
         contentsContainer.appendChild(getLoginTemplate());
+      } else if (childId === 'common-2' && tabName === '검색/조회') {
+        contentsContainer.appendChild(getAuthGroupListTemplate());
+      } else if (childId === 'common-2' && tabName === '권한그룹 추가하기') {
+        contentsContainer.appendChild(getAuthGroupSettingTemplate());
       } else if (childId === 'common-1' && tabName === '관리자 목록') {
         contentsContainer.appendChild(getAdminListTemplate());
       } else if (childId === 'common-1' && tabName === '관리자 등록') {
         contentsContainer.appendChild(getAdminRegisterTemplate());
+      } else if (childId === 'common-3' && tabName === 'IP 목록') {
+        contentsContainer.appendChild(getAccessIpListTemplate());
+      } else if (childId === 'common-3' && tabName === 'IP 등록') {
+        contentsContainer.appendChild(getAccessIpRegisterTemplate());
+      } else if (childId === 'common-4' && tabName === '코드 목록') {
+        contentsContainer.appendChild(getCodeListTemplate());
+      } else if (childId === 'common-4' && tabName === '코드 등록') {
+        contentsContainer.appendChild(getCodeRegisterTemplate());
+      } else if (childId === 'common-5' && tabName === '로그인 현황') {
+        contentsContainer.appendChild(getLoginStatusTemplate());
+      } else if (childId === 'common-6' && tabName === '메뉴별 접속현황') {
+        contentsContainer.appendChild(getMenuAccessStatusTemplate());
       } else if (childId.startsWith('stat-analysis-')) {
         contentsContainer.appendChild(getStatAnalysisTemplate(childId));
       } else {
@@ -4280,6 +4610,333 @@
       return wrapper;
     }
 
+    /* 권한그룹 및 권한 관리 - 목록 */
+    function getAuthGroupListTemplate() {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'auth-dashboard';
+
+      const authGroups = [
+        { no: 1, name: '권한그룹 #1', desc: '최고관리자 및 시스템 운영 담당자를 대상으로 한 모든 권한', created: '2026.06.09', owner: '이희성', updated: '2026.06.10', count: '15명' },
+        { no: 2, name: '권한그룹 #2', desc: '경영진 조회 및 주요 통계 승인 권한', created: '2026.06.09', owner: '이희성', updated: '2026.06.10', count: '6명' },
+        { no: 3, name: '권한그룹 #3', desc: '사업 접수, 계약, 발주, 공사 업무 담당자 권한', created: '2026.06.09', owner: '이희성', updated: '2026.06.11', count: '32명' },
+        { no: 4, name: '권한그룹 #4', desc: '일반 사용자 조회 및 개인 업무 처리 권한', created: '2026.06.10', owner: '이희성', updated: '2026.06.12', count: '187명' },
+        { no: 5, name: '회계정산 담당자', desc: '상환, 정산, 회계 마감 처리 권한', created: '2026.06.12', owner: '김도윤', updated: '2026.06.13', count: '9명' }
+      ];
+
+      wrapper.innerHTML = `
+        <div class="card search-card">
+          <div class="card-title">검색/조회</div>
+          <div class="search-grid" style="grid-template-columns: 180px minmax(280px, 1fr) auto;">
+            <div class="form-group">
+              <label>검색 구분</label>
+              <select class="form-control">
+                <option>전체</option>
+                <option>권한그룹명</option>
+                <option>권한 그룹 설명</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>검색어</label>
+              <input type="text" class="form-control" placeholder="검색어를 입력하세요.">
+            </div>
+            <div class="form-group">
+              <label>&nbsp;</label>
+              <button class="btn btn-primary">${uiIcon('search')} 검색</button>
+            </div>
+          </div>
+          <div style="display:flex; flex-wrap:wrap; gap:18px; margin-top:14px; color:var(--text-label); font-size:13px;">
+            <span>• 조회기간 등록일 : <input type="date" class="form-control" style="width:150px; display:inline-flex; margin-left:6px;" value="2026-06-01"> ~ <input type="date" class="form-control" style="width:150px; display:inline-flex;" value="2026-06-16"></span>
+            <span>• 키워드 검색 : 검색 시작일</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="auth-toolbar">
+            <div class="card-title" style="margin:0;">권한그룹 및 권한 관리</div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <button class="btn btn-outline" onclick="alert('선택한 권한그룹 삭제 기능입니다.')">${uiIcon('trash')} 삭제</button>
+              <button class="btn btn-outline" onclick="alert('권한그룹 목록 Excel 다운로드 기능입니다.')">${uiIcon('download')} Excel 다운로드</button>
+              <button class="btn btn-accent" onclick="selectMenu('common-2','권한그룹 추가하기')">${uiIcon('plus')} 권한그룹 추가하기</button>
+            </div>
+          </div>
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th><input type="checkbox"></th>
+                  <th>No</th>
+                  <th>권한그룹명</th>
+                  <th>권한그룹 설명</th>
+                  <th>등록일</th>
+                  <th>등록자</th>
+                  <th>최종수정</th>
+                  <th>매핑 수</th>
+                  <th>삭제</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${authGroups.map(group => `
+                  <tr>
+                    <td><input type="checkbox"></td>
+                    <td>${group.no}</td>
+                    <td><button class="btn btn-outline" style="height:32px;" onclick="selectMenu('common-2','권한그룹 추가하기')">${group.name}</button></td>
+                    <td style="text-align:left;">${group.desc}</td>
+                    <td>${group.created}</td>
+                    <td>${group.owner}</td>
+                    <td>${group.updated}</td>
+                    <td><span class="badge badge-secondary">${group.count}</span></td>
+                    <td><button class="btn btn-outline" style="height:32px;" onclick="deleteAuthGroup('${group.name}')">${uiIcon('trash')} 삭제</button></td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+          <div class="table-footer">
+            <span>전체 25,214건 중 1-5 표시</span>
+            <div class="pagination">
+              <button class="page-btn active">1</button>
+              <button class="page-btn">2</button>
+              <button class="page-btn">3</button>
+              <button class="page-btn">4</button>
+              <button class="page-btn">5</button>
+            </div>
+          </div>
+        </div>
+      `;
+      return wrapper;
+    }
+
+    /* 권한그룹 및 권한 관리 - 상세/설정 */
+    function getAuthGroupSettingTemplate() {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'auth-dashboard';
+
+      wrapper.innerHTML = `
+        <div class="auth-info-grid">
+          <div class="card">
+            <div class="card-title">권한그룹 정보</div>
+            <div class="form-group" style="margin-bottom:12px;">
+              <label>권한그룹명</label>
+              <input class="form-control" maxlength="30" value="권한그룹 #1" placeholder="30자 이내로 작성해주세요.">
+            </div>
+            <div class="form-group">
+              <label>권한그룹 설명</label>
+              <textarea class="form-control" maxlength="100" style="height:86px; padding-top:10px; resize:vertical;" placeholder="100자 이내로 간략히 작성해주세요.">최고관리자 및 시스템 운영 담당자를 대상으로 한 모든 권한</textarea>
+            </div>
+            <div class="auth-meta-list">
+              <div>등록일시<br><strong>2026.06.09 15:23</strong></div>
+              <div>등록자<br><strong>이희성</strong></div>
+              <div>최종수정일시<br><strong>2026.06.10 10:05</strong></div>
+              <div>매핑 수<br><strong>15명</strong></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">메뉴별 권한 부여</div>
+            <div class="auth-permission-tree">
+              <div class="auth-tree-group">
+                <div class="auth-tree-title">${uiIcon('shield')} 사업관리 권한</div>
+                <ul class="auth-tree-list">
+                  <li>
+                    <label><input type="checkbox" checked> 사업관리 전체</label>
+                    <ul>
+                      <li><label><input type="checkbox" checked> 접수관리</label></li>
+                      <li><label><input type="checkbox" checked> 설계관리</label></li>
+                      <li><label><input type="checkbox" checked> 계약관리</label></li>
+                      <li><label><input type="checkbox" checked> 공사관리</label></li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+              <div class="auth-tree-group">
+                <div class="auth-tree-title">${uiIcon('settings')} 공통/통계 권한</div>
+                <ul class="auth-tree-list">
+                  <li>
+                    <label><input type="checkbox" checked> 공통관리</label>
+                    <ul>
+                      <li><label><input type="checkbox" checked> 관리자 관리</label></li>
+                      <li><label><input type="checkbox" checked> 권한그룹 및 권한 관리</label></li>
+                      <li><label><input type="checkbox" checked> 접속 아이피(IP) 관리</label></li>
+                    </ul>
+                  </li>
+                  <li><label><input type="checkbox" checked> 통계/분석 조회</label></li>
+                </ul>
+              </div>
+            </div>
+            <div class="auth-notice">
+              권한 그룹이 접근할 수 있는 메뉴를 설정합니다. 해당 권한 그룹은 체크된 메뉴에만 접근 가능합니다.
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="auth-toolbar">
+            <div>
+              <div class="card-title" style="margin-bottom:8px;">관리자 직원 매핑</div>
+              <div style="color:var(--text-muted); font-size:13px;">한 명의 관리자 직원은 여러 개의 권한그룹에 매핑될 수 있습니다.</div>
+            </div>
+            <button class="btn btn-accent" onclick="openAuthEmployeeModal()">${uiIcon('users')} 관리자 직원 추가하기</button>
+          </div>
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>사원번호</th>
+                  <th>아이디</th>
+                  <th>사원명</th>
+                  <th>부서</th>
+                  <th>직급</th>
+                  <th>매핑일</th>
+                  <th>등록자</th>
+                  <th>삭제</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>15</td>
+                  <td>2110004</td>
+                  <td>simon</td>
+                  <td>장시형</td>
+                  <td>기획지원팀</td>
+                  <td>과장</td>
+                  <td>2026.06.09</td>
+                  <td>이희성</td>
+                  <td><button class="btn btn-outline" style="height:32px;" onclick="removeAuthEmployee('장시형')">${uiIcon('trash')} 삭제</button></td>
+                </tr>
+                <tr>
+                  <td>14</td>
+                  <td>2110012</td>
+                  <td>mkchoi</td>
+                  <td>최미경</td>
+                  <td>재무관리부</td>
+                  <td>사원</td>
+                  <td>2026.06.09</td>
+                  <td>이희성</td>
+                  <td><button class="btn btn-outline" style="height:32px;" onclick="removeAuthEmployee('최미경')">${uiIcon('trash')} 삭제</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:16px;">
+            <button class="btn btn-outline" onclick="selectMenu('common-2','검색/조회')">목록</button>
+            <button class="btn btn-primary" onclick="alert('권한그룹 정보와 메뉴별 권한이 저장되었습니다.')">저장</button>
+          </div>
+        </div>
+
+        <div class="auth-modal-backdrop" id="auth-employee-modal">
+          <div class="auth-employee-modal">
+            <div class="auth-employee-modal-header">
+              <h3>관리자 직원 추가하기</h3>
+              <button class="auth-modal-close" onclick="closeAuthEmployeeModal()">×</button>
+            </div>
+            <div class="auth-employee-modal-body">
+              <div class="card search-card" style="margin-bottom:14px;">
+                <div class="search-grid">
+                  <div class="form-group">
+                    <label>검색 구분</label>
+                    <select class="form-control">
+                      <option>전체</option>
+                      <option>사원번호</option>
+                      <option>아이디</option>
+                      <option>사원명</option>
+                      <option>부서</option>
+                      <option>직급</option>
+                      <option>이메일</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>키워드 검색</label>
+                    <input class="form-control" placeholder="검색어를 입력하세요.">
+                  </div>
+                  <div class="form-group">
+                    <label>&nbsp;</label>
+                    <button class="btn btn-primary">${uiIcon('search')} 검색</button>
+                  </div>
+                </div>
+              </div>
+              <div class="table-container">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th><input type="checkbox"></th>
+                      <th>사원번호</th>
+                      <th>아이디</th>
+                      <th>사원명</th>
+                      <th>부서</th>
+                      <th>직급</th>
+                      <th>이메일</th>
+                      <th>사용여부</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><input type="checkbox" checked></td>
+                      <td>2110004</td>
+                      <td>simon</td>
+                      <td>장시형</td>
+                      <td>기획지원팀</td>
+                      <td>과장</td>
+                      <td>simon@kepcoes.co.kr</td>
+                      <td><span class="badge badge-success">사용 Y</span></td>
+                    </tr>
+                    <tr>
+                      <td><input type="checkbox"></td>
+                      <td>2110028</td>
+                      <td>dhkim</td>
+                      <td>김도현</td>
+                      <td>사업관리부</td>
+                      <td>차장</td>
+                      <td>dhkim@kepcoes.co.kr</td>
+                      <td><span class="badge badge-success">사용 Y</span></td>
+                    </tr>
+                    <tr>
+                      <td><input type="checkbox"></td>
+                      <td>2110031</td>
+                      <td>sjpark</td>
+                      <td>박서진</td>
+                      <td>계약관리부</td>
+                      <td>대리</td>
+                      <td>sjpark@kepcoes.co.kr</td>
+                      <td><span class="badge badge-success">사용 Y</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="table-footer">
+                <span>전체 55건 현재 1/4</span>
+                <div style="display:flex; gap:8px;">
+                  <select class="form-control" style="width:110px;"><option>10개씩</option><option>20개씩</option></select>
+                  <button class="btn btn-accent" onclick="alert('선택한 관리자 직원이 권한그룹에 추가되었습니다.'); closeAuthEmployeeModal();">추가하기</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      return wrapper;
+    }
+
+    window.deleteAuthGroup = function(groupName) {
+      const message = `권한그룹을 삭제하면 해당 권한그룹에 매핑된 직원들의 권한이 모두 해지됩니다.\n\n${groupName}을(를) 삭제하시겠습니까?`;
+      if (confirm(message)) alert('프로토타입: 권한그룹 삭제가 처리되었습니다.');
+    };
+
+    window.removeAuthEmployee = function(employeeName) {
+      const message = `본 매핑 목록에서 삭제하면 해당 권한을 잃게 됩니다.\n${employeeName} 직원을 본 권한그룹에서 삭제하시겠습니까?`;
+      if (confirm(message)) alert('프로토타입: 관리자 직원 매핑이 삭제되었습니다.');
+    };
+
+    window.openAuthEmployeeModal = function() {
+      const modal = document.getElementById('auth-employee-modal');
+      if (modal) modal.classList.add('open');
+    };
+
+    window.closeAuthEmployeeModal = function() {
+      const modal = document.getElementById('auth-employee-modal');
+      if (modal) modal.classList.remove('open');
+    };
+
     /* 준비중 템플릿 */
     function getReadyTemplate(pathName) {
       const div = document.createElement('div');
@@ -4311,6 +4968,69 @@
           '필수(*) Validation: 필수 값 누락 시 alert 창 실행 대신 해당 입력 필드 테두리를 빨간색으로 변경하고 밑에 서브 텍스트로 보완 설명해 주세요.'
         ]
       },
+      'common-2_검색/조회': {
+        summary: '공통관리(설정) > 권한그룹 및 권한 관리 > 검색/조회 화면입니다.',
+        rules: [
+          '검색구분: 전체, 권한그룹명, 권한 그룹 설명',
+          '권한에 매핑된 직원의 숫자를 목록 컬럼에 표시합니다.',
+          '목록 컬럼: No, 권한그룹명, 권한그룹 설명, 등록일, 등록자, 최종수정, 매핑 수, 삭제',
+          '권한그룹 삭제 시 삭제 유의사항 Confirm 박스를 노출합니다.'
+        ]
+      },
+      'common-2_권한그룹 추가하기': {
+        summary: '공통관리(설정) > 권한그룹 및 권한 관리 > 권한그룹 추가하기 화면입니다.',
+        rules: [
+          '권한그룹 정보: 권한그룹명, 권한그룹 설명, 등록일시, 등록자, 최종수정일시, 매핑 수를 표시합니다.',
+          '메뉴별 권한 부여: 권한 그룹이 접근할 수 있는 메뉴를 설정하며 체크된 메뉴에만 접근 가능합니다.',
+          '관리자 직원 매핑 등록 목록에는 No, 사원번호, 아이디, 사원명, 부서, 직급, 매핑일, 등록자, 삭제 컬럼을 표시합니다.',
+          '페이징은 필요 없습니다. 오히려 불편하므로 등록 목록은 한 화면에서 확인 가능하게 구성합니다.',
+          '삭제 시 Confirm 문구: 본 매핑 목록에서 삭제하면, 해당 권한을 잃게 됩니다. 본 권한그룹에서 해당 관리자 직원을 삭제하시겠습니까?',
+          '관리자 직원 추가하기 검색구분: 전체, 사원번호, 아이디, 사원명, 부서, 직급, 이메일',
+          '관리자 직원 추가하기에서는 사용여부가 사용 Y인 관리자만 호출 가능합니다.'
+        ]
+      },
+      'common-3_IP 목록': {
+        summary: '공통관리(설정) > 접속 아이피(IP) 관리',
+        rules: [
+          '①검색 구분 : 전체, 아이피(IP), 아이피(IP) 추가 사유',
+          '② 삭제 시 컨펌(Confirm) 박스\n“본 접속 아이피(IP)를 삭제하면, 본 시스템에 해당 아이피(IP)로 접근이 불가합니다. 삭제하시겠습니까?”'
+        ]
+      },
+      'common-3_IP 등록': {
+        summary: '공통관리(설정) > 접속 아이피(IP) 관리 > IP 등록',
+        rules: [
+          '① 접속 아이피(IP)를 추가 등록하는 팝업/화면입니다.',
+          '② 아이피(IP) 및 추가 사유를 필수로 입력해야 합니다.'
+        ]
+      },
+      'common-4_코드 목록': {
+        summary: '공통관리(설정) > 코드 관리 > 검색/조회',
+        rules: [
+          '①검색 구분 : 전체, 코드, 코드(논리명), 코드설명',
+          '② 해당 목록의 모든 정보 + 값(하나의 컬럼에 ‘,’로 구분) 다운로드'
+        ]
+      },
+      'common-4_코드 등록': {
+        summary: '공통관리(설정) > 코드 관리 > 추가/관리 및 값 추가/관리',
+        rules: [
+          '① 개발 당시에만 사용 : 컨펌 박스 노출\n코드 삭제 시 시스템에 영향(값 삭제, 정보 유실 등)이 있을 수 있습니다. 시스템 관리자의 점검 후 삭제하세요. 본 코드를 삭제하시겠습니까?',
+          '② 값 추가/관리 삭제 컨펌 박스 노출\n코드(값) 삭제 시 시스템에 영향(값 삭제, 정보 유실 등)이 있을 수 있습니다. 시스템 관리자의 점검 후 삭제하세요. 본 코드를 삭제하시겠습니까?'
+        ]
+      },
+      'common-5_로그인 현황': {
+        summary: '공통관리(설정) > 로그인 현황',
+        rules: [
+          '①페이지 로딩 시 최초 검색 셋팅\n- 기준 : 월별\n- 기간(월별) : 당해년(예 : 2026.01~현재 년월)',
+          '② 기준 선택에 따라 적합한 컨트롤 노출 (일별/월별/연도별)'
+        ]
+      },
+      'common-6_메뉴별 접속현황': {
+        summary: '공통관리(설정) > 메뉴별 접속현황',
+        rules: [
+          '① 조회기간(등록일) 필터 제공 (하루 전, 1주일, 1개월, 3개월, 6개월, 1년)',
+          '② 대메뉴, 중메뉴, 소메뉴 간의 계층적 구조 및 접속 횟수 표시'
+        ]
+      },
       'default': {
         summary: '현재 선택한 화면은 화면 정의서 작성 및 업무 프로세스 조율 단계에 있는 화면입니다.',
         rules: [
@@ -4333,11 +5053,11 @@
       
       body.innerHTML = `
         <div class="desc-section">
-        <div class="desc-section-title">${uiIcon('pin')} 화면 개요</div>
+        <div class="desc-section-title">${uiIcon('pin')} 화면 위치</div>
           <div class="desc-text">${guide.summary}</div>
         </div>
         <div class="desc-section">
-        <div class="desc-section-title">${uiIcon('settings')} 개발 시 참고/전달 사항</div>
+        <div class="desc-section-title">${uiIcon('settings')} Description</div>
           <div class="desc-text" style="background-color: var(--blue-lt); border-color: var(--blue-md); color: var(--blue-dk); font-weight:500;">
             ${guide.rules.map(r => `• ${r}`).join('\n')}
           </div>
@@ -5438,6 +6158,1154 @@
       }
       
       wrapper.innerHTML = getStatPeriodSearchTemplate(childId) + html;
+      return wrapper;
+    }
+
+    /* ── 접속 아이피(IP) 관리 템플릿 ── */
+    let ipPageSize = 10;
+    let ipCurrentPage = 1;
+
+    function getAccessIpListTemplate() {
+      const wrapper = document.createElement('div');
+
+      const searchCard = document.createElement('div');
+      searchCard.className = 'card search-card';
+      searchCard.innerHTML = `
+        <div class="card-title">검색 조건</div>
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          <div class="form-group" style="display:flex; flex-direction:row; align-items:center; gap:12px;">
+            <label style="width:130px; flex-shrink:0; font-weight:600; font-size:14px; color:var(--text-label); margin:0;">조회기간 (등록일)</label>
+            <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+              <div class="date-presets" style="display:flex; gap:4px; margin-right:4px;">
+                <button type="button" class="date-preset-btn" data-preset="1d">하루 전</button>
+                <button type="button" class="date-preset-btn" data-preset="1w">1주일</button>
+                <button type="button" class="date-preset-btn" data-preset="1m">1개월</button>
+                <button type="button" class="date-preset-btn" data-preset="3m">3개월</button>
+                <button type="button" class="date-preset-btn" data-preset="6m">6개월</button>
+                <button type="button" class="date-preset-btn" data-preset="1y">1년</button>
+              </div>
+              <input type="date" id="ip-search-start-date" class="form-control" style="width:150px;">
+              <span style="color:var(--text-muted);">~</span>
+              <input type="date" id="ip-search-end-date" class="form-control" style="width:150px;">
+            </div>
+          </div>
+          <div class="form-group" style="display:flex; flex-direction:row; align-items:center; gap:12px;">
+            <label style="width:130px; flex-shrink:0; font-weight:600; font-size:14px; color:var(--text-label); margin:0;">키워드 검색</label>
+            <div style="display:flex; gap:8px; width:500px; max-width:100%;">
+              <select id="ip-search-key" class="form-control" style="width:130px; flex-shrink:0;">
+                <option value="전체">전체</option>
+                <option value="아이피(IP)">아이피(IP)</option>
+                <option value="아이피(IP) 추가 사유">아이피(IP) 추가 사유</option>
+              </select>
+              <input type="text" id="ip-search-keyword" class="form-control" style="flex:1;" placeholder="검색어를 입력하세요.">
+            </div>
+          </div>
+        </div>
+        <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:16px; border-top:1px solid var(--border); padding-top:16px;">
+          <button class="btn btn-primary" id="btn-ip-search">
+            ${uiIcon('search')} 검색
+          </button>
+          <button class="btn btn-outline" id="btn-ip-reset">초기화</button>
+        </div>`;
+      wrapper.appendChild(searchCard);
+
+      const listCard = document.createElement('div');
+      listCard.className = 'card';
+      listCard.innerHTML = `
+        <div class="card-title">접속 아이피(IP) 목록</div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:10px;">
+          <div style="font-size:13px; color:var(--text-muted);">
+            전체 <strong id="ip-total-cnt" style="color:var(--blue);">0</strong>건 &nbsp;|&nbsp; 
+            현재 <strong id="ip-current-page" style="color:var(--text);">1/1</strong> 페이지
+          </div>
+          <div style="display:flex; gap:8px; align-items:center;">
+            <select id="select-ip-page-size" class="form-control" style="width:110px; height:32px; font-size:13px; padding:0 8px; margin:0;">
+              <option value="10">10개씩</option>
+              <option value="20">20개씩</option>
+              <option value="50">50개씩</option>
+            </select>
+            <button class="btn btn-outline" style="height:32px; padding:0 12px; font-size:13px;" onclick="alert('전체 접속 아이피 목록이 엑셀(.xlsx) 파일로 다운로드되었습니다.')">
+              ${uiIcon('download')} 다운로드(Excel)
+            </button>
+            <button class="btn btn-primary" onclick="openIpAddModal()" style="height:32px; padding:0 14px; font-size:13px; background-color: var(--blue);">
+              접속 아이피(IP) 추가하기
+            </button>
+          </div>
+        </div>
+        <div class="table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th style="width:70px; text-align:center;">No</th>
+                <th>아이피(IP)</th>
+                <th>아이피(IP) 추가 사유</th>
+                <th>등록일</th>
+                <th>등록자</th>
+                <th style="width:90px; text-align:center;">삭제</th>
+              </tr>
+            </thead>
+            <tbody id="ip-table-body"></tbody>
+          </table>
+        </div>
+        <div class="table-footer" style="margin-top:20px; border-top:1px solid var(--border); padding-top:14px;">
+          <div></div>
+          <div class="pagination" id="ip-pagination"></div>
+          <div></div>
+        </div>`;
+      wrapper.appendChild(listCard);
+
+      setTimeout(() => {
+        const updateTable = () => {
+          const startDate = wrapper.querySelector('#ip-search-start-date').value;
+          const endDate = wrapper.querySelector('#ip-search-end-date').value;
+          const key = wrapper.querySelector('#ip-search-key').value;
+          const keyword = wrapper.querySelector('#ip-search-keyword').value.toLowerCase().trim();
+
+          const filtered = accessIpList.filter(item => {
+            if (startDate && item.regDate.replace(/\./g, '-').trim() < startDate) return false;
+            if (endDate && item.regDate.replace(/\./g, '-').trim() > endDate) return false;
+
+            if (keyword) {
+              if (key === '전체') {
+                return (item.ip.toLowerCase().includes(keyword) || item.reason.toLowerCase().includes(keyword));
+              } else if (key === '아이피(IP)') {
+                return item.ip.toLowerCase().includes(keyword);
+              } else if (key === '아이피(IP) 추가 사유') {
+                return item.reason.toLowerCase().includes(keyword);
+              }
+            }
+            return true;
+          });
+
+          const totalCount = filtered.length;
+          const totalPages = Math.ceil(totalCount / ipPageSize) || 1;
+          if (ipCurrentPage > totalPages) ipCurrentPage = totalPages;
+
+          const startIdx = (ipCurrentPage - 1) * ipPageSize;
+          const paginated = filtered.slice(startIdx, startIdx + ipPageSize);
+
+          const tbody = wrapper.querySelector('#ip-table-body');
+          tbody.innerHTML = paginated.map((item, idx) => {
+            return `<tr>
+              <td style="color:var(--text-muted); text-align:center;">${25214 + startIdx + idx}</td>
+              <td style="font-weight:700;">${item.ip}</td>
+              <td style="text-align:left;">${item.reason}</td>
+              <td style="color:var(--text-muted);">${item.regDate}</td>
+              <td>${item.regUser}</td>
+              <td style="text-align:center;">
+                <button class="btn btn-outline" style="height:26px; padding:0 8px; font-size:13px; color:var(--red-dk); border-color:var(--red-md);"
+                  onclick="deleteAccessIp(${item.id})">삭제</button>
+              </td>
+            </tr>`;
+          }).join('');
+
+          wrapper.querySelector('#ip-total-cnt').textContent = totalCount;
+          wrapper.querySelector('#ip-current-page').textContent = `${ipCurrentPage}/${totalPages}`;
+
+          const paginationContainer = wrapper.querySelector('#ip-pagination');
+          let pagHTML = `<button class="page-btn" onclick="goToIpPage(1)">&laquo;</button>`;
+          for (let i = 1; i <= totalPages; i++) {
+            pagHTML += `<button class="page-btn ${i === ipCurrentPage ? 'active' : ''}" onclick="goToIpPage(${i})">${i}</button>`;
+          }
+          pagHTML += `<button class="page-btn" onclick="goToIpPage(${totalPages})">&raquo;</button>`;
+          paginationContainer.innerHTML = pagHTML;
+        };
+
+        window.goToIpPage = (page) => {
+          ipCurrentPage = page;
+          updateTable();
+        };
+
+        window.deleteAccessIp = (id) => {
+          if (confirm('“본 접속 아이피(IP)를 삭제하면, 본 시스템에 해당 아이피(IP)로 접근이 불가합니다. 삭제하시겠습니까?”')) {
+            const idx = accessIpList.findIndex(item => item.id === id);
+            if (idx !== -1) {
+              accessIpList.splice(idx, 1);
+              alert('삭제되었습니다.');
+              updateTable();
+            }
+          }
+        };
+
+        const presetBtns = wrapper.querySelectorAll('.date-preset-btn');
+        const startInput = wrapper.querySelector('#ip-search-start-date');
+        const endInput = wrapper.querySelector('#ip-search-end-date');
+        const clearPresets = () => presetBtns.forEach(b => b.classList.remove('active'));
+        startInput.onchange = clearPresets;
+        endInput.onchange = clearPresets;
+
+        presetBtns.forEach(btn => {
+          btn.onclick = () => {
+            presetBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const preset = btn.getAttribute('data-preset');
+            const endDate = new Date();
+            let startDate = new Date();
+
+            if (preset === '1d') startDate.setDate(endDate.getDate() - 1);
+            else if (preset === '1w') startDate.setDate(endDate.getDate() - 7);
+            else if (preset === '1m') startDate.setMonth(endDate.getMonth() - 1);
+            else if (preset === '3m') startDate.setMonth(endDate.getMonth() - 3);
+            else if (preset === '6m') startDate.setMonth(endDate.getMonth() - 6);
+            else if (preset === '1y') startDate.setFullYear(endDate.getFullYear() - 1);
+
+            const formatDate = (d) => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+            startInput.value = formatDate(startDate);
+            endInput.value = formatDate(endDate);
+            ipCurrentPage = 1;
+            updateTable();
+          };
+        });
+
+        wrapper.querySelector('#btn-ip-search').onclick = () => {
+          ipCurrentPage = 1;
+          updateTable();
+        };
+
+        wrapper.querySelector('#btn-ip-reset').onclick = () => {
+          startInput.value = '';
+          endInput.value = '';
+          clearPresets();
+          wrapper.querySelector('#ip-search-key').value = '전체';
+          wrapper.querySelector('#ip-search-keyword').value = '';
+          ipCurrentPage = 1;
+          updateTable();
+        };
+
+        wrapper.querySelector('#select-ip-page-size').onchange = (e) => {
+          ipPageSize = parseInt(e.target.value);
+          ipCurrentPage = 1;
+          updateTable();
+        };
+
+        updateTable();
+      }, 50);
+
+      return wrapper;
+    }
+
+    function getAccessIpRegisterTemplate() {
+      const wrapper = document.createElement('div');
+      wrapper.innerHTML = `
+        <div class="card">
+          <div class="card-title">접속 아이피(IP) 등록</div>
+          <div style="display:flex; flex-direction:column; gap:16px;">
+            <div class="form-group">
+              <label>아이피(IP) <span class="required">*</span></label>
+              <input type="text" id="ip-reg-address" class="form-control" placeholder="예) 211.215.111.2" style="max-width:400px;">
+            </div>
+            <div class="form-group">
+              <label>아이피(IP) 추가 사유 <span class="required">*</span></label>
+              <input type="text" id="ip-reg-reason" class="form-control" placeholder="100자 이내로 간략히 작성해주세요.">
+            </div>
+          </div>
+          <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:20px; border-top:1px solid var(--border); padding-top:16px;">
+            <button class="btn btn-primary" onclick="submitIpRegTab()" style="background-color: var(--blue);">접속 아이피(IP) 추가하기</button>
+            <button class="btn btn-outline" onclick="selectMenu('common-3', 'IP 목록')">취소</button>
+          </div>
+        </div>`;
+      
+      window.submitIpRegTab = () => {
+        const ip = document.getElementById('ip-reg-address').value.trim();
+        const reason = document.getElementById('ip-reg-reason').value.trim();
+        if(!ip || !reason) {
+          alert('필수(*) 항목을 입력해주세요.');
+          return;
+        }
+        const today = new Date();
+        const fmt = `${today.getFullYear()}. ${String(today.getMonth()+1).padStart(2,'0')}. ${String(today.getDate()).padStart(2,'0')}`;
+        accessIpList.unshift({
+          id: accessIpList.length + 1,
+          ip: ip,
+          reason: reason,
+          regDate: fmt,
+          regUser: '이희성'
+        });
+        alert('정상적으로 등록되었습니다.');
+        selectMenu('common-3', 'IP 목록');
+      };
+
+      return wrapper;
+    }
+
+    window.openIpAddModal = () => {
+      document.getElementById('ip-add-address').value = '';
+      document.getElementById('ip-add-reason').value = '';
+      document.getElementById('ip-add-modal').classList.add('open');
+      document.getElementById('ip-add-overlay').classList.add('open');
+    };
+    window.closeIpAddModal = () => {
+      document.getElementById('ip-add-modal').classList.remove('open');
+      document.getElementById('ip-add-overlay').classList.remove('open');
+    };
+    window.submitIpAdd = () => {
+      const ip = document.getElementById('ip-add-address').value.trim();
+      const reason = document.getElementById('ip-add-reason').value.trim();
+      if (!ip || !reason) {
+        alert('필수(*) 항목을 입력해주세요.');
+        return;
+      }
+      const today = new Date();
+      const fmt = `${today.getFullYear()}. ${String(today.getMonth()+1).padStart(2,'0')}. ${String(today.getDate()).padStart(2,'0')}`;
+      accessIpList.unshift({
+        id: accessIpList.length + 1,
+        ip: ip,
+        reason: reason,
+        regDate: fmt,
+        regUser: '이희성'
+      });
+      alert('정상적으로 등록되었습니다.');
+      closeIpAddModal();
+      selectMenu('common-3', 'IP 목록');
+    };
+
+
+    /* ── 코드 관리 템플릿 ── */
+    let codePageSize = 10;
+    let codeCurrentPage = 1;
+    let activeEditCodeId = null;
+
+    function getCodeListTemplate() {
+      const wrapper = document.createElement('div');
+
+      const searchCard = document.createElement('div');
+      searchCard.className = 'card search-card';
+      searchCard.innerHTML = `
+        <div class="card-title">검색 조건</div>
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          <div class="form-group" style="display:flex; flex-direction:row; align-items:center; gap:12px;">
+            <label style="width:130px; flex-shrink:0; font-weight:600; font-size:14px; color:var(--text-label); margin:0;">조회기간 (등록일)</label>
+            <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+              <div class="date-presets" style="display:flex; gap:4px; margin-right:4px;">
+                <button type="button" class="date-preset-btn" data-preset="1d">하루 전</button>
+                <button type="button" class="date-preset-btn" data-preset="1w">1주일</button>
+                <button type="button" class="date-preset-btn" data-preset="1m">1개월</button>
+                <button type="button" class="date-preset-btn" data-preset="3m">3개월</button>
+                <button type="button" class="date-preset-btn" data-preset="6m">6개월</button>
+                <button type="button" class="date-preset-btn" data-preset="1y">1년</button>
+              </div>
+              <input type="date" id="code-search-start-date" class="form-control" style="width:150px;">
+              <span style="color:var(--text-muted);">~</span>
+              <input type="date" id="code-search-end-date" class="form-control" style="width:150px;">
+            </div>
+          </div>
+          <div class="form-group" style="display:flex; flex-direction:row; align-items:center; gap:12px;">
+            <label style="width:130px; flex-shrink:0; font-weight:600; font-size:14px; color:var(--text-label); margin:0;">사용여부</label>
+            <div class="radio-group" style="display:flex; gap:16px; height:38px; align-items:center;">
+              <label class="radio-item"><input type="radio" name="code-search-status" value="전체" checked> 전체</label>
+              <label class="radio-item"><input type="radio" name="code-search-status" value="사용(Y)"> 사용(Y)</label>
+              <label class="radio-item"><input type="radio" name="code-search-status" value="중지(N)"> 중지(N)</label>
+            </div>
+          </div>
+          <div class="form-group" style="display:flex; flex-direction:row; align-items:center; gap:12px;">
+            <label style="width:130px; flex-shrink:0; font-weight:600; font-size:14px; color:var(--text-label); margin:0;">키워드 검색</label>
+            <div style="display:flex; gap:8px; width:500px; max-width:100%;">
+              <select id="code-search-key" class="form-control" style="width:130px; flex-shrink:0;">
+                <option value="전체">전체</option>
+                <option value="코드">코드</option>
+                <option value="코드(논리명)">코드(논리명)</option>
+                <option value="코드설명">코드설명</option>
+              </select>
+              <input type="text" id="code-search-keyword" class="form-control" style="flex:1;" placeholder="검색어를 입력하세요.">
+            </div>
+          </div>
+        </div>
+        <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:16px; border-top:1px solid var(--border); padding-top:16px;">
+          <button class="btn btn-primary" id="btn-code-search">
+            ${uiIcon('search')} 검색
+          </button>
+          <button class="btn btn-outline" id="btn-code-reset">초기화</button>
+        </div>`;
+      wrapper.appendChild(searchCard);
+
+      const listCard = document.createElement('div');
+      listCard.className = 'card';
+      listCard.innerHTML = `
+        <div class="card-title">코드 목록</div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:10px;">
+          <div style="font-size:13px; color:var(--text-muted);">
+            전체 <strong id="code-total-cnt" style="color:var(--blue);">0</strong>건 &nbsp;|&nbsp; 
+            현재 <strong id="code-current-page" style="color:var(--text);">1/1</strong> 페이지
+          </div>
+          <div style="display:flex; gap:8px; align-items:center;">
+            <select id="select-code-page-size" class="form-control" style="width:110px; height:32px; font-size:13px; padding:0 8px; margin:0;">
+              <option value="10">10개씩</option>
+              <option value="20">20개씩</option>
+              <option value="50">50개씩</option>
+            </select>
+            <button class="btn btn-outline" style="height:32px; padding:0 12px; font-size:13px;" onclick="downloadCodeExcel()">
+              ${uiIcon('download')} 다운로드(Excel)
+            </button>
+            <button class="btn btn-primary" onclick="openCodeAddTab()" style="height:32px; padding:0 14px; font-size:13px; background-color: var(--blue);">
+              코드 추가하기
+            </button>
+          </div>
+        </div>
+        <div class="table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th style="width:70px; text-align:center;">No</th>
+                <th>코드</th>
+                <th>코드(논리명)</th>
+                <th>코드설명</th>
+                <th style="width:90px; text-align:center;">사용여부</th>
+                <th style="width:85px; text-align:center;">값(개수)</th>
+                <th>등록일</th>
+                <th>등록자</th>
+                <th style="width:85px; text-align:center;">관리</th>
+                <th>최종수정</th>
+              </tr>
+            </thead>
+            <tbody id="code-table-body"></tbody>
+          </table>
+        </div>
+        <div class="table-footer" style="margin-top:20px; border-top:1px solid var(--border); padding-top:14px;">
+          <div></div>
+          <div class="pagination" id="code-pagination"></div>
+          <div></div>
+        </div>`;
+      wrapper.appendChild(listCard);
+
+      setTimeout(() => {
+        const updateTable = () => {
+          const startDate = wrapper.querySelector('#code-search-start-date').value;
+          const endDate = wrapper.querySelector('#code-search-end-date').value;
+          const useStatus = wrapper.querySelector('input[name="code-search-status"]:checked').value;
+          const key = wrapper.querySelector('#code-search-key').value;
+          const keyword = wrapper.querySelector('#code-search-keyword').value.toLowerCase().trim();
+
+          const filtered = codeList.filter(item => {
+            if (startDate && item.regDate.replace(/\./g, '-').trim() < startDate) return false;
+            if (endDate && item.regDate.replace(/\./g, '-').trim() > endDate) return false;
+            if (useStatus !== '전체' && item.useStatus !== useStatus) return false;
+
+            if (keyword) {
+              if (key === '전체') {
+                return (item.code.toLowerCase().includes(keyword) || item.codeName.toLowerCase().includes(keyword) || item.codeDesc.toLowerCase().includes(keyword));
+              } else if (key === '코드') {
+                return item.code.toLowerCase().includes(keyword);
+              } else if (key === '코드(논리명)') {
+                return item.codeName.toLowerCase().includes(keyword);
+              } else if (key === '코드설명') {
+                return item.codeDesc.toLowerCase().includes(keyword);
+              }
+            }
+            return true;
+          });
+
+          const totalCount = filtered.length;
+          const totalPages = Math.ceil(totalCount / codePageSize) || 1;
+          if (codeCurrentPage > totalPages) codeCurrentPage = totalPages;
+
+          const startIdx = (codeCurrentPage - 1) * codePageSize;
+          const paginated = filtered.slice(startIdx, startIdx + codePageSize);
+
+          const tbody = wrapper.querySelector('#code-table-body');
+          tbody.innerHTML = paginated.map((item, idx) => {
+            const statusClass = item.useStatus === '사용(Y)' ? 'badge-success' : 'badge-danger';
+            return `<tr>
+              <td style="color:var(--text-muted); text-align:center;">${25214 + startIdx + idx}</td>
+              <td style="font-weight:700; color:var(--blue-dk);">${item.code}</td>
+              <td>${item.codeName}</td>
+              <td style="text-align:left;">${item.codeDesc}</td>
+              <td style="text-align:center;"><span class="badge ${statusClass}">${item.useStatus}</span></td>
+              <td style="text-align:center; font-weight:700; color:var(--blue);">${item.values.length}개</td>
+              <td style="color:var(--text-muted);">${item.regDate}</td>
+              <td>${item.regUser}</td>
+              <td style="text-align:center;">
+                <button class="btn btn-outline" style="height:26px; padding:0 8px; font-size:13px;"
+                  onclick="openCodeEditTab(${item.id})">관리</button>
+              </td>
+              <td style="color:var(--text-muted);">${item.editDate || '—'}</td>
+            </tr>`;
+          }).join('');
+
+          wrapper.querySelector('#code-total-cnt').textContent = totalCount;
+          wrapper.querySelector('#code-current-page').textContent = `${codeCurrentPage}/${totalPages}`;
+
+          const paginationContainer = wrapper.querySelector('#code-pagination');
+          let pagHTML = `<button class="page-btn" onclick="goToCodePage(1)">&laquo;</button>`;
+          for (let i = 1; i <= totalPages; i++) {
+            pagHTML += `<button class="page-btn ${i === codeCurrentPage ? 'active' : ''}" onclick="goToCodePage(${i})">${i}</button>`;
+          }
+          pagHTML += `<button class="page-btn" onclick="goToCodePage(${totalPages})">&raquo;</button>`;
+          paginationContainer.innerHTML = pagHTML;
+        };
+
+        window.goToCodePage = (page) => {
+          codeCurrentPage = page;
+          updateTable();
+        };
+
+        window.openCodeAddTab = () => {
+          activeEditCodeId = null;
+          selectMenu('common-4', '코드 등록');
+        };
+
+        window.openCodeEditTab = (id) => {
+          activeEditCodeId = id;
+          selectMenu('common-4', '코드 등록');
+        };
+
+        window.downloadCodeExcel = () => {
+          const lines = codeList.map(item => {
+            const valListStr = item.values.map(v => `${v.valName}(${v.valCode})`).join(', ');
+            return `코드: ${item.code}, 논리명: ${item.codeName}, 설명: ${item.codeDesc}, 사용여부: ${item.useStatus}, 값 목록: [${valListStr}]`;
+          });
+          alert("해당 목록의 모든 정보 + 값(하나의 컬럼에 ','로 구분)이 포함된 엑셀 파일이 다운로드되었습니다.\n\n" + lines.slice(0, 3).join("\n") + "\n...");
+        };
+
+        const presetBtns = wrapper.querySelectorAll('.date-preset-btn');
+        const startInput = wrapper.querySelector('#code-search-start-date');
+        const endInput = wrapper.querySelector('#code-search-end-date');
+        const clearPresets = () => presetBtns.forEach(b => b.classList.remove('active'));
+        startInput.onchange = clearPresets;
+        endInput.onchange = clearPresets;
+
+        presetBtns.forEach(btn => {
+          btn.onclick = () => {
+            presetBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const preset = btn.getAttribute('data-preset');
+            const endDate = new Date();
+            let startDate = new Date();
+
+            if (preset === '1d') startDate.setDate(endDate.getDate() - 1);
+            else if (preset === '1w') startDate.setDate(endDate.getDate() - 7);
+            else if (preset === '1m') startDate.setMonth(endDate.getMonth() - 1);
+            else if (preset === '3m') startDate.setMonth(endDate.getMonth() - 3);
+            else if (preset === '6m') startDate.setMonth(endDate.getMonth() - 6);
+            else if (preset === '1y') startDate.setFullYear(endDate.getFullYear() - 1);
+
+            const formatDate = (d) => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+            startInput.value = formatDate(startDate);
+            endInput.value = formatDate(endDate);
+            codeCurrentPage = 1;
+            updateTable();
+          };
+        });
+
+        wrapper.querySelector('#btn-code-search').onclick = () => {
+          codeCurrentPage = 1;
+          updateTable();
+        };
+
+        wrapper.querySelector('#btn-code-reset').onclick = () => {
+          startInput.value = '';
+          endInput.value = '';
+          clearPresets();
+          wrapper.querySelector('input[name="code-search-status"][value="전체"]').checked = true;
+          wrapper.querySelector('#code-search-key').value = '전체';
+          wrapper.querySelector('#code-search-keyword').value = '';
+          codeCurrentPage = 1;
+          updateTable();
+        };
+
+        wrapper.querySelector('#select-code-page-size').onchange = (e) => {
+          codePageSize = parseInt(e.target.value);
+          codeCurrentPage = 1;
+          updateTable();
+        };
+
+        updateTable();
+      }, 50);
+
+      return wrapper;
+    }
+
+    let activeEditValueId = null;
+
+    function getCodeRegisterTemplate() {
+      const wrapper = document.createElement('div');
+      const isEdit = activeEditCodeId !== null;
+      const codeItem = isEdit ? codeList.find(c => c.id === activeEditCodeId) : null;
+
+      const codeVal = isEdit ? codeItem.code : `KepcoES${String(codeList.length + 1).padStart(4, '0')}(자동 발번)`;
+      const codeNameVal = isEdit ? codeItem.codeName : '';
+      const codeDescVal = isEdit ? codeItem.codeDesc : '';
+      const isUseChecked = isEdit ? (codeItem.useStatus === '사용(Y)' ? 'checked' : '') : 'checked';
+      const isStopChecked = isEdit ? (codeItem.useStatus === '중지(N)' ? 'checked' : '') : '';
+      const regDateVal = isEdit ? codeItem.regDate : '2026. 06. 16';
+      const regUserVal = isEdit ? codeItem.regUser : '이희성';
+      const editDateVal = isEdit ? codeItem.editDate : '—';
+
+      wrapper.innerHTML = `
+        <div class="card">
+          <div class="card-title">코드 정보</div>
+          <div style="display:flex; flex-direction:column; gap:14px;">
+            <div class="form-group">
+              <label>코드</label>
+              <input type="text" class="form-control" readonly style="background-color:var(--bg); color:var(--text-muted); cursor:not-allowed;" value="${codeVal}">
+            </div>
+            <div class="form-group">
+              <label>코드(논리명) <span class="required">*</span></label>
+              <input type="text" id="code-reg-name" class="form-control" placeholder="20자 이내로 작성해주세요." value="${codeNameVal}">
+            </div>
+            <div class="form-group">
+              <label>코드설명 <span class="required">*</span></label>
+              <input type="text" id="code-reg-desc" class="form-control" placeholder="100자 이내로 간략히 작성해주세요." value="${codeDescVal}">
+            </div>
+            <div class="form-group">
+              <label>사용여부</label>
+              <div class="radio-group">
+                <label class="radio-item"><input type="radio" name="code-reg-status" value="사용(Y)" ${isUseChecked}> 사용(Y)</label>
+                <label class="radio-item"><input type="radio" name="code-reg-status" value="중지(N)" ${isStopChecked}> 중지(N)</label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>등록일시</label>
+              <input type="text" class="form-control" readonly style="background-color:var(--bg); color:var(--text-muted); cursor:not-allowed;" value="${regDateVal}">
+            </div>
+            <div class="form-group">
+              <label>등록자</label>
+              <input type="text" class="form-control" readonly style="background-color:var(--bg); color:var(--text-muted); cursor:not-allowed;" value="${regUserVal}">
+            </div>
+            <div class="form-group">
+              <label>최종수정일시</label>
+              <input type="text" class="form-control" readonly style="background-color:var(--bg); color:var(--text-muted); cursor:not-allowed;" value="${editDateVal}">
+            </div>
+          </div>
+          <div style="display:flex; gap:8px; margin-top:20px; border-top:1px solid var(--border); padding-top:16px;">
+            <button class="btn btn-secondary" onclick="selectMenu('common-4', '코드 목록')">목록</button>
+            <button class="btn btn-primary" onclick="submitCodeReg()" style="background-color: var(--blue); margin-left:auto;">${isEdit ? '수정' : '등록'}</button>
+            ${isEdit ? `<button class="btn btn-outline" onclick="deleteCodeParent()" style="color:var(--red-dk); border-color:var(--red-md);">삭제</button>` : ''}
+          </div>
+        </div>
+
+        ${isEdit ? `
+        <div class="card" style="margin-top:24px;">
+          <div class="card-title">값 (전체 <span id="code-val-count">${codeItem.values.length}</span>건)</div>
+          <div style="display:flex; justify-content:flex-end; margin-bottom:14px;">
+             <button class="btn btn-outline" style="height:32px; padding:0 12px; font-size:13px; background-color:orange; color:white; border-color:orange; margin-right:8px;" onclick="applyValueOrder()">순서 적용</button>
+             <button class="btn btn-primary" style="height:32px; padding:0 12px; font-size:13px; background-color: var(--blue);" onclick="openValueAddModal()">값 추가하기</button>
+          </div>
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th style="width:70px; text-align:center;">No</th>
+                  <th>코드</th>
+                  <th>값(논리명)</th>
+                  <th style="width:90px; text-align:center;">사용여부</th>
+                  <th>등록일</th>
+                  <th>등록자</th>
+                  <th style="width:95px; text-align:center;">순서</th>
+                  <th style="width:90px; text-align:center;">관리</th>
+                  <th>최종수정</th>
+                </tr>
+              </thead>
+              <tbody id="code-val-table-body"></tbody>
+            </table>
+          </div>
+        </div>` : ''}`;
+
+      setTimeout(() => {
+        window.submitCodeReg = () => {
+          const name = document.getElementById('code-reg-name').value.trim();
+          const desc = document.getElementById('code-reg-desc').value.trim();
+          const status = document.querySelector('input[name="code-reg-status"]:checked').value;
+
+          if(!name || !desc) {
+            alert('필수(*) 항목을 입력해주세요.');
+            return;
+          }
+
+          if(isEdit) {
+            codeItem.codeName = name;
+            codeItem.codeDesc = desc;
+            codeItem.useStatus = status;
+            codeItem.editDate = '2026.06.16(이희성)';
+            alert('코드가 수정되었습니다.');
+          } else {
+            const newCode = {
+              id: codeList.length + 1,
+              code: `KepcoES${String(codeList.length + 1).padStart(4, '0')}`,
+              codeName: name,
+              codeDesc: desc,
+              useStatus: status,
+              regDate: '2026. 06. 16',
+              regUser: '이희성',
+              editDate: '2026.06.16(이희성)',
+              values: []
+            };
+            codeList.unshift(newCode);
+            alert('코드가 등록되었습니다.');
+          }
+          selectMenu('common-4', '코드 목록');
+        };
+
+        window.deleteCodeParent = () => {
+          if(confirm('코드 삭제 시 시스템에 영향(값 삭제, 정보 유실 등)이 있을 수 있습니다.\n시스템 관리자의 점검 후 삭제하세요.\n본 코드를 삭제하시겠습니까?')) {
+            const idx = codeList.findIndex(c => c.id === activeEditCodeId);
+            if(idx !== -1) {
+              codeList.splice(idx, 1);
+              alert('삭제되었습니다.');
+              selectMenu('common-4', '코드 목록');
+            }
+          }
+        };
+
+        window.renderValueTable = () => {
+          if(!isEdit) return;
+          const tbody = document.getElementById('code-val-table-body');
+          const sortedValues = codeItem.values.sort((a,b) => a.order - b.order);
+          document.getElementById('code-val-count').textContent = sortedValues.length;
+          
+          tbody.innerHTML = sortedValues.map((val, idx) => {
+            const statusClass = val.useStatus === '사용(Y)' ? 'badge-success' : 'badge-danger';
+            const isFirst = idx === 0;
+            const isLast = idx === sortedValues.length - 1;
+            
+            const upBtn = isFirst ? '' : `<span style="cursor:pointer; color:var(--blue); margin-right:4px;" onclick="moveValueOrder(${idx}, -1)">▲</span>`;
+            const downBtn = isLast ? '' : `<span style="cursor:pointer; color:var(--blue);" onclick="moveValueOrder(${idx}, 1)">▼</span>`;
+
+            return `<tr>
+              <td style="color:var(--text-muted); text-align:center;">${idx + 1}</td>
+              <td style="font-weight:700;">${val.valCode}</td>
+              <td>${val.valName}</td>
+              <td style="text-align:center;"><span class="badge ${statusClass}">${val.useStatus}</span></td>
+              <td style="color:var(--text-muted);">${val.regDate}</td>
+              <td>${val.regUser}</td>
+              <td style="text-align:center; font-size:14px; font-weight:bold;">${upBtn}${downBtn}</td>
+              <td style="text-align:center;">
+                <button class="btn btn-outline" style="height:26px; padding:0 8px; font-size:13px;" onclick="openValueEditModal(${val.id})">관리</button>
+              </td>
+              <td style="color:var(--text-muted);">${val.editDate || '—'}</td>
+            </tr>`;
+          }).join('');
+        };
+
+        window.moveValueOrder = (index, direction) => {
+          const targetIndex = index + direction;
+          if(targetIndex < 0 || targetIndex >= codeItem.values.length) return;
+          
+          const temp = codeItem.values[index].order;
+          codeItem.values[index].order = codeItem.values[targetIndex].order;
+          codeItem.values[targetIndex].order = temp;
+          
+          renderValueTable();
+        };
+
+        window.applyValueOrder = () => {
+          alert('순서 배치가 반영되었습니다.');
+          renderValueTable();
+        };
+
+        window.openValueAddModal = () => {
+          activeEditValueId = null;
+          document.getElementById('val-modal-code').value = `${codeItem.code}_${String(codeItem.values.length + 1).padStart(3, '0')}(자동 발번)`;
+          document.getElementById('val-modal-name').value = '';
+          document.getElementById('val-modal-status-y').checked = true;
+          document.getElementById('val-modal-regdate').value = '2026. 06. 16';
+          document.getElementById('val-modal-editdate').value = '—';
+
+          document.getElementById('btn-val-modal-add').style.display = 'inline-flex';
+          document.getElementById('btn-val-modal-edit').style.display = 'none';
+          document.getElementById('btn-val-modal-delete').style.display = 'none';
+
+          document.getElementById('code-value-modal').classList.add('open');
+          document.getElementById('code-value-overlay').classList.add('open');
+        };
+
+        window.openValueEditModal = (valId) => {
+          activeEditValueId = valId;
+          const valItem = codeItem.values.find(v => v.id === valId);
+          if(!valItem) return;
+
+          document.getElementById('val-modal-code').value = valItem.valCode;
+          document.getElementById('val-modal-name').value = valItem.valName;
+          
+          if(valItem.useStatus === '사용(Y)') {
+            document.getElementById('val-modal-status-y').checked = true;
+          } else {
+            document.getElementById('val-modal-status-n').checked = true;
+          }
+
+          document.getElementById('val-modal-regdate').value = valItem.regDate;
+          document.getElementById('val-modal-editdate').value = valItem.editDate || '—';
+
+          document.getElementById('btn-val-modal-add').style.display = 'none';
+          document.getElementById('btn-val-modal-edit').style.display = 'inline-flex';
+          document.getElementById('btn-val-modal-delete').style.display = 'inline-flex';
+
+          document.getElementById('code-value-modal').classList.add('open');
+          document.getElementById('code-value-overlay').classList.add('open');
+        };
+
+        renderValueTable();
+      }, 50);
+
+      return wrapper;
+    }
+
+    window.closeCodeValueModal = () => {
+      document.getElementById('code-value-modal').classList.remove('open');
+      document.getElementById('code-value-overlay').classList.remove('open');
+    };
+
+    window.saveCodeValue = (isEdit) => {
+      const parentCodeItem = codeList.find(c => c.id === activeEditCodeId);
+      if(!parentCodeItem) return;
+
+      const name = document.getElementById('val-modal-name').value.trim();
+      const status = document.querySelector('input[name="val-modal-status"]:checked').value;
+
+      if(!name) {
+        alert('필수(*) 항목을 입력해주세요.');
+        return;
+      }
+
+      if(isEdit) {
+        const valItem = parentCodeItem.values.find(v => v.id === activeEditValueId);
+        if(valItem) {
+          valItem.valName = name;
+          valItem.useStatus = status;
+          valItem.editDate = '2026.06.16(이희성)';
+          alert('수정되었습니다.');
+        }
+      } else {
+        const nextId = parentCodeItem.values.length > 0 ? Math.max(...parentCodeItem.values.map(v => v.id)) + 1 : 1;
+        const nextOrder = parentCodeItem.values.length > 0 ? Math.max(...parentCodeItem.values.map(v => v.order)) + 1 : 1;
+        const newCodeVal = {
+          id: nextId,
+          valCode: `${parentCodeItem.code}_${String(nextId).padStart(3, '0')}`,
+          valName: name,
+          useStatus: status,
+          regDate: '2026. 06. 16',
+          regUser: '이희성',
+          order: nextOrder,
+          editDate: '2026.06.16(이희성)'
+        };
+        parentCodeItem.values.push(newCodeVal);
+        alert('추가되었습니다.');
+      }
+      
+      closeCodeValueModal();
+      renderValueTable();
+    };
+
+    window.deleteCodeValue = () => {
+      if(confirm('코드(값) 삭제 시 시스템에 영향(값 삭제, 정보 유실 등)이 있을 수 있습니다.\n시스템 관리자의 점검 후 삭제하세요.\n본 코드를 삭제하시겠습니까?')) {
+        const parentCodeItem = codeList.find(c => c.id === activeEditCodeId);
+        if(!parentCodeItem) return;
+
+        const idx = parentCodeItem.values.findIndex(v => v.id === activeEditValueId);
+        if(idx !== -1) {
+          parentCodeItem.values.splice(idx, 1);
+          alert('삭제되었습니다.');
+          closeCodeValueModal();
+          renderValueTable();
+        }
+      }
+    };
+
+
+    /* ── 로그인 현황 템플릿 ── */
+    function getLoginStatusTemplate() {
+      const wrapper = document.createElement('div');
+      
+      const chartData = [
+        { label: '2026.01', value: 18, actual: 1523 },
+        { label: '2026.02', value: 130, actual: 1523 },
+        { label: '2026.03', value: 90, actual: 1523 },
+        { label: '2026.04', value: 70, actual: 1523 },
+        { label: '2026.05', value: 95, actual: 1523 },
+        { label: '2026.06', value: 150, actual: 1523 },
+        { label: '2026.07', value: 50, actual: 1523 },
+        { label: '2026.08', value: 95, actual: 1523 },
+        { label: '2026.09', value: 98, actual: 1523 }
+      ];
+
+      wrapper.innerHTML = `
+        <div class="card">
+          <div class="card-title">로그인 검색</div>
+          <div style="display:flex; flex-direction:column; gap:16px;">
+            <div class="form-group" style="display:flex; flex-direction:row; align-items:center; gap:12px;">
+              <label style="width:120px; flex-shrink:0; font-weight:600; font-size:14px; color:var(--text-label); margin:0;">기준 :</label>
+              <div class="radio-group" style="display:flex; gap:16px;">
+                <label class="radio-item"><input type="radio" name="login-criteria" value="daily" onchange="toggleLoginCriteria()"> 일별</label>
+                <label class="radio-item"><input type="radio" name="login-criteria" value="monthly" checked onchange="toggleLoginCriteria()"> 월별</label>
+                <label class="radio-item"><input type="radio" name="login-criteria" value="yearly" onchange="toggleLoginCriteria()"> 연도별</label>
+              </div>
+            </div>
+
+            <!-- 일별 컨트롤 -->
+            <div id="criteria-daily" class="criteria-container" style="display:none; align-items:center; gap:10px;">
+              <span style="font-size:13px; font-weight:600; width:120px; color:var(--text-label);">기간(일별) :</span>
+              <input type="date" id="login-day-start" class="form-control" style="width:150px;">
+              <span style="color:var(--text-muted);">~</span>
+              <input type="date" id="login-day-end" class="form-control" style="width:150px;">
+              <button class="btn btn-primary" onclick="alert('조회되었습니다.')">조회</button>
+            </div>
+
+            <!-- 월별 컨트롤 -->
+            <div id="criteria-monthly" class="criteria-container" style="display:flex; align-items:center; gap:10px;">
+              <span style="font-size:13px; font-weight:600; width:120px; color:var(--text-label);">기간(월별) :</span>
+              <select class="form-control" style="width:100px;">
+                <option value="2026">2026년</option>
+                <option value="2025">2025년</option>
+              </select>
+              <select class="form-control" style="width:80px;">
+                <option value="01">01월</option>
+              </select>
+              <span style="color:var(--text-muted);">~</span>
+              <select class="form-control" style="width:100px;">
+                <option value="2026">2026년</option>
+              </select>
+              <select class="form-control" style="width:80px;">
+                <option value="09" selected>09월</option>
+              </select>
+              <button class="btn btn-primary" onclick="alert('조회되었습니다.')">조회</button>
+            </div>
+
+            <!-- 연도별 컨트롤 -->
+            <div id="criteria-yearly" class="criteria-container" style="display:none; align-items:center; gap:10px;">
+              <span style="font-size:13px; font-weight:600; width:120px; color:var(--text-label);">기간(연도별) :</span>
+              <select class="form-control" style="width:120px;">
+                <option value="2024">2024년</option>
+              </select>
+              <span style="color:var(--text-muted);">~</span>
+              <select class="form-control" style="width:120px;">
+                <option value="2026" selected>2026년</option>
+              </select>
+              <button class="btn btn-primary" onclick="alert('조회되었습니다.')">조회</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="position:relative;">
+          <div class="card-title">로그인 접속 추이</div>
+          <div class="chart-tooltip-el" id="chart-tooltip"></div>
+          
+          <div style="background-color: var(--bg2); padding: 10px; border-radius:8px;">
+            <svg viewBox="0 0 1000 300" style="width:100%; height:auto;">
+              <!-- Grid Lines -->
+              <line x1="50" y1="50" x2="950" y2="50" class="chart-grid-line" />
+              <text x="30" y="55" font-size="12" fill="var(--text-muted)" text-anchor="end">150</text>
+
+              <line x1="50" y1="117" x2="950" y2="117" class="chart-grid-line" />
+              <text x="30" y="122" font-size="12" fill="var(--text-muted)" text-anchor="end">100</text>
+
+              <line x1="50" y1="184" x2="950" y2="184" class="chart-grid-line" />
+              <text x="30" y="189" font-size="12" fill="var(--text-muted)" text-anchor="end">50</text>
+
+              <line x1="50" y1="250" x2="950" y2="250" class="chart-grid-line" />
+              <text x="30" y="255" font-size="12" fill="var(--text-muted)" text-anchor="end">0</text>
+
+              <!-- Connection Lines and Nodes -->
+              <path d="M 100 226 L 200 77 L 300 130 L 400 157 L 500 123 L 600 50 L 700 183 L 800 123 L 900 119" class="chart-line" />
+
+              <!-- Dots -->
+              <circle cx="100" cy="226" r="6" class="chart-point" onmouseover="showChartTooltip(event, '2026.01', 1523)" onmouseout="hideChartTooltip()" />
+              <circle cx="200" cy="77" r="6" class="chart-point" onmouseover="showChartTooltip(event, '2026.02', 1523)" onmouseout="hideChartTooltip()" />
+              <circle cx="300" cy="130" r="6" class="chart-point" onmouseover="showChartTooltip(event, '2026.03', 1523)" onmouseout="hideChartTooltip()" />
+              <circle cx="400" cy="157" r="6" class="chart-point" onmouseover="showChartTooltip(event, '2026.04', 1523)" onmouseout="hideChartTooltip()" />
+              <circle cx="500" cy="123" r="6" class="chart-point" onmouseover="showChartTooltip(event, '2026.05', 1523)" onmouseout="hideChartTooltip()" />
+              <circle cx="600" cy="50" r="6" class="chart-point" onmouseover="showChartTooltip(event, '2026.06', 1523)" onmouseout="hideChartTooltip()" />
+              <circle cx="700" cy="183" r="6" class="chart-point" onmouseover="showChartTooltip(event, '2026.07', 1523)" onmouseout="hideChartTooltip()" />
+              <circle cx="800" cy="123" r="6" class="chart-point" onmouseover="showChartTooltip(event, '2026.08', 1523)" onmouseout="hideChartTooltip()" />
+              <circle cx="900" cy="119" r="6" class="chart-point" onmouseover="showChartTooltip(event, '2026.09', 1523)" onmouseout="hideChartTooltip()" />
+
+              <!-- X-Axis Labels -->
+              <text x="100" y="280" font-size="12" fill="var(--text-muted)" text-anchor="middle">2026.01</text>
+              <text x="200" y="280" font-size="12" fill="var(--text-muted)" text-anchor="middle">2026.02</text>
+              <text x="300" y="280" font-size="12" fill="var(--text-muted)" text-anchor="middle">2026.03</text>
+              <text x="400" y="280" font-size="12" fill="var(--text-muted)" text-anchor="middle">2026.04</text>
+              <text x="500" y="280" font-size="12" fill="var(--text-muted)" text-anchor="middle">2026.05</text>
+              <text x="600" y="280" font-size="12" fill="var(--text-muted)" text-anchor="middle">2026.06</text>
+              <text x="700" y="280" font-size="12" fill="var(--text-muted)" text-anchor="middle">2026.07</text>
+              <text x="800" y="280" font-size="12" fill="var(--text-muted)" text-anchor="middle">2026.08</text>
+              <text x="900" y="280" font-size="12" fill="var(--text-muted)" text-anchor="middle">2026.09</text>
+            </svg>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">로그인 이력 데이터</div>
+          <div style="display:flex; justify-content:flex-end; margin-bottom:14px;">
+            <button class="btn btn-outline" style="height:32px; padding:0 12px; font-size:13px;" onclick="alert('전체 로그인 이력이 엑셀(.xlsx) 파일로 다운로드되었습니다.')">
+              ${uiIcon('download')} 다운로드(Excel)
+            </button>
+          </div>
+          <div class="table-container" style="overflow-x:auto;">
+            <table class="data-table">
+              <thead>
+                <tr id="login-table-header"></tr>
+              </thead>
+              <tbody id="login-table-body"></tbody>
+            </table>
+          </div>
+        </div>`;
+
+      setTimeout(() => {
+        window.toggleLoginCriteria = () => {
+          const val = document.querySelector('input[name="login-criteria"]:checked').value;
+          document.querySelectorAll('.criteria-container').forEach(c => c.style.display = 'none');
+          if (val === 'daily') {
+            document.getElementById('criteria-daily').style.display = 'flex';
+          } else if (val === 'monthly') {
+            document.getElementById('criteria-monthly').style.display = 'flex';
+          } else {
+            document.getElementById('criteria-yearly').style.display = 'flex';
+          }
+        };
+
+        window.showChartTooltip = (event, label, value) => {
+          const tooltip = document.getElementById('chart-tooltip');
+          tooltip.innerHTML = `로그인 횟수 (${label}) : ${value.toLocaleString()}`;
+          tooltip.style.display = 'block';
+          
+          const rect = event.target.getBoundingClientRect();
+          const cardRect = event.target.closest('.card').getBoundingClientRect();
+          tooltip.style.left = `${rect.left - cardRect.left - 50}px`;
+          tooltip.style.top = `${rect.top - cardRect.top - 40}px`;
+        };
+
+        window.hideChartTooltip = () => {
+          document.getElementById('chart-tooltip').style.display = 'none';
+        };
+
+        const renderTableData = () => {
+          const header = document.getElementById('login-table-header');
+          const tbody = document.getElementById('login-table-body');
+          
+          const periods = ['기간', '2026.01', '2026.02', '2026.03', '2026.04', '2026.05', '2026.06', '2026.07', '2026.08', '2026.09', '2026.10'];
+          
+          header.innerHTML = periods.map(p => `<th>${p}</th>`).join('');
+          
+          tbody.innerHTML = `
+            <tr>
+              <td><strong>로그인 횟수</strong></td>
+              <td><a href="#" style="color:var(--blue); font-weight:bold; text-decoration:none;" onclick="event.preventDefault(); alert('1,523건 조회')">1,523</a></td>
+              <td><a href="#" style="color:var(--blue); font-weight:bold; text-decoration:none;" onclick="event.preventDefault(); alert('1,523건 조회')">1,523</a></td>
+              <td><a href="#" style="color:var(--blue); font-weight:bold; text-decoration:none;" onclick="event.preventDefault(); alert('1,523건 조회')">1,523</a></td>
+              <td><a href="#" style="color:var(--blue); font-weight:bold; text-decoration:none;" onclick="event.preventDefault(); alert('1,523건 조회')">1,523</a></td>
+              <td><a href="#" style="color:var(--blue); font-weight:bold; text-decoration:none;" onclick="event.preventDefault(); alert('1,523건 조회')">1,523</a></td>
+              <td><a href="#" style="color:var(--blue); font-weight:bold; text-decoration:none;" onclick="event.preventDefault(); alert('1,523건 조회')">1,523</a></td>
+              <td><a href="#" style="color:var(--blue); font-weight:bold; text-decoration:none;" onclick="event.preventDefault(); alert('1,523건 조회')">1,523</a></td>
+              <td><a href="#" style="color:var(--blue); font-weight:bold; text-decoration:none;" onclick="event.preventDefault(); alert('1,523건 조회')">1,523</a></td>
+              <td><a href="#" style="color:var(--blue); font-weight:bold; text-decoration:none;" onclick="event.preventDefault(); alert('1,523건 조회')">1,523</a></td>
+              <td><a href="#" style="color:var(--blue); font-weight:bold; text-decoration:none;" onclick="event.preventDefault(); alert('1,523건 조회')">1,523</a></td>
+              <td><a href="#" style="color:var(--blue); font-weight:bold; text-decoration:none;" onclick="event.preventDefault(); alert('1,523건 조회')">1,523</a></td>
+            </tr>`;
+        };
+
+        renderTableData();
+      }, 50);
+
+      return wrapper;
+    }
+
+
+    /* ── 메뉴별 접속현황 템플릿 ── */
+    function getMenuAccessStatusTemplate() {
+      const wrapper = document.createElement('div');
+
+      wrapper.innerHTML = `
+        <div class="card">
+          <div class="card-title">조회 조건</div>
+          <div style="display:flex; flex-direction:column; gap:12px;">
+            <div class="form-group" style="display:flex; flex-direction:row; align-items:center; gap:12px;">
+              <label style="width:130px; flex-shrink:0; font-weight:600; font-size:14px; color:var(--text-label); margin:0;">조회기간 (등록일)</label>
+              <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                <div class="date-presets" style="display:flex; gap:4px; margin-right:4px;">
+                  <button type="button" class="date-preset-btn" data-preset="1d">하루 전</button>
+                  <button type="button" class="date-preset-btn" data-preset="1w">1주일</button>
+                  <button type="button" class="date-preset-btn" data-preset="1m">1개월</button>
+                  <button type="button" class="date-preset-btn" data-preset="3m">3개월</button>
+                  <button type="button" class="date-preset-btn" data-preset="6m">6개월</button>
+                  <button type="button" class="date-preset-btn" data-preset="1y">1년</button>
+                </div>
+                <input type="date" id="menu-search-start-date" class="form-control" style="width:150px;">
+                <span style="color:var(--text-muted);">~</span>
+                <input type="date" id="menu-search-end-date" class="form-control" style="width:150px;">
+                <button class="btn btn-primary" onclick="alert('조회되었습니다.')">검색</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">메뉴별 접속 현황 목록</div>
+          <div style="display:flex; justify-content:flex-end; margin-bottom:14px;">
+            <button class="btn btn-outline" style="height:32px; padding:0 12px; font-size:13px;" onclick="alert('전체 메뉴별 접속 현황이 엑셀(.xlsx) 파일로 다운로드되었습니다.')">
+              ${uiIcon('download')} 다운로드(Excel)
+            </button>
+          </div>
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>대메뉴(1Depth)</th>
+                  <th>중메뉴(2Depth)</th>
+                  <th>소메뉴(3Depth)</th>
+                  <th style="width:150px; text-align:right;">메뉴 접속 횟수</th>
+                </tr>
+              </thead>
+              <tbody id="menu-access-table-body"></tbody>
+            </table>
+          </div>
+        </div>`;
+
+      setTimeout(() => {
+        const renderTable = () => {
+          const tbody = document.getElementById('menu-access-table-body');
+          const rows = [
+            { d1: '대메뉴(1Depth)명 #1', d2: '중메뉴(1Depth)명 #1', d3: '', count: 16528 },
+            { d1: '└', d2: '중메뉴(1Depth)명 #2', d3: '', count: 16528 },
+            { d1: '└', d2: '중메뉴(1Depth)명 #3', d3: '소메뉴(1Depth)명 #1', count: 16528 },
+            { d1: '└ └', d2: '', d3: '소메뉴(1Depth)명 #2', count: 16528 },
+            { d1: '└', d2: '중메뉴(1Depth)명 #4', d3: '', count: 16528 },
+            { d1: '└', d2: '중메뉴(1Depth)명 #5', d3: '', count: 16528 },
+            { d1: '대메뉴(1Depth)명 #2', d2: '중메뉴(1Depth)명 #1', d3: '', count: 16528 },
+            { d1: '└', d2: '중메뉴(1Depth)명 #2', d3: '', count: 16528 },
+            { d1: '└', d2: '중메뉴(1Depth)명 #3', d3: '', count: 16528 }
+          ];
+
+          tbody.innerHTML = rows.map(r => {
+            const d1Align = (r.d1.includes('└')) ? 'style="text-align:left; color:var(--text-muted); font-size:12px; padding-left:24px;"' : 'style="text-align:left; font-weight:700;"';
+            const d2Align = (r.d1.includes('└ └')) ? 'style="text-align:left; color:var(--text-muted);"' : 'style="text-align:left;"';
+            return `<tr>
+              <td ${d1Align}>${r.d1}</td>
+              <td ${d2Align}>${r.d2}</td>
+              <td style="text-align:left;">${r.d3}</td>
+              <td style="text-align:right; font-weight:bold; color:var(--blue-dk);">${r.count.toLocaleString()}</td>
+            </tr>`;
+          }).join('');
+        };
+
+        const presetBtns = wrapper.querySelectorAll('.date-preset-btn');
+        const startInput = wrapper.querySelector('#menu-search-start-date');
+        const endInput = wrapper.querySelector('#menu-search-end-date');
+        const clearPresets = () => presetBtns.forEach(b => b.classList.remove('active'));
+        startInput.onchange = clearPresets;
+        endInput.onchange = clearPresets;
+
+        presetBtns.forEach(btn => {
+          btn.onclick = () => {
+            presetBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const preset = btn.getAttribute('data-preset');
+            const endDate = new Date();
+            let startDate = new Date();
+
+            if (preset === '1d') startDate.setDate(endDate.getDate() - 1);
+            else if (preset === '1w') startDate.setDate(endDate.getDate() - 7);
+            else if (preset === '1m') startDate.setMonth(endDate.getMonth() - 1);
+            else if (preset === '3m') startDate.setMonth(endDate.getMonth() - 3);
+            else if (preset === '6m') startDate.setMonth(endDate.getMonth() - 6);
+            else if (preset === '1y') startDate.setFullYear(endDate.getFullYear() - 1);
+
+            const formatDate = (d) => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+            startInput.value = formatDate(startDate);
+            endInput.value = formatDate(endDate);
+          };
+        });
+
+        renderTable();
+      }, 50);
+
       return wrapper;
     }
   </script>

@@ -1363,6 +1363,62 @@
     .modal-body { padding: 20px; overflow-y: auto; font-family: var(--font); font-size: 14px; }
 
     #admin-detail-modal { width: 580px; }
+    #group-delete-modal, #ip-add-modal, #code-value-modal { width: 500px; }
+    #staff-add-modal { width: 780px; max-width: 95vw; }
+
+    /* 차트 및 툴팁 스타일 */
+    .chart-grid-line { stroke: var(--border); stroke-dasharray: 4,4; }
+    .chart-line { stroke: var(--blue); stroke-width: 3; fill: none; }
+    .chart-point { fill: var(--navy); stroke: #ffffff; stroke-width: 2.5; cursor: pointer; transition: r 0.2s, fill 0.2s; }
+    .chart-point:hover { r: 8; fill: var(--amber); }
+    .chart-tooltip-el {
+      position: absolute;
+      background: var(--navy);
+      color: #ffffff;
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 700;
+      pointer-events: none;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+      display: none;
+      z-index: 1000;
+    }
+
+    /* 권한그룹 안내 박스 */
+    .info-alert-box {
+      background: var(--amber-lt);
+      border: 1px solid var(--amber);
+      border-radius: var(--radius);
+      padding: 14px 18px;
+      margin-bottom: 20px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      color: var(--amber-dk);
+      font-size: 13.5px;
+    }
+    .info-alert-box .ui-icon { width: 24px; height: 24px; color: var(--amber); flex-shrink: 0; }
+    .info-alert-box strong { color: var(--navy); }
+
+    /* 메뉴별 권한 부여 트리 */
+    .menu-perm-tree {
+      border: 1.5px solid var(--border);
+      background: var(--bg2);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      max-height: 380px;
+      overflow-y: auto;
+    }
+    .tree-node { display: flex; flex-direction: column; gap: 8px; }
+    .tree-node-1depth { margin-bottom: 12px; }
+    .tree-node-1depth-title { font-weight: 700; font-size: 14.5px; color: var(--navy); display: flex; align-items: center; gap: 6px; }
+    .tree-node-2depth-list { margin-left: 24px; margin-top: 6px; display: flex; flex-direction: column; gap: 8px; }
+    .tree-node-2depth-title { font-weight: 700; font-size: 13.5px; color: var(--blue-dk); display: flex; align-items: center; gap: 6px; }
+    .tree-node-3depth-list { margin-left: 24px; margin-top: 4px; display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 6px; }
+    .tree-node-3depth-item { font-size: 13px; color: var(--text); display: flex; align-items: center; gap: 6px; }
+    .tree-checkbox-item { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; user-select: none; }
+    .tree-checkbox-item input[type="checkbox"] { accent-color: var(--blue); width: 15px; height: 15px; cursor: pointer; }
 
     /* 아이콘 유틸 */
     .ui-icon {
@@ -1557,6 +1613,158 @@
     </div>
   </div>
 
+  <!-- 권한그룹 삭제 유의사항 모달 -->
+  <div class="modal-overlay" id="group-delete-overlay" onclick="closeGroupDeleteModal()"></div>
+  <div class="modal-box" id="group-delete-modal">
+    <div class="modal-header" style="background:var(--navy);">
+      <h3>권한그룹 삭제 유의사항</h3>
+      <button class="modal-close" onclick="closeGroupDeleteModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <h4 style="font-size:14px;font-weight:700;color:var(--red-dk);margin-bottom:14px;border-bottom:1.5px solid var(--border);padding-bottom:8px;">| 권한그룹 삭제 유의사항</h4>
+      <div class="info-alert-box" style="margin-bottom:20px;">
+        <span class="ui-icon" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
+        <div>
+          <strong>권한 그룹을 삭제하면, 해당 권한그룹에 매핑된 직원들의 권한이 모두 해지됩니다.</strong><br>
+          <span style="font-size:13px;color:var(--text-label);margin-top:6px;display:inline-block;">반드시 최고관리자(시스템운영자)만 사용하세요. 그래도 진행 하시겠습니까?</span>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;">
+        <button class="btn btn-primary" id="btn-confirm-delete">삭제하기</button>
+        <button class="btn btn-outline" onclick="closeGroupDeleteModal()">취소</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 접속 아이피(IP) 추가하기 모달 -->
+  <div class="modal-overlay" id="ip-add-overlay" onclick="closeIpAddModal()"></div>
+  <div class="modal-box" id="ip-add-modal">
+    <div class="modal-header" style="background:var(--navy);">
+      <h3>접속 아이피(IP) 추가하기</h3>
+      <button class="modal-close" onclick="closeIpAddModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <h4 style="font-size:14px;font-weight:700;color:var(--navy);margin-bottom:14px;border-bottom:1.5px solid var(--border);padding-bottom:8px;">| 접속 아이피(IP) 추가하기</h4>
+      <div style="display:flex; flex-direction:column; gap:16px;">
+        <div class="form-group">
+          <label>아이피(IP) <span class="required">*</span></label>
+          <input type="text" id="ip-add-address" class="form-control" placeholder="예) 211.215.111.2">
+        </div>
+        <div class="form-group">
+          <label>아이피(IP) 추가 사유 <span class="required">*</span></label>
+          <input type="text" id="ip-add-reason" class="form-control" placeholder="100자 이내로 간략히 작성해주세요.">
+        </div>
+      </div>
+      <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:20px; border-top:1px solid var(--border); padding-top:16px;">
+        <button class="btn btn-primary" onclick="submitIpAdd()" style="background-color: var(--blue);">접속 아이피(IP) 추가하기</button>
+        <button class="btn btn-outline" onclick="closeIpAddModal()">취소</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 코드 내 값 관리 모달 -->
+  <div class="modal-overlay" id="code-value-overlay" onclick="closeCodeValueModal()"></div>
+  <div class="modal-box" id="code-value-modal">
+    <div class="modal-header" style="background:var(--navy);">
+      <h3>코드 내 값 관리</h3>
+      <button class="modal-close" onclick="closeCodeValueModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <h4 style="font-size:14px;font-weight:700;color:var(--navy);margin-bottom:14px;border-bottom:1.5px solid var(--border);padding-bottom:8px;">| 코드 내 값 관리</h4>
+      <div style="display:flex; flex-direction:column; gap:14px; margin-bottom:20px;">
+        <div class="form-group">
+          <label>코드</label>
+          <input type="text" id="val-modal-code" class="form-control" readonly style="background-color:var(--bg); color:var(--text-sub); cursor:not-allowed;">
+        </div>
+        <div class="form-group">
+          <label>값(논리명) <span class="required">*</span></label>
+          <input type="text" id="val-modal-name" class="form-control" placeholder="20자 이내로 작성해주세요.">
+        </div>
+        <div class="form-group">
+          <label>사용여부</label>
+          <div class="radio-group">
+             <label class="radio-item"><input type="radio" name="val-modal-status" id="val-modal-status-y" value="사용(Y)" checked> 사용(Y)</label>
+             <label class="radio-item"><input type="radio" name="val-modal-status" id="val-modal-status-n" value="중지(N)"> 중지(N)</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>등록일시</label>
+          <input type="text" id="val-modal-regdate" class="form-control" readonly style="background-color:var(--bg); color:var(--text-sub); cursor:not-allowed;">
+        </div>
+        <div class="form-group">
+          <label>등록자</label>
+          <input type="text" id="val-modal-reguser" class="form-control" readonly style="background-color:var(--bg); color:var(--text-sub); cursor:not-allowed;" value="이희성">
+        </div>
+        <div class="form-group">
+          <label>최종수정일시</label>
+          <input type="text" id="val-modal-editdate" class="form-control" readonly style="background-color:var(--bg); color:var(--text-sub); cursor:not-allowed;">
+        </div>
+      </div>
+      <div style="display:flex; gap:8px; justify-content:flex-end; border-top:1px solid var(--border); padding-top:16px;">
+        <button class="btn btn-primary" id="btn-val-modal-add" onclick="saveCodeValue(false)">값 추가하기</button>
+        <button class="btn btn-primary" id="btn-val-modal-edit" onclick="saveCodeValue(true)">수정</button>
+        <button class="btn btn-outline" id="btn-val-modal-delete" onclick="deleteCodeValue()" style="color:var(--red-dk); border-color:var(--red);">삭제</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 관리자(직원) 추가하기 모달 -->
+  <div class="modal-overlay" id="staff-add-overlay" onclick="closeStaffAddModal()"></div>
+  <div class="modal-box" id="staff-add-modal">
+    <div class="modal-header" style="background:var(--navy);">
+      <h3>관리자(직원) 추가하기</h3>
+      <button class="modal-close" onclick="closeStaffAddModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <h4 style="font-size:14px;font-weight:700;color:var(--navy);margin-bottom:14px;border-bottom:1.5px solid var(--border);padding-bottom:8px;">| 관리자(직원) 추가하기</h4>
+      <div class="card" style="box-shadow:none;padding:14px 18px;margin-bottom:16px;border:1px solid var(--border);">
+        <div style="display:flex;gap:12px;align-items:center;">
+          <label style="font-weight:700;font-size:13.5px;color:var(--text-label);white-space:nowrap;margin:0;">키워드 검색 :</label>
+          <select id="modal-search-key" class="form-control" style="width:120px;">
+            <option value="전체">전체</option>
+            <option value="사원번호">사원번호</option>
+            <option value="아이디">아이디</option>
+            <option value="사원명">사원명</option>
+            <option value="부서">부서</option>
+            <option value="직급">직급</option>
+            <option value="이메일">이메일</option>
+          </select>
+          <input type="text" id="modal-search-keyword" class="form-control" style="flex:1;" placeholder="검색어를 입력하세요.">
+          <button class="btn btn-primary" onclick="searchModalStaff()" style="height:36px;">검색</button>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <div style="font-size:13px;color:var(--text-sub);">전체 <strong id="modal-staff-total-cnt" style="color:var(--blue);">0</strong>건 &nbsp;|&nbsp; 현재 <strong id="modal-staff-current-page">1/1</strong> 페이지</div>
+        <select id="modal-page-size" class="form-control" style="width:100px;height:32px;font-size:13px;padding:0 8px;margin:0;" onchange="changeModalPageSize()">
+          <option value="5">5개씩</option>
+          <option value="10" selected>10개씩</option>
+          <option value="20">20개씩</option>
+        </select>
+      </div>
+      <div class="table-wrap" style="max-height:280px;overflow-y:auto;">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th style="width:40px;text-align:center;"><input type="checkbox" id="modal-staff-check-all" onclick="toggleAllModalCheckboxes(this)"></th>
+              <th>사원번호</th><th>아이디</th><th>사원명</th><th>부서</th><th>직급</th><th>이메일</th>
+              <th style="width:90px;text-align:center;">사용여부</th>
+            </tr>
+          </thead>
+          <tbody id="modal-staff-table-body"></tbody>
+        </table>
+      </div>
+      <div class="table-footer" style="margin-top:14px;border-top:1px solid var(--border);padding-top:10px;">
+        <div></div>
+        <div class="pagination" id="modal-staff-pagination"></div>
+        <div></div>
+      </div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:18px;border-top:1px solid var(--border);padding-top:14px;">
+        <button class="btn btn-primary" onclick="addSelectedStaffToGroup()" style="background:var(--amber);border-color:var(--amber);">관리자(직원) 추가하기</button>
+        <button class="btn btn-outline" onclick="closeStaffAddModal()">취소</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     /* ══════════════════════════════════════
        메뉴 데이터 — 원본과 동일
@@ -1609,9 +1817,50 @@
       'common-3':['IP 목록','IP 등록'],
       'common-4':['코드 목록','코드 등록'],
       'common-5':['로그인 이력'],
-      'common-6':['메뉴별 통계'],
+      'common-6':['메뉴별 접속현황'],
       'config-1':['시스템 옵션','코드 관리']
     };
+
+    // Mock databases for new screens
+    let accessIpList = [
+      { id: 1, ip: '211.215.111.2', reason: '회사 아이피(IP) – 내부 접속용', regDate: '2026. 06. 09', regUser: '이희성' },
+      { id: 2, ip: '1.112.11.2', reason: '2026년 1년간 홍길동 차장의 재택근무 지원용', regDate: '2026. 06. 09', regUser: '이희성' }
+    ];
+    for (let i = 3; i <= 55; i++) {
+      accessIpList.push({
+        id: i,
+        ip: `192.168.10.${10 + i}`,
+        reason: `개발부서 운영 업무 접속용 IP #${i}`,
+        regDate: '2026. 06. 12',
+        regUser: '이희성'
+      });
+    }
+
+    let codeList = [
+      { id: 1, code: 'KepcoES0001', codeName: '사업구분', codeDesc: '사업접수 시 사용하는 사업구분', useStatus: '사용(Y)', regDate: '2026. 06. 09', regUser: '이희성', editDate: '2026.06.10(이희성)', values: [
+        { id: 1, valCode: 'KepcoES0001_001', valName: '산업체', useStatus: '사용(Y)', regDate: '2026. 06. 09', regUser: '이희성', order: 1, editDate: '2026.06.10(이희성)' },
+        { id: 2, valCode: 'KepcoES0001_002', valName: '건축물', useStatus: '중지(N)', regDate: '2026. 06. 09', regUser: '이희성', order: 2, editDate: '' },
+        { id: 3, valCode: 'KepcoES0001_003', valName: '공공', useStatus: '사용(Y)', regDate: '2026. 06. 09', regUser: '이희성', order: 3, editDate: '' },
+        { id: 4, valCode: 'KepcoES0001_004', valName: '한전고효율', useStatus: '사용(Y)', regDate: '2026. 06. 09', regUser: '이희성', order: 4, editDate: '' },
+        { id: 5, valCode: 'KepcoES0001_005', valName: '자가소비형', useStatus: '사용(Y)', regDate: '2026. 06. 09', regUser: '이희성', order: 5, editDate: '' }
+      ]}
+    ];
+    for (let i = 2; i <= 55; i++) {
+      codeList.push({
+        id: i,
+        code: `KepcoES${String(i).padStart(4, '0')}`,
+        codeName: `공통코드_${i}`,
+        codeDesc: `시스템 표준 분류를 위한 공통코드 ${i}`,
+        useStatus: i % 5 === 0 ? '중지(N)' : '사용(Y)',
+        regDate: '2026. 06. 12',
+        regUser: '이희성',
+        editDate: '2026.06.12(이희성)',
+        values: [
+          { id: 1, valCode: `KepcoES${String(i).padStart(4, '0')}_001`, valName: '기본값A', useStatus: '사용(Y)', regDate: '2026. 06. 12', regUser: '이희성', order: 1, editDate: '' },
+          { id: 2, valCode: `KepcoES${String(i).padStart(4, '0')}_002`, valName: '기본값B', useStatus: '사용(Y)', regDate: '2026. 06. 12', regUser: '이희성', order: 2, editDate: '' }
+        ]
+      });
+    }
 
     let adminList = [
       { id:1, empNo:'EMP001', username:'hslee', name:'이희성', dept:'에너지사업부', position:'부장', email:'hslee@kepcoes.co.kr', status:'사용', regDate:'2026-06-01 09:15:30', regUser:'관리자A', editDate:'2026-06-15 14:30:22', ip:'192.168.10.11', authGroups:['1','3'] },
@@ -1620,6 +1869,15 @@
       { id:4, empNo:'EMP004', username:'gdhong', name:'홍길동', dept:'에너지사업부', position:'차장', email:'gdhong@kepcoes.co.kr', status:'중지', regDate:'2026-05-15 09:00:00', regUser:'관리자A', editDate:'2026-05-30 18:22:15', ip:'192.168.10.14', authGroups:['4'] },
       { id:5, empNo:'EMP005', username:'mkchoi', name:'최미경', dept:'재무관리부', position:'사원', email:'mkchoi@kepcoes.co.kr', status:'사용', regDate:'2026-06-10 11:30:24', regUser:'이희성', editDate:'2026-06-11 10:05:59', ip:'192.168.10.15', authGroups:['3','4'] }
     ];
+
+    let roleGroups = [
+      { id:1, name:'최고관리자', desc:'최고관리자(시스템 운영 담당자)를 대상으로 한 모든 권한', regDate:'2026-06-09', regUser:'이희성', editDate:'2026-06-10 10:45(이희성)', menuPermissions:['login-1','rec-1','dsn-1','con-1','rep-1','acc-1','trip-1','stat-analysis-1','stat-analysis-2','stat-analysis-3','stat-analysis-4','stat-analysis-5','stat-analysis-6','stat-analysis-7','common-1','common-2','common-3','common-4','common-5','common-6','config-1'], mappedStaff:[1,3] },
+      { id:2, name:'일반사용자', desc:'기본적인 업무 조회 및 출장관리 권한', regDate:'2026-06-10', regUser:'관리자A', editDate:'2026-06-11 11:20(관리자A)', menuPermissions:['login-1','trip-1'], mappedStaff:[2,4,5] }
+    ];
+    let selectedRoleGroupId   = null;
+    let modalStaffCurrentPage = 1;
+    let modalStaffPageSize    = 10;
+    let modalStaffFilteredList = [];
 
     let currentActiveMenuId = 'common-1';
     let currentActiveTab    = '관리자 목록';
@@ -1856,6 +2114,22 @@
         container.appendChild(getAdminListTemplate());
       } else if (childId === 'common-1' && tabName === '관리자 등록') {
         container.appendChild(getAdminRegisterTemplate());
+      } else if (childId === 'common-2' && tabName === '권한그룹 목록') {
+        container.appendChild(getRoleGroupListTemplate());
+      } else if (childId === 'common-2' && tabName === '권한 항목 설정') {
+        container.appendChild(getRoleGroupDetailTemplate());
+      } else if (childId === 'common-3' && tabName === 'IP 목록') {
+        container.appendChild(getAccessIpListTemplate());
+      } else if (childId === 'common-3' && tabName === 'IP 등록') {
+        container.appendChild(getAccessIpRegisterTemplate());
+      } else if (childId === 'common-4' && tabName === '코드 목록') {
+        container.appendChild(getCodeListTemplate());
+      } else if (childId === 'common-4' && tabName === '코드 등록') {
+        container.appendChild(getCodeRegisterTemplate());
+      } else if (childId === 'common-5' && tabName === '로그인 이력') {
+        container.appendChild(getLoginStatusTemplate());
+      } else if (childId === 'common-6' && tabName === '메뉴별 접속현황') {
+        container.appendChild(getMenuAccessStatusTemplate());
       } else if (childId.startsWith('stat-analysis-')) {
         container.appendChild(getStatAnalysisTemplate(childId));
       } else {
@@ -2153,6 +2427,563 @@
       return wrap;
     }
 
+    /* ── 권한그룹 목록 (검색/조회) ── */
+    function getRoleGroupListTemplate() {
+      const wrap = document.createElement('div');
+
+      /* 검색 카드 */
+      const sc = document.createElement('div');
+      sc.className = 'card';
+      sc.innerHTML = `
+        <div class="card-title">
+          <div class="card-title-icon">${svgIcon('award', 15)}</div>
+          검색 조건
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div class="search-row">
+            <span class="search-row-label">조회기간 (등록일)</span>
+            <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+              <div style="display:flex;gap:4px;">
+                <button type="button" class="date-preset-btn" data-preset="1d">하루 전</button>
+                <button type="button" class="date-preset-btn" data-preset="1w">1주일</button>
+                <button type="button" class="date-preset-btn" data-preset="1m">1개월</button>
+                <button type="button" class="date-preset-btn" data-preset="3m">3개월</button>
+                <button type="button" class="date-preset-btn" data-preset="6m">6개월</button>
+                <button type="button" class="date-preset-btn" data-preset="1y">1년</button>
+              </div>
+              <input type="date" id="group-search-start-date" class="form-control" style="width:148px;">
+              <span style="color:var(--text-sub);">~</span>
+              <input type="date" id="group-search-end-date" class="form-control" style="width:148px;">
+            </div>
+          </div>
+          <div class="search-row">
+            <span class="search-row-label">키워드 검색</span>
+            <div style="display:flex;gap:8px;width:480px;max-width:100%;">
+              <select id="group-search-key" class="form-control" style="width:130px;flex-shrink:0;">
+                <option value="전체">전체</option>
+                <option value="권한그룹명">권한그룹명</option>
+                <option value="권한그룹설명">권한그룹 설명</option>
+              </select>
+              <input type="text" id="group-search-keyword" class="form-control" style="flex:1;" placeholder="검색어를 입력하세요.">
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px;border-top:1px solid var(--border);padding-top:14px;">
+          <button class="btn btn-primary" id="btn-group-search">${svgIcon('award',14)} 검색</button>
+          <button class="btn btn-outline" id="btn-group-reset">초기화</button>
+        </div>`;
+      wrap.appendChild(sc);
+
+      /* 목록 카드 */
+      const lc = document.createElement('div');
+      lc.className = 'card';
+      lc.innerHTML = `
+        <div class="card-title">
+          <div class="card-title-icon">${svgIcon('award', 15)}</div>
+          권한그룹 목록
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+          <div style="font-size:13px;color:var(--text-sub);">전체 <strong id="group-total-cnt" style="color:var(--blue);">0</strong>건 &nbsp;|&nbsp; 현재 <strong id="group-current-page">1/1</strong> 페이지</div>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <select id="select-group-page-size" class="form-control" style="width:100px;height:32px;font-size:13px;padding:0 8px;">
+              <option value="10">10개씩</option><option value="20">20개씩</option><option value="50">50개씩</option>
+            </select>
+            <button class="btn btn-outline" style="height:32px;font-size:13px;" onclick="alert('전체 권한그룹 목록이 엑셀(.xlsx) 파일로 다운로드되었습니다.')">${svgIcon('file',13)} 다운로드(Excel)</button>
+            <button class="btn btn-primary" id="btn-add-role-group" style="height:32px;font-size:13px;">${svgIcon('award',13)} 권한그룹 추가하기</button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th style="width:50px;text-align:center;">No</th>
+                <th>권한그룹명</th><th>권한그룹 설명</th>
+                <th>등록일</th><th>등록자</th><th>최종수정</th><th>매핑(수)</th>
+                <th style="width:80px;text-align:center;">삭제</th>
+              </tr>
+            </thead>
+            <tbody id="group-table-body"></tbody>
+          </table>
+        </div>
+        <div class="table-footer">
+          <div></div>
+          <div class="pagination" id="group-pagination"></div>
+          <div></div>
+        </div>`;
+      wrap.appendChild(lc);
+
+      setTimeout(() => {
+        let pageSize = 10;
+        let currentPage = 1;
+
+        const updateTable = () => {
+          const startDate = wrap.querySelector('#group-search-start-date').value;
+          const endDate   = wrap.querySelector('#group-search-end-date').value;
+          const key       = wrap.querySelector('#group-search-key').value;
+          const keyword   = wrap.querySelector('#group-search-keyword').value.toLowerCase().trim();
+
+          const filtered = roleGroups.filter(g => {
+            if (startDate && g.regDate < startDate) return false;
+            if (endDate && g.regDate > endDate) return false;
+            if (keyword) {
+              if (key === '전체') return (g.name+g.desc).toLowerCase().includes(keyword);
+              if (key === '권한그룹명') return g.name.toLowerCase().includes(keyword);
+              if (key === '권한그룹설명') return g.desc.toLowerCase().includes(keyword);
+            }
+            return true;
+          });
+
+          const total = filtered.length;
+          const pages = Math.ceil(total / pageSize) || 1;
+          if (currentPage > pages) currentPage = pages;
+          const start = (currentPage - 1) * pageSize;
+          const page  = filtered.slice(start, start + pageSize);
+
+          wrap.querySelector('#group-table-body').innerHTML = page.map((g, i) => `
+            <tr>
+              <td style="text-align:center;color:var(--text-sub);font-size:13px;">${start+i+1}</td>
+              <td><a href="#" style="color:var(--blue);font-weight:700;text-decoration:none;" onclick="event.preventDefault();goToRoleGroupDetail(${g.id});">${g.name}</a></td>
+              <td style="text-align:left;font-size:13px;">${g.desc}</td>
+              <td style="color:var(--text-sub);font-size:13px;">${g.regDate}</td>
+              <td style="font-size:13px;">${g.regUser}</td>
+              <td style="color:var(--text-sub);font-size:13px;">${g.editDate}</td>
+              <td><strong style="color:var(--blue-dk);">${g.mappedStaff.length}명</strong></td>
+              <td style="text-align:center;"><button class="btn btn-outline" style="height:26px;padding:0 8px;font-size:13px;color:var(--red-dk);border-color:var(--red);" onclick="triggerDeleteRoleGroup(${g.id})">삭제</button></td>
+            </tr>`).join('');
+
+          wrap.querySelector('#group-total-cnt').textContent = total;
+          wrap.querySelector('#group-current-page').textContent = `${currentPage}/${pages}`;
+
+          let pagHTML = `<button class="page-btn" onclick="goToGroupPage(1)">&laquo;</button>`;
+          for (let i = 1; i <= pages; i++) pagHTML += `<button class="page-btn ${i===currentPage?'active':''}" onclick="goToGroupPage(${i})">${i}</button>`;
+          pagHTML += `<button class="page-btn" onclick="goToGroupPage(${pages})">&raquo;</button>`;
+          wrap.querySelector('#group-pagination').innerHTML = pagHTML;
+        };
+
+        window.goToGroupPage = (p) => { currentPage = p; updateTable(); };
+
+        window.goToRoleGroupDetail = (id) => {
+          selectedRoleGroupId = id;
+          selectMenu('common-2', '권한 항목 설정');
+        };
+
+        window.triggerDeleteRoleGroup = (id) => {
+          const deleteModal   = document.getElementById('group-delete-modal');
+          const deleteOverlay = document.getElementById('group-delete-overlay');
+          const confirmBtn    = document.getElementById('btn-confirm-delete');
+
+          confirmBtn.onclick = () => {
+            const idx = roleGroups.findIndex(g => g.id === id);
+            if (idx !== -1) {
+              roleGroups.splice(idx, 1);
+              alert('권한그룹이 삭제되었습니다.');
+              closeGroupDeleteModal();
+              updateTable();
+            }
+          };
+
+          deleteModal.classList.add('open');
+          deleteOverlay.classList.add('open');
+        };
+
+        const presets = wrap.querySelectorAll('.date-preset-btn');
+        const sDate = wrap.querySelector('#group-search-start-date');
+        const eDate = wrap.querySelector('#group-search-end-date');
+        const fmt = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+        presets.forEach(btn => {
+          btn.onclick = () => {
+            presets.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const p = btn.getAttribute('data-preset');
+            const end = new Date();
+            const s = new Date();
+            if (p==='1d') s.setDate(end.getDate()-1);
+            else if (p==='1w') s.setDate(end.getDate()-7);
+            else if (p==='1m') s.setMonth(end.getMonth()-1);
+            else if (p==='3m') s.setMonth(end.getMonth()-3);
+            else if (p==='6m') s.setMonth(end.getMonth()-6);
+            else if (p==='1y') s.setFullYear(end.getFullYear()-1);
+            sDate.value = fmt(s);
+            eDate.value = fmt(end);
+            currentPage = 1; updateTable();
+          };
+        });
+        sDate.onchange = eDate.onchange = () => presets.forEach(b => b.classList.remove('active'));
+
+        wrap.querySelector('#btn-group-search').onclick = () => { currentPage=1; updateTable(); };
+        wrap.querySelector('#btn-group-reset').onclick = () => {
+          sDate.value = ''; eDate.value = '';
+          presets.forEach(b => b.classList.remove('active'));
+          wrap.querySelector('#group-search-key').value = '전체';
+          wrap.querySelector('#group-search-keyword').value = '';
+          currentPage = 1; updateTable();
+        };
+        wrap.querySelector('#select-group-page-size').onchange = e => { pageSize = +e.target.value; currentPage=1; updateTable(); };
+        wrap.querySelector('#btn-add-role-group').onclick = () => {
+          selectedRoleGroupId = null;
+          selectMenu('common-2', '권한 항목 설정');
+        };
+
+        updateTable();
+      }, 50);
+
+      return wrap;
+    }
+
+    /* ── 권한그룹 상세(권한 항목 설정: 등록/수정 + 메뉴별 권한 부여 + 관리자 매핑) ── */
+    function getRoleGroupDetailTemplate(groupId) {
+      const wrap = document.createElement('div');
+      const gid = groupId !== undefined ? groupId : selectedRoleGroupId;
+      const isEdit = gid !== null && gid !== undefined;
+      const group = isEdit ? roleGroups.find(g => g.id === gid) : null;
+
+      const todayStr   = new Date().toISOString().substring(0,10);
+      const regDate    = isEdit ? group.regDate : todayStr;
+      const regUser    = isEdit ? group.regUser : '이희성';
+      const editDate   = isEdit ? group.editDate : '—';
+      const mapCount   = isEdit ? group.mappedStaff.length : 0;
+      const groupName  = isEdit ? group.name : '';
+      const groupDesc  = isEdit ? group.desc : '';
+
+      wrap.innerHTML = `
+        <div class="info-alert-box">
+          <span class="ui-icon" aria-hidden="true">${svgIcon('alert', 22)}</span>
+          <div>
+            <strong>권한 그룹이 접근할 수 있는 메뉴를 설정합니다. (해당 권한 그룹은 체크된 메뉴에 접근 가능합니다.)</strong><br>
+            <span style="font-size:13px;color:var(--text-label);margin-top:4px;display:inline-block;">
+              '권한 그룹'에 관리자(직원)를 관리(등록/삭제)하실 수 있습니다. 한 명의 관리자(직원)는 여러 개의 '권한 그룹'에 매핑될 수 있습니다.
+            </span>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;align-items:start;">
+          <div class="card" style="margin-bottom:0;">
+            <div class="card-title">
+              <div class="card-title-icon">${svgIcon('award', 15)}</div>
+              권한그룹 정보
+            </div>
+            <div style="display:flex;flex-direction:column;gap:14px;">
+              <div class="form-group">
+                <label>권한그룹명 <span class="required">*</span></label>
+                <input type="text" id="role-group-name" class="form-control" placeholder="30자 이내로 작성해주세요." maxlength="30" value="${groupName}">
+              </div>
+              <div class="form-group">
+                <label>권한그룹 설명</label>
+                <input type="text" id="role-group-desc" class="form-control" placeholder="100자 이내로 간략히 작성해주세요." maxlength="100" value="${groupDesc}">
+              </div>
+              <div class="form-group">
+                <label>등록일시</label>
+                <input type="text" class="form-control" readonly style="background:var(--bg);cursor:not-allowed;" value="${regDate}">
+              </div>
+              <div class="form-group">
+                <label>등록자</label>
+                <input type="text" class="form-control" readonly style="background:var(--bg);cursor:not-allowed;" value="${regUser}">
+              </div>
+              <div class="form-group">
+                <label>최종수정일시</label>
+                <input type="text" class="form-control" readonly style="background:var(--bg);cursor:not-allowed;" value="${editDate}">
+              </div>
+              <div class="form-group">
+                <label>매핑(수)</label>
+                <input type="text" class="form-control" readonly style="background:var(--bg);cursor:not-allowed;" value="${mapCount}명">
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-bottom:0;">
+            <div class="card-title">
+              <div class="card-title-icon">${svgIcon('award', 15)}</div>
+              메뉴별 권한 부여
+            </div>
+            <div class="menu-perm-tree" id="menu-permission-tree-container"></div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:8px;margin-bottom:20px;">
+          <button class="btn btn-outline" onclick="selectMenu('common-2','권한그룹 목록')">목록</button>
+          <button class="btn btn-primary" id="btn-save-role-group" style="margin-left:auto;">저장</button>
+        </div>
+
+        <div class="card" id="staff-mapping-section" style="${isEdit ? '' : 'display:none;'}">
+          <div class="card-title">
+            <div class="card-title-icon">${svgIcon('user', 15)}</div>
+            관리자(직원) 매핑
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+            <div style="font-size:13px;color:var(--text-sub);">매핑된 관리자 총 <strong id="mapped-staff-total-cnt" style="color:var(--blue);">0</strong>명</div>
+            <button class="btn btn-primary" onclick="openStaffAddModal()" style="height:32px;font-size:13px;background:var(--amber);border-color:var(--amber);">관리자(직원) 추가하기</button>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th style="width:50px;text-align:center;">No</th>
+                  <th>사원번호</th><th>아이디</th><th>사원명</th><th>부서</th><th>직급</th><th>매핑일</th><th>등록자</th>
+                  <th style="width:80px;text-align:center;">삭제</th>
+                </tr>
+              </thead>
+              <tbody id="mapped-staff-table-body"></tbody>
+            </table>
+          </div>
+        </div>`;
+
+      setTimeout(() => {
+        renderMenuPermissionTree();
+        if (isEdit) renderMappedStaffTable();
+
+        wrap.querySelector('#btn-save-role-group').onclick = () => {
+          const name = wrap.querySelector('#role-group-name').value.trim();
+          const desc = wrap.querySelector('#role-group-desc').value.trim();
+          if (!name) { alert('권한그룹명을 입력해 주세요.'); return; }
+
+          const checkedPerms = [];
+          wrap.querySelectorAll('.tree-checkbox:checked').forEach(cb => checkedPerms.push(cb.value));
+
+          const fmtDT = (d) => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}(이희성)`;
+
+          if (isEdit) {
+            group.name = name;
+            group.desc = desc;
+            group.menuPermissions = checkedPerms;
+            group.editDate = fmtDT(new Date());
+            alert(`권한그룹 '${name}'이(가) 수정되었습니다.`);
+          } else {
+            roleGroups.push({ id: roleGroups.length ? Math.max(...roleGroups.map(g=>g.id))+1 : 1, name, desc, regDate: todayStr, regUser:'이희성', editDate: fmtDT(new Date()), menuPermissions: checkedPerms, mappedStaff: [] });
+            alert(`권한그룹 '${name}'이(가) 등록되었습니다.`);
+          }
+          selectMenu('common-2', '권한그룹 목록');
+        };
+      }, 50);
+
+      /* 메뉴별 권한 부여 트리 (PDF 화면설계서 명세 기준) */
+      function renderMenuPermissionTree() {
+        const tree = wrap.querySelector('#menu-permission-tree-container');
+        tree.innerHTML = `
+          <div class="tree-node">
+            <div class="tree-node-1depth">
+              <div class="tree-node-1depth-title">
+                <label class="tree-checkbox-item">
+                  <input type="checkbox" class="tree-checkbox parent-checkbox" data-id="p1" value="대 메뉴 #1(1Depth)" onclick="toggleTreeChildren('p1', this)">
+                  대 메뉴 #1(1Depth)
+                </label>
+              </div>
+              <div class="tree-node-2depth-list" id="children-p1">
+                <div class="tree-node-2depth-title">
+                  <label class="tree-checkbox-item">
+                    <input type="checkbox" class="tree-checkbox child-checkbox" data-parent="p1" data-id="c1" value="중 메뉴 #1(2Depth)" onclick="checkParentStatus('p1')">
+                    중 메뉴 #1(2Depth)
+                  </label>
+                </div>
+                <div class="tree-node-2depth-title" style="margin-bottom:0;">
+                  <label class="tree-checkbox-item">
+                    <input type="checkbox" class="tree-checkbox child-checkbox parent-2depth" data-parent="p1" data-id="c2" value="중 메뉴 #2(2Depth)" onclick="toggleTreeGrandchildren('c2', this); checkParentStatus('p1')">
+                    중 메뉴 #2(2Depth)
+                  </label>
+                  <div class="tree-node-3depth-list" id="grandchildren-c2" style="margin-left:24px;margin-top:6px;">
+                    <div class="tree-node-3depth-item"><label class="tree-checkbox-item"><input type="checkbox" class="tree-checkbox grandchild-checkbox" data-parent="p1" data-subparent="c2" value="소 메뉴 #1(3Depth)" onclick="checkSubparentStatus('c2'); checkParentStatus('p1')">소 메뉴 #1(3Depth)</label></div>
+                    <div class="tree-node-3depth-item"><label class="tree-checkbox-item"><input type="checkbox" class="tree-checkbox grandchild-checkbox" data-parent="p1" data-subparent="c2" value="소 메뉴 #2(3Depth)" onclick="checkSubparentStatus('c2'); checkParentStatus('p1')">소 메뉴 #2(3Depth)</label></div>
+                    <div class="tree-node-3depth-item"><label class="tree-checkbox-item"><input type="checkbox" class="tree-checkbox grandchild-checkbox" data-parent="p1" data-subparent="c2" value="소 메뉴 #3(3Depth)" onclick="checkSubparentStatus('c2'); checkParentStatus('p1')">소 메뉴 #3(3Depth)</label></div>
+                    <div class="tree-node-3depth-item"><label class="tree-checkbox-item"><input type="checkbox" class="tree-checkbox grandchild-checkbox" data-parent="p1" data-subparent="c2" value="소 메뉴 #4(3Depth)" onclick="checkSubparentStatus('c2'); checkParentStatus('p1')">소 메뉴 #4(3Depth)</label></div>
+                  </div>
+                </div>
+                <div class="tree-node-2depth-title">
+                  <label class="tree-checkbox-item">
+                    <input type="checkbox" class="tree-checkbox child-checkbox" data-parent="p1" data-id="c3" value="중 메뉴 #3(2Depth)" onclick="checkParentStatus('p1')">
+                    중 메뉴 #3(2Depth)
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="tree-node-1depth">
+              <div class="tree-node-1depth-title">
+                <label class="tree-checkbox-item">
+                  <input type="checkbox" class="tree-checkbox parent-checkbox" data-id="p2" value="대 메뉴 #2(1Depth)" onclick="toggleTreeChildren('p2', this)">
+                  대 메뉴 #2(1Depth)
+                </label>
+              </div>
+              <div class="tree-node-2depth-list" id="children-p2"></div>
+            </div>
+          </div>`;
+
+        if (isEdit && group.menuPermissions) {
+          group.menuPermissions.forEach(val => {
+            const cb = tree.querySelector(`input[value="${val}"]`);
+            if (cb) cb.checked = true;
+          });
+          checkSubparentStatus('c2');
+          checkParentStatus('p1');
+          checkParentStatus('p2');
+        }
+      }
+
+      window.toggleTreeChildren = (parentId, checkbox) => {
+        const children = wrap.querySelector(`#children-${parentId}`);
+        if (children) children.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = checkbox.checked);
+      };
+      window.toggleTreeGrandchildren = (subparentId, checkbox) => {
+        const gc = wrap.querySelector(`#grandchildren-${subparentId}`);
+        if (gc) gc.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = checkbox.checked);
+      };
+      window.checkSubparentStatus = (subparentId) => {
+        const subCb = wrap.querySelector(`input[data-id="${subparentId}"]`);
+        const gc = wrap.querySelector(`#grandchildren-${subparentId}`);
+        if (subCb && gc) {
+          const total = gc.querySelectorAll('input[type="checkbox"]').length;
+          const checked = gc.querySelectorAll('input[type="checkbox"]:checked').length;
+          subCb.checked = (total === checked);
+        }
+      };
+      window.checkParentStatus = (parentId) => {
+        const parentCb = wrap.querySelector(`.parent-checkbox[data-id="${parentId}"]`);
+        const children = wrap.querySelector(`#children-${parentId}`);
+        if (parentCb && children) {
+          const total = children.querySelectorAll('input[type="checkbox"]').length;
+          const checked = children.querySelectorAll('input[type="checkbox"]:checked').length;
+          parentCb.checked = (total > 0 && total === checked);
+        }
+      };
+
+      /* 관리자(직원) 매핑 테이블 */
+      function renderMappedStaffTable() {
+        const tbody = wrap.querySelector('#mapped-staff-table-body');
+        const mapped = adminList.filter(a => group.mappedStaff.includes(a.id));
+        wrap.querySelector('#mapped-staff-total-cnt').textContent = mapped.length;
+
+        if (mapped.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="8" style="color:var(--text-sub);">매핑된 관리자가 없습니다.</td></tr>`;
+          return;
+        }
+        tbody.innerHTML = mapped.map((a, i) => `
+          <tr>
+            <td style="text-align:center;color:var(--text-sub);font-size:13px;">${i+1}</td>
+            <td style="font-size:13px;">${a.empNo}</td>
+            <td style="color:var(--text-sub);font-size:13px;">${a.username}</td>
+            <td><strong>${a.name}</strong></td>
+            <td style="font-size:13px;">${a.dept}</td>
+            <td style="font-size:13px;">${a.position}</td>
+            <td style="color:var(--text-sub);font-size:13px;">${group.regDate}</td>
+            <td style="font-size:13px;">이희성</td>
+            <td style="text-align:center;"><button class="btn btn-outline" style="height:26px;padding:0 8px;font-size:13px;color:var(--red-dk);border-color:var(--red);" onclick="removeStaffFromGroup(${a.id})">삭제</button></td>
+          </tr>`).join('');
+      }
+
+      window.removeStaffFromGroup = (adminId) => {
+        if (confirm('본 매핑 목록에서 삭제하면, 해당 권한을 잃게 됩니다. 본 권한그룹에서 해당 관리자(직원)를 삭제하시겠습니까?')) {
+          const idx = group.mappedStaff.indexOf(adminId);
+          if (idx !== -1) {
+            group.mappedStaff.splice(idx, 1);
+            alert('정상적으로 삭제되었습니다.');
+            renderMappedStaffTable();
+          }
+        }
+      };
+
+      /* 관리자(직원) 추가하기 팝업 */
+      window.openStaffAddModal = () => {
+        modalStaffCurrentPage = 1;
+        modalStaffFilteredList = adminList.filter(a => a.status === '사용' && !group.mappedStaff.includes(a.id));
+
+        document.getElementById('modal-search-keyword').value = '';
+        document.getElementById('modal-search-key').value = '전체';
+        document.getElementById('modal-staff-check-all').checked = false;
+
+        renderModalStaffTable();
+
+        document.getElementById('staff-add-modal').classList.add('open');
+        document.getElementById('staff-add-overlay').classList.add('open');
+
+        // 온라인 매뉴얼(FAB) 안내문을 '관리자(직원) 추가하기' 팝업 기준으로 전환
+        updateGuideContent('common-2', '관리자(직원) 추가하기');
+      };
+
+      window.renderModalStaffTable = () => {
+        const tbody = document.getElementById('modal-staff-table-body');
+        const total = modalStaffFilteredList.length;
+        const pages = Math.ceil(total / modalStaffPageSize) || 1;
+        if (modalStaffCurrentPage > pages) modalStaffCurrentPage = pages;
+
+        const start = (modalStaffCurrentPage - 1) * modalStaffPageSize;
+        const page  = modalStaffFilteredList.slice(start, start + modalStaffPageSize);
+
+        if (page.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="8" style="color:var(--text-sub);text-align:center;">추가 가능한 관리자가 없습니다.</td></tr>`;
+          document.getElementById('modal-staff-total-cnt').textContent = '0';
+          document.getElementById('modal-staff-current-page').textContent = '1/1';
+          document.getElementById('modal-staff-pagination').innerHTML = '';
+          return;
+        }
+
+        tbody.innerHTML = page.map(a => `
+          <tr>
+            <td style="text-align:center;"><input type="checkbox" class="modal-staff-checkbox" value="${a.id}"></td>
+            <td style="font-size:13px;">${a.empNo}</td>
+            <td style="color:var(--text-sub);font-size:13px;">${a.username}</td>
+            <td><strong>${a.name}</strong></td>
+            <td style="font-size:13px;">${a.dept}</td>
+            <td style="font-size:13px;">${a.position}</td>
+            <td style="color:var(--text-sub);font-size:12px;">${a.email}</td>
+            <td style="text-align:center;"><span class="badge badge-success">사용(Y)</span></td>
+          </tr>`).join('');
+
+        document.getElementById('modal-staff-total-cnt').textContent = total;
+        document.getElementById('modal-staff-current-page').textContent = `${modalStaffCurrentPage}/${pages}`;
+
+        let pagHTML = `<button class="page-btn" onclick="goToModalPage(1)">&laquo;</button>`;
+        for (let i = 1; i <= pages; i++) pagHTML += `<button class="page-btn ${i===modalStaffCurrentPage?'active':''}" onclick="goToModalPage(${i})">${i}</button>`;
+        pagHTML += `<button class="page-btn" onclick="goToModalPage(${pages})">&raquo;</button>`;
+        document.getElementById('modal-staff-pagination').innerHTML = pagHTML;
+      };
+
+      window.goToModalPage = (p) => { modalStaffCurrentPage = p; renderModalStaffTable(); };
+
+      window.changeModalPageSize = () => {
+        modalStaffPageSize = parseInt(document.getElementById('modal-page-size').value);
+        modalStaffCurrentPage = 1;
+        renderModalStaffTable();
+      };
+
+      window.searchModalStaff = () => {
+        const key = document.getElementById('modal-search-key').value;
+        const keyword = document.getElementById('modal-search-keyword').value.toLowerCase().trim();
+        const base = adminList.filter(a => a.status === '사용' && !group.mappedStaff.includes(a.id));
+
+        modalStaffFilteredList = base.filter(a => {
+          if (!keyword) return true;
+          if (key === '전체') return (a.empNo+a.username+a.name+a.dept+a.position+a.email).toLowerCase().includes(keyword);
+          if (key === '사원번호') return a.empNo.toLowerCase().includes(keyword);
+          if (key === '아이디') return a.username.toLowerCase().includes(keyword);
+          if (key === '사원명') return a.name.toLowerCase().includes(keyword);
+          if (key === '부서') return a.dept.toLowerCase().includes(keyword);
+          if (key === '직급') return a.position.toLowerCase().includes(keyword);
+          if (key === '이메일') return a.email.toLowerCase().includes(keyword);
+          return true;
+        });
+
+        modalStaffCurrentPage = 1;
+        renderModalStaffTable();
+      };
+
+      window.toggleAllModalCheckboxes = (master) => {
+        document.querySelectorAll('.modal-staff-checkbox').forEach(cb => cb.checked = master.checked);
+      };
+
+      window.addSelectedStaffToGroup = () => {
+        const checked = document.querySelectorAll('.modal-staff-checkbox:checked');
+        if (checked.length === 0) { alert('추가할 관리자를 선택해 주세요.'); return; }
+
+        checked.forEach(cb => {
+          const id = parseInt(cb.value);
+          if (!group.mappedStaff.includes(id)) group.mappedStaff.push(id);
+        });
+
+        alert(`${checked.length}명의 관리자가 권한그룹에 매핑되었습니다.`);
+        closeStaffAddModal();
+        renderMappedStaffTable();
+      };
+
+      return wrap;
+    }
+
     /* ── 준비중 ── */
     function getReadyTemplate(pathName) {
       const div = document.createElement('div');
@@ -2196,6 +3027,69 @@
           '비밀번호 규칙: 사용자가 설정한 비밀번호는 DB 저장 전 반드시 SHA-256 단방향 해싱 암호화 가이드를 따라 가공해야 합니다.',
           '도메인 강제규칙: 메일 계정 입력 칸(@) 오른편은 kepcoes.co.kr 도메인만 등록 가능하도록 Regex 유효성을 검사해 주세요.',
           '필수(*) Validation: 필수 값 누락 시 alert 창 실행 대신 해당 입력 필드 테두리를 빨간색으로 변경하고 밑에 서브 텍스트로 안내해 주세요.'
+        ]
+      },
+      'common-2_권한그룹 목록': {
+        summary: '등록된 권한그룹을 검색·조회하는 화면입니다. (화면설계서 1p 기준)',
+        rules: [
+          '① 검색 구분 : 전체, 권한그룹명, 권한그룹 설명',
+          '② 권한에 매핑된 직원의 숫자 표시'
+        ]
+      },
+      'common-2_권한 항목 설정': {
+        summary: '권한그룹을 등록/수정하고, 메뉴별 권한 부여 및 관리자(직원) 매핑을 관리하는 화면입니다. (화면설계서 2p 기준)',
+        rules: [
+          '① 페이징 필요 없음(오히려 불편함)',
+          '② 삭제 시 컨펌(Confirm) 박스\n“본 매핑 목록에서 삭제하면, 해당 권한을 잃게 됩니다. 본 권한그룹에서 해당 관리자(직원)를 삭제하시겠습니까?”'
+        ]
+      },
+      'common-2_관리자(직원) 추가하기': {
+        summary: '권한그룹에 매핑할 관리자(직원)를 검색하여 추가하는 팝업 화면입니다. (화면설계서 3p 기준)',
+        rules: [
+          '① 검색 구분 : 전체, 사원번호, 아이디, 사원명, 부서, 직급, 이메일',
+          '단, ‘사용여부’가 ‘사용(Y)’인 관리자만 호출 가능'
+        ]
+      },
+      'common-3_IP 목록': {
+        summary: '공통관리(설정) > 접속 아이피(IP) 관리',
+        rules: [
+          '①검색 구분 : 전체, 아이피(IP), 아이피(IP) 추가 사유',
+          '② 삭제 시 컨펌(Confirm) 박스\n“본 접속 아이피(IP)를 삭제하면, 본 시스템에 해당 아이피(IP)로 접근이 불가합니다. 삭제하시겠습니까?”'
+        ]
+      },
+      'common-3_IP 등록': {
+        summary: '공통관리(설정) > 접속 아이피(IP) 관리 > IP 등록',
+        rules: [
+          '① 접속 아이피(IP)를 추가 등록하는 팝업/화면입니다.',
+          '② 아이피(IP) 및 추가 사유를 필수로 입력해야 합니다.'
+        ]
+      },
+      'common-4_코드 목록': {
+        summary: '공통관리(설정) > 코드 관리 > 검색/조회',
+        rules: [
+          '①검색 구분 : 전체, 코드, 코드(논리명), 코드설명',
+          '② 해당 목록의 모든 정보 + 값(하나의 컬럼에 ‘,’로 구분) 다운로드'
+        ]
+      },
+      'common-4_코드 등록': {
+        summary: '공통관리(설정) > 코드 관리 > 추가/관리 및 값 추가/관리',
+        rules: [
+          '① 개발 당시에만 사용 : 컨펌 박스 노출\n코드 삭제 시 시스템에 영향(값 삭제, 정보 유실 등)이 있을 수 있습니다. 시스템 관리자의 점검 후 삭제하세요. 본 코드를 삭제하시겠습니까?',
+          '② 값 추가/관리 삭제 컨펌 박스 노출\n코드(값) 삭제 시 시스템에 영향(값 삭제, 정보 유실 등)이 있을 수 있습니다. 시스템 관리자의 점검 후 삭제하세요. 본 코드를 삭제하시겠습니까?'
+        ]
+      },
+      'common-5_로그인 이력': {
+        summary: '공통관리(설정) > 로그인 현황',
+        rules: [
+          '①페이지 로딩 시 최초 검색 셋팅\n- 기준 : 월별\n- 기간(월별) : 당해년(예 : 2026.01~현재 년월)',
+          '② 기준 선택에 따라 적합한 컨트롤 노출 (일별/월별/연도별)'
+        ]
+      },
+      'common-6_메뉴별 접속현황': {
+        summary: '공통관리(설정) > 메뉴별 접속현황',
+        rules: [
+          '① 조회기간(등록일) 필터 제공 (하루 전, 1주일, 1개월, 3개월, 6개월, 1년)',
+          '② 대메뉴, 중메뉴, 소메뉴 간의 계층적 구조 및 접속 횟수 표시'
         ]
       },
       'default': {
@@ -2282,6 +3176,18 @@
       alert(`${a.name}의 상세 정보가 수정되었습니다.`);
       closeAdminDetail();
       selectMenu(currentActiveMenuId, currentActiveTab);
+    };
+
+    /* ── 권한그룹 모달 공통 닫기 ── */
+    window.closeGroupDeleteModal = function() {
+      document.getElementById('group-delete-modal').classList.remove('open');
+      document.getElementById('group-delete-overlay').classList.remove('open');
+    };
+    window.closeStaffAddModal = function() {
+      document.getElementById('staff-add-modal').classList.remove('open');
+      document.getElementById('staff-add-overlay').classList.remove('open');
+      // 온라인 매뉴얼(FAB) 안내문을 원래 화면(권한 항목 설정) 기준으로 복원
+      updateGuideContent(currentActiveMenuId, currentActiveTab);
     };
 
     /* ── 기간 검색 바 HTML (통계분석 공통) ── */
@@ -2570,6 +3476,1186 @@
 
       wrap.innerHTML = html;
       return wrap;
+    }
+
+    /* ── 접속 아이피(IP) 관리 템플릿 ── */
+    let ipPageSize = 10;
+    let ipCurrentPage = 1;
+
+    function getAccessIpListTemplate() {
+      const wrapper = document.createElement('div');
+
+      const searchCard = document.createElement('div');
+      searchCard.className = 'card';
+      searchCard.innerHTML = `
+        <div class="card-title">
+          <div class="card-title-icon">${svgIcon('settings', 15)}</div>
+          검색 조건
+        </div>
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          <div class="search-row">
+            <span class="search-row-label">조회기간 (등록일)</span>
+            <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+              <div style="display:flex; gap:4px;">
+                <button type="button" class="date-preset-btn" data-preset="1d">하루 전</button>
+                <button type="button" class="date-preset-btn" data-preset="1w">1주일</button>
+                <button type="button" class="date-preset-btn" data-preset="1m">1개월</button>
+                <button type="button" class="date-preset-btn" data-preset="3m">3개월</button>
+                <button type="button" class="date-preset-btn" data-preset="6m">6개월</button>
+                <button type="button" class="date-preset-btn" data-preset="1y">1년</button>
+              </div>
+              <input type="date" id="ip-search-start-date" class="form-control" style="width:148px;">
+              <span style="color:var(--text-sub);">~</span>
+              <input type="date" id="ip-search-end-date" class="form-control" style="width:148px;">
+            </div>
+          </div>
+          <div class="search-row">
+            <span class="search-row-label">키워드 검색</span>
+            <div style="display:flex; gap:8px; width:480px; max-width:100%;">
+              <select id="ip-search-key" class="form-control" style="width:130px; flex-shrink:0;">
+                <option value="전체">전체</option>
+                <option value="아이피(IP)">아이피(IP)</option>
+                <option value="아이피(IP) 추가 사유">아이피(IP) 추가 사유</option>
+              </select>
+              <input type="text" id="ip-search-keyword" class="form-control" style="flex:1;" placeholder="검색어를 입력하세요.">
+            </div>
+          </div>
+        </div>
+        <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:14px; border-top:1px solid var(--border); padding-top:14px;">
+          <button class="btn btn-primary" id="btn-ip-search">${svgIcon('settings',14)} 검색</button>
+          <button class="btn btn-outline" id="btn-ip-reset">초기화</button>
+        </div>`;
+      wrapper.appendChild(searchCard);
+
+      const listCard = document.createElement('div');
+      listCard.className = 'card';
+      listCard.innerHTML = `
+        <div class="card-title">
+          <div class="card-title-icon">${svgIcon('settings', 15)}</div>
+          접속 아이피(IP) 목록
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+          <div style="font-size:13px; color:var(--text-sub);">
+            전체 <strong id="ip-total-cnt" style="color:var(--blue);">0</strong>건 &nbsp;|&nbsp; 
+            현재 <strong id="ip-current-page">1/1</strong> 페이지
+          </div>
+          <div style="display:flex; gap:8px; align-items:center;">
+            <select id="select-ip-page-size" class="form-control" style="width:100px; height:32px; font-size:13px; padding:0 8px;">
+              <option value="10">10개씩</option>
+              <option value="20">20개씩</option>
+              <option value="50">50개씩</option>
+            </select>
+            <button class="btn btn-outline" style="height:32px; font-size:13px;" onclick="alert('전체 접속 아이피 목록이 엑셀(.xlsx) 파일로 다운로드되었습니다.')">
+              ${svgIcon('file', 13)} 다운로드(Excel)
+            </button>
+            <button class="btn btn-primary" onclick="openIpAddModal()" style="height:32px; font-size:13px;">
+              접속 아이피(IP) 추가하기
+            </button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th style="width:70px; text-align:center;">No</th>
+                <th>아이피(IP)</th>
+                <th>아이피(IP) 추가 사유</th>
+                <th>등록일</th>
+                <th>등록자</th>
+                <th style="width:90px; text-align:center;">삭제</th>
+              </tr>
+            </thead>
+            <tbody id="ip-table-body"></tbody>
+          </table>
+        </div>
+        <div class="table-footer">
+          <div></div>
+          <div class="pagination" id="ip-pagination"></div>
+          <div></div>
+        </div>`;
+      wrapper.appendChild(listCard);
+
+      setTimeout(() => {
+        const updateTable = () => {
+          const startDate = wrapper.querySelector('#ip-search-start-date').value;
+          const endDate = wrapper.querySelector('#ip-search-end-date').value;
+          const key = wrapper.querySelector('#ip-search-key').value;
+          const keyword = wrapper.querySelector('#ip-search-keyword').value.toLowerCase().trim();
+
+          const filtered = accessIpList.filter(item => {
+            if (startDate && item.regDate.replace(/\./g, '-').trim() < startDate) return false;
+            if (endDate && item.regDate.replace(/\./g, '-').trim() > endDate) return false;
+
+            if (keyword) {
+              if (key === '전체') {
+                return (item.ip.toLowerCase().includes(keyword) || item.reason.toLowerCase().includes(keyword));
+              } else if (key === '아이피(IP)') {
+                return item.ip.toLowerCase().includes(keyword);
+              } else if (key === '아이피(IP) 추가 사유') {
+                return item.reason.toLowerCase().includes(keyword);
+              }
+            }
+            return true;
+          });
+
+          const totalCount = filtered.length;
+          const totalPages = Math.ceil(totalCount / ipPageSize) || 1;
+          if (ipCurrentPage > totalPages) ipCurrentPage = totalPages;
+
+          const startIdx = (ipCurrentPage - 1) * ipPageSize;
+          const paginated = filtered.slice(startIdx, startIdx + ipPageSize);
+
+          const tbody = wrapper.querySelector('#ip-table-body');
+          tbody.innerHTML = paginated.map((item, idx) => {
+            return `<tr>
+              <td style="color:var(--text-sub); text-align:center;">${25214 + startIdx + idx}</td>
+              <td style="font-weight:700;">${item.ip}</td>
+              <td style="text-align:left;">${item.reason}</td>
+              <td style="color:var(--text-sub);">${item.regDate}</td>
+              <td>${item.regUser}</td>
+              <td style="text-align:center;">
+                <button class="btn btn-outline" style="height:26px; padding:0 8px; font-size:13px; color:var(--red-dk); border-color:var(--red);"
+                  onclick="deleteAccessIp(${item.id})">삭제</button>
+              </td>
+            </tr>`;
+          }).join('');
+
+          wrapper.querySelector('#ip-total-cnt').textContent = totalCount;
+          wrapper.querySelector('#ip-current-page').textContent = `${ipCurrentPage}/${totalPages}`;
+
+          const paginationContainer = wrapper.querySelector('#ip-pagination');
+          let pagHTML = `<button class="page-btn" onclick="goToIpPage(1)">&laquo;</button>`;
+          for (let i = 1; i <= totalPages; i++) {
+            pagHTML += `<button class="page-btn ${i === ipCurrentPage ? 'active' : ''}" onclick="goToIpPage(${i})">${i}</button>`;
+          }
+          pagHTML += `<button class="page-btn" onclick="goToIpPage(${totalPages})">&raquo;</button>`;
+          paginationContainer.innerHTML = pagHTML;
+        };
+
+        window.goToIpPage = (page) => {
+          ipCurrentPage = page;
+          updateTable();
+        };
+
+        window.deleteAccessIp = (id) => {
+          if (confirm('“본 접속 아이피(IP)를 삭제하면, 본 시스템에 해당 아이피(IP)로 접근이 불가합니다. 삭제하시겠습니까?”')) {
+            const idx = accessIpList.findIndex(item => item.id === id);
+            if (idx !== -1) {
+              accessIpList.splice(idx, 1);
+              alert('삭제되었습니다.');
+              updateTable();
+            }
+          }
+        };
+
+        const presetBtns = wrapper.querySelectorAll('.date-preset-btn');
+        const startInput = wrapper.querySelector('#ip-search-start-date');
+        const endInput = wrapper.querySelector('#ip-search-end-date');
+        const clearPresets = () => presetBtns.forEach(b => b.classList.remove('active'));
+        startInput.onchange = clearPresets;
+        endInput.onchange = clearPresets;
+
+        presetBtns.forEach(btn => {
+          btn.onclick = () => {
+            presetBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const preset = btn.getAttribute('data-preset');
+            const endDate = new Date();
+            let startDate = new Date();
+
+            if (preset === '1d') startDate.setDate(endDate.getDate() - 1);
+            else if (preset === '1w') startDate.setDate(endDate.getDate() - 7);
+            else if (preset === '1m') startDate.setMonth(endDate.getMonth() - 1);
+            else if (preset === '3m') startDate.setMonth(endDate.getMonth() - 3);
+            else if (preset === '6m') startDate.setMonth(endDate.getMonth() - 6);
+            else if (preset === '1y') startDate.setFullYear(endDate.getFullYear() - 1);
+
+            const formatDate = (d) => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+            startInput.value = formatDate(startDate);
+            endInput.value = formatDate(endDate);
+            ipCurrentPage = 1;
+            updateTable();
+          };
+        });
+
+        wrapper.querySelector('#btn-ip-search').onclick = () => {
+          ipCurrentPage = 1;
+          updateTable();
+        };
+
+        wrapper.querySelector('#btn-ip-reset').onclick = () => {
+          startInput.value = '';
+          endInput.value = '';
+          clearPresets();
+          wrapper.querySelector('#ip-search-key').value = '전체';
+          wrapper.querySelector('#ip-search-keyword').value = '';
+          ipCurrentPage = 1;
+          updateTable();
+        };
+
+        wrapper.querySelector('#select-ip-page-size').onchange = (e) => {
+          ipPageSize = parseInt(e.target.value);
+          ipCurrentPage = 1;
+          updateTable();
+        };
+
+        updateTable();
+      }, 50);
+
+      return wrapper;
+    }
+
+    function getAccessIpRegisterTemplate() {
+      const wrapper = document.createElement('div');
+      wrapper.innerHTML = `
+        <div class="card">
+          <div class="card-title">
+            <div class="card-title-icon">${svgIcon('settings', 15)}</div>
+            접속 아이피(IP) 등록
+          </div>
+          <div style="display:flex; flex-direction:column; gap:16px;">
+            <div class="form-group">
+              <label>아이피(IP) <span class="required">*</span></label>
+              <input type="text" id="ip-reg-address" class="form-control" placeholder="예) 211.215.111.2" style="max-width:400px;">
+            </div>
+            <div class="form-group">
+              <label>아이피(IP) 추가 사유 <span class="required">*</span></label>
+              <input type="text" id="ip-reg-reason" class="form-control" placeholder="100자 이내로 간략히 작성해주세요.">
+            </div>
+          </div>
+          <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:20px; border-top:1px solid var(--border); padding-top:16px;">
+            <button class="btn btn-primary" onclick="submitIpRegTab()">${svgIcon('settings', 13)} 접속 아이피(IP) 추가하기</button>
+            <button class="btn btn-outline" onclick="selectMenu('common-3', 'IP 목록')">취소</button>
+          </div>
+        </div>`;
+      
+      window.submitIpRegTab = () => {
+        const ip = document.getElementById('ip-reg-address').value.trim();
+        const reason = document.getElementById('ip-reg-reason').value.trim();
+        if(!ip || !reason) {
+          alert('필수(*) 항목을 입력해주세요.');
+          return;
+        }
+        const today = new Date();
+        const fmt = `${today.getFullYear()}. ${String(today.getMonth()+1).padStart(2,'0')}. ${String(today.getDate()).padStart(2,'0')}`;
+        accessIpList.unshift({
+          id: accessIpList.length + 1,
+          ip: ip,
+          reason: reason,
+          regDate: fmt,
+          regUser: '이희성'
+        });
+        alert('정상적으로 등록되었습니다.');
+        selectMenu('common-3', 'IP 목록');
+      };
+
+      return wrapper;
+    }
+
+    window.openIpAddModal = () => {
+      document.getElementById('ip-add-address').value = '';
+      document.getElementById('ip-add-reason').value = '';
+      document.getElementById('ip-add-modal').classList.add('open');
+      document.getElementById('ip-add-overlay').classList.add('open');
+    };
+    window.closeIpAddModal = () => {
+      document.getElementById('ip-add-modal').classList.remove('open');
+      document.getElementById('ip-add-overlay').classList.remove('open');
+    };
+    window.submitIpAdd = () => {
+      const ip = document.getElementById('ip-add-address').value.trim();
+      const reason = document.getElementById('ip-add-reason').value.trim();
+      if (!ip || !reason) {
+        alert('필수(*) 항목을 입력해주세요.');
+        return;
+      }
+      const today = new Date();
+      const fmt = `${today.getFullYear()}. ${String(today.getMonth()+1).padStart(2,'0')}. ${String(today.getDate()).padStart(2,'0')}`;
+      accessIpList.unshift({
+        id: accessIpList.length + 1,
+        ip: ip,
+        reason: reason,
+        regDate: fmt,
+        regUser: '이희성'
+      });
+      alert('정상적으로 등록되었습니다.');
+      closeIpAddModal();
+      selectMenu('common-3', 'IP 목록');
+    };
+
+
+    /* ── 코드 관리 템플릿 ── */
+    let codePageSize = 10;
+    let codeCurrentPage = 1;
+    let activeEditCodeId = null;
+
+    function getCodeListTemplate() {
+      const wrapper = document.createElement('div');
+
+      const searchCard = document.createElement('div');
+      searchCard.className = 'card';
+      searchCard.innerHTML = `
+        <div class="card-title">
+          <div class="card-title-icon">${svgIcon('settings', 15)}</div>
+          검색 조건
+        </div>
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          <div class="search-row">
+            <span class="search-row-label">조회기간 (등록일)</span>
+            <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+              <div style="display:flex; gap:4px;">
+                <button type="button" class="date-preset-btn" data-preset="1d">하루 전</button>
+                <button type="button" class="date-preset-btn" data-preset="1w">1주일</button>
+                <button type="button" class="date-preset-btn" data-preset="1m">1개월</button>
+                <button type="button" class="date-preset-btn" data-preset="3m">3개월</button>
+                <button type="button" class="date-preset-btn" data-preset="6m">6개월</button>
+                <button type="button" class="date-preset-btn" data-preset="1y">1년</button>
+              </div>
+              <input type="date" id="code-search-start-date" class="form-control" style="width:148px;">
+              <span style="color:var(--text-sub);">~</span>
+              <input type="date" id="code-search-end-date" class="form-control" style="width:148px;">
+            </div>
+          </div>
+          <div class="search-row">
+            <span class="search-row-label">사용여부</span>
+            <div class="radio-group">
+              <label class="radio-item"><input type="radio" name="code-search-status" value="전체" checked> 전체</label>
+              <label class="radio-item"><input type="radio" name="code-search-status" value="사용(Y)"> 사용(Y)</label>
+              <label class="radio-item"><input type="radio" name="code-search-status" value="중지(N)"> 중지(N)</label>
+            </div>
+          </div>
+          <div class="search-row">
+            <span class="search-row-label">키워드 검색</span>
+            <div style="display:flex; gap:8px; width:480px; max-width:100%;">
+              <select id="code-search-key" class="form-control" style="width:130px; flex-shrink:0;">
+                <option value="전체">전체</option>
+                <option value="코드">코드</option>
+                <option value="코드(논리명)">코드(논리명)</option>
+                <option value="코드설명">코드설명</option>
+              </select>
+              <input type="text" id="code-search-keyword" class="form-control" style="flex:1;" placeholder="검색어를 입력하세요.">
+            </div>
+          </div>
+        </div>
+        <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:14px; border-top:1px solid var(--border); padding-top:14px;">
+          <button class="btn btn-primary" id="btn-code-search">${svgIcon('settings',14)} 검색</button>
+          <button class="btn btn-outline" id="btn-code-reset">초기화</button>
+        </div>`;
+      wrapper.appendChild(searchCard);
+
+      const listCard = document.createElement('div');
+      listCard.className = 'card';
+      listCard.innerHTML = `
+        <div class="card-title">
+          <div class="card-title-icon">${svgIcon('settings', 15)}</div>
+          코드 목록
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+          <div style="font-size:13px; color:var(--text-sub);">
+            전체 <strong id="code-total-cnt" style="color:var(--blue);">0</strong>건 &nbsp;|&nbsp; 
+            현재 <strong id="code-current-page">1/1</strong> 페이지
+          </div>
+          <div style="display:flex; gap:8px; align-items:center;">
+            <select id="select-code-page-size" class="form-control" style="width:100px; height:32px; font-size:13px; padding:0 8px;">
+              <option value="10">10개씩</option>
+              <option value="20">20개씩</option>
+              <option value="50">50개씩</option>
+            </select>
+            <button class="btn btn-outline" style="height:32px; font-size:13px;" onclick="downloadCodeExcel()">
+              ${svgIcon('file', 13)} 다운로드(Excel)
+            </button>
+            <button class="btn btn-primary" onclick="openCodeAddTab()" style="height:32px; font-size:13px;">
+              코드 추가하기
+            </button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th style="width:70px; text-align:center;">No</th>
+                <th>코드</th>
+                <th>코드(논리명)</th>
+                <th>코드설명</th>
+                <th style="width:90px; text-align:center;">사용여부</th>
+                <th style="width:85px; text-align:center;">값(개수)</th>
+                <th>등록일</th>
+                <th>등록자</th>
+                <th style="width:85px; text-align:center;">관리</th>
+                <th>최종수정</th>
+              </tr>
+            </thead>
+            <tbody id="code-table-body"></tbody>
+          </table>
+        </div>
+        <div class="table-footer">
+          <div></div>
+          <div class="pagination" id="code-pagination"></div>
+          <div></div>
+        </div>`;
+      wrapper.appendChild(listCard);
+
+      setTimeout(() => {
+        const updateTable = () => {
+          const startDate = wrapper.querySelector('#code-search-start-date').value;
+          const endDate = wrapper.querySelector('#code-search-end-date').value;
+          const useStatus = wrapper.querySelector('input[name="code-search-status"]:checked').value;
+          const key = wrapper.querySelector('#code-search-key').value;
+          const keyword = wrapper.querySelector('#code-search-keyword').value.toLowerCase().trim();
+
+          const filtered = codeList.filter(item => {
+            if (startDate && item.regDate.replace(/\./g, '-').trim() < startDate) return false;
+            if (endDate && item.regDate.replace(/\./g, '-').trim() > endDate) return false;
+            if (useStatus !== '전체' && item.useStatus !== useStatus) return false;
+
+            if (keyword) {
+              if (key === '전체') {
+                return (item.code.toLowerCase().includes(keyword) || item.codeName.toLowerCase().includes(keyword) || item.codeDesc.toLowerCase().includes(keyword));
+              } else if (key === '코드') {
+                return item.code.toLowerCase().includes(keyword);
+              } else if (key === '코드(논리명)') {
+                return item.codeName.toLowerCase().includes(keyword);
+              } else if (key === '코드설명') {
+                return item.codeDesc.toLowerCase().includes(keyword);
+              }
+            }
+            return true;
+          });
+
+          const totalCount = filtered.length;
+          const totalPages = Math.ceil(totalCount / codePageSize) || 1;
+          if (codeCurrentPage > totalPages) codeCurrentPage = totalPages;
+
+          const startIdx = (codeCurrentPage - 1) * codePageSize;
+          const paginated = filtered.slice(startIdx, startIdx + codePageSize);
+
+          const tbody = wrapper.querySelector('#code-table-body');
+          tbody.innerHTML = paginated.map((item, idx) => {
+            const statusClass = item.useStatus === '사용(Y)' ? 'badge-success' : 'badge-danger';
+            return `<tr>
+              <td style="color:var(--text-sub); text-align:center;">${25214 + startIdx + idx}</td>
+              <td style="font-weight:700; color:var(--blue-dk);">${item.code}</td>
+              <td>${item.codeName}</td>
+              <td style="text-align:left;">${item.codeDesc}</td>
+              <td style="text-align:center;"><span class="badge ${statusClass}">${item.useStatus}</span></td>
+              <td style="text-align:center; font-weight:700; color:var(--blue);">${item.values.length}개</td>
+              <td style="color:var(--text-sub);">${item.regDate}</td>
+              <td>${item.regUser}</td>
+              <td style="text-align:center;">
+                <button class="btn btn-outline" style="height:26px; padding:0 8px; font-size:13px;"
+                  onclick="openCodeEditTab(${item.id})">관리</button>
+              </td>
+              <td style="color:var(--text-sub);">${item.editDate || '—'}</td>
+            </tr>`;
+          }).join('');
+
+          wrapper.querySelector('#code-total-cnt').textContent = totalCount;
+          wrapper.querySelector('#code-current-page').textContent = `${codeCurrentPage}/${totalPages}`;
+
+          const paginationContainer = wrapper.querySelector('#code-pagination');
+          let pagHTML = `<button class="page-btn" onclick="goToCodePage(1)">&laquo;</button>`;
+          for (let i = 1; i <= totalPages; i++) {
+            pagHTML += `<button class="page-btn ${i === codeCurrentPage ? 'active' : ''}" onclick="goToCodePage(${i})">${i}</button>`;
+          }
+          pagHTML += `<button class="page-btn" onclick="goToCodePage(${totalPages})">&raquo;</button>`;
+          paginationContainer.innerHTML = pagHTML;
+        };
+
+        window.goToCodePage = (page) => {
+          codeCurrentPage = page;
+          updateTable();
+        };
+
+        window.openCodeAddTab = () => {
+          activeEditCodeId = null;
+          selectMenu('common-4', '코드 등록');
+        };
+
+        window.openCodeEditTab = (id) => {
+          activeEditCodeId = id;
+          selectMenu('common-4', '코드 등록');
+        };
+
+        window.downloadCodeExcel = () => {
+          const lines = codeList.map(item => {
+            const valListStr = item.values.map(v => `${v.valName}(${v.valCode})`).join(', ');
+            return `코드: ${item.code}, 논리명: ${item.codeName}, 설명: ${item.codeDesc}, 사용여부: ${item.useStatus}, 값 목록: [${valListStr}]`;
+          });
+          alert("해당 목록의 모든 정보 + 값(하나의 컬럼에 ','로 구분)이 포함된 엑셀 파일이 다운로드되었습니다.\n\n" + lines.slice(0, 3).join("\n") + "\n...");
+        };
+
+        const presetBtns = wrapper.querySelectorAll('.date-preset-btn');
+        const startInput = wrapper.querySelector('#code-search-start-date');
+        const endInput = wrapper.querySelector('#code-search-end-date');
+        const clearPresets = () => presetBtns.forEach(b => b.classList.remove('active'));
+        startInput.onchange = clearPresets;
+        endInput.onchange = clearPresets;
+
+        presetBtns.forEach(btn => {
+          btn.onclick = () => {
+            presetBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const preset = btn.getAttribute('data-preset');
+            const endDate = new Date();
+            let startDate = new Date();
+
+            if (preset === '1d') startDate.setDate(endDate.getDate() - 1);
+            else if (preset === '1w') startDate.setDate(endDate.getDate() - 7);
+            else if (preset === '1m') startDate.setMonth(endDate.getMonth() - 1);
+            else if (preset === '3m') startDate.setMonth(endDate.getMonth() - 3);
+            else if (preset === '6m') startDate.setMonth(endDate.getMonth() - 6);
+            else if (preset === '1y') startDate.setFullYear(endDate.getFullYear() - 1);
+
+            const formatDate = (d) => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+            startInput.value = formatDate(startDate);
+            endInput.value = formatDate(endDate);
+            codeCurrentPage = 1;
+            updateTable();
+          };
+        });
+
+        wrapper.querySelector('#btn-code-search').onclick = () => {
+          codeCurrentPage = 1;
+          updateTable();
+        };
+
+        wrapper.querySelector('#btn-code-reset').onclick = () => {
+          startInput.value = '';
+          endInput.value = '';
+          clearPresets();
+          wrapper.querySelector('input[name="code-search-status"][value="전체"]').checked = true;
+          wrapper.querySelector('#code-search-key').value = '전체';
+          wrapper.querySelector('#code-search-keyword').value = '';
+          codeCurrentPage = 1;
+          updateTable();
+        };
+
+        wrapper.querySelector('#select-code-page-size').onchange = (e) => {
+          codePageSize = parseInt(e.target.value);
+          codeCurrentPage = 1;
+          updateTable();
+        };
+
+        updateTable();
+      }, 50);
+
+      return wrapper;
+    }
+
+    let activeEditValueId = null;
+
+    function getCodeRegisterTemplate() {
+      const wrapper = document.createElement('div');
+      const isEdit = activeEditCodeId !== null;
+      const codeItem = isEdit ? codeList.find(c => c.id === activeEditCodeId) : null;
+
+      const codeVal = isEdit ? codeItem.code : `KepcoES${String(codeList.length + 1).padStart(4, '0')}(자동 발번)`;
+      const codeNameVal = isEdit ? codeItem.codeName : '';
+      const codeDescVal = isEdit ? codeItem.codeDesc : '';
+      const isUseChecked = isEdit ? (codeItem.useStatus === '사용(Y)' ? 'checked' : '') : 'checked';
+      const isStopChecked = isEdit ? (codeItem.useStatus === '중지(N)' ? 'checked' : '') : '';
+      const regDateVal = isEdit ? codeItem.regDate : '2026. 06. 16';
+      const regUserVal = isEdit ? codeItem.regUser : '이희성';
+      const editDateVal = isEdit ? codeItem.editDate : '—';
+
+      wrapper.innerHTML = `
+        <div class="card">
+          <div class="card-title">
+            <div class="card-title-icon">${svgIcon('settings', 15)}</div>
+            코드 정보
+          </div>
+          <div style="display:flex; flex-direction:column; gap:14px;">
+            <div class="form-group">
+              <label>코드</label>
+              <input type="text" class="form-control" readonly style="background-color:var(--bg); color:var(--text-sub); cursor:not-allowed;" value="${codeVal}">
+            </div>
+            <div class="form-group">
+              <label>코드(논리명) <span class="required">*</span></label>
+              <input type="text" id="code-reg-name" class="form-control" placeholder="20자 이내로 작성해주세요." value="${codeNameVal}">
+            </div>
+            <div class="form-group">
+              <label>코드설명 <span class="required">*</span></label>
+              <input type="text" id="code-reg-desc" class="form-control" placeholder="100자 이내로 간략히 작성해주세요." value="${codeDescVal}">
+            </div>
+            <div class="form-group">
+              <label>사용여부</label>
+              <div class="radio-group">
+                <label class="radio-item"><input type="radio" name="code-reg-status" value="사용(Y)" ${isUseChecked}> 사용(Y)</label>
+                <label class="radio-item"><input type="radio" name="code-reg-status" value="중지(N)" ${isStopChecked}> 중지(N)</label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>등록일시</label>
+              <input type="text" class="form-control" readonly style="background-color:var(--bg); color:var(--text-sub); cursor:not-allowed;" value="${regDateVal}">
+            </div>
+            <div class="form-group">
+              <label>등록자</label>
+              <input type="text" class="form-control" readonly style="background-color:var(--bg); color:var(--text-sub); cursor:not-allowed;" value="${regUserVal}">
+            </div>
+            <div class="form-group">
+              <label>최종수정일시</label>
+              <input type="text" class="form-control" readonly style="background-color:var(--bg); color:var(--text-sub); cursor:not-allowed;" value="${editDateVal}">
+            </div>
+          </div>
+          <div style="display:flex; gap:8px; margin-top:20px; border-top:1px solid var(--border); padding-top:16px;">
+            <button class="btn btn-secondary" onclick="selectMenu('common-4', '코드 목록')">목록</button>
+            <button class="btn btn-primary" onclick="submitCodeReg()" style="margin-left:auto;">${isEdit ? '수정' : '등록'}</button>
+            ${isEdit ? `<button class="btn btn-outline" onclick="deleteCodeParent()" style="color:var(--red-dk); border-color:var(--red);">삭제</button>` : ''}
+          </div>
+        </div>
+
+        ${isEdit ? `
+        <div class="card" style="margin-top:24px;">
+          <div class="card-title">
+            <div class="card-title-icon">${svgIcon('settings', 15)}</div>
+            값 (전체 <span id="code-val-count">${codeItem.values.length}</span>건)
+          </div>
+          <div style="display:flex; justify-content:flex-end; margin-bottom:14px;">
+             <button class="btn btn-outline" style="height:32px; padding:0 12px; font-size:13px; background-color:orange; color:white; border-color:orange; margin-right:8px;" onclick="applyValueOrder()">순서 적용</button>
+             <button class="btn btn-primary" style="height:32px; padding:0 12px; font-size:13px;" onclick="openValueAddModal()">값 추가하기</button>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th style="width:70px; text-align:center;">No</th>
+                  <th>코드</th>
+                  <th>값(논리명)</th>
+                  <th style="width:90px; text-align:center;">사용여부</th>
+                  <th>등록일</th>
+                  <th>등록자</th>
+                  <th style="width:95px; text-align:center;">순서</th>
+                  <th style="width:90px; text-align:center;">관리</th>
+                  <th>최종수정</th>
+                </tr>
+              </thead>
+              <tbody id="code-val-table-body"></tbody>
+            </table>
+          </div>
+        </div>` : ''}`;
+
+      setTimeout(() => {
+        window.submitCodeReg = () => {
+          const name = document.getElementById('code-reg-name').value.trim();
+          const desc = document.getElementById('code-reg-desc').value.trim();
+          const status = document.querySelector('input[name="code-reg-status"]:checked').value;
+
+          if(!name || !desc) {
+            alert('필수(*) 항목을 입력해주세요.');
+            return;
+          }
+
+          if(isEdit) {
+            codeItem.codeName = name;
+            codeItem.codeDesc = desc;
+            codeItem.useStatus = status;
+            codeItem.editDate = '2026.06.16(이희성)';
+            alert('코드가 수정되었습니다.');
+          } else {
+            const newCode = {
+              id: codeList.length + 1,
+              code: `KepcoES${String(codeList.length + 1).padStart(4, '0')}`,
+              codeName: name,
+              codeDesc: desc,
+              useStatus: status,
+              regDate: '2026. 06. 16',
+              regUser: '이희성',
+              editDate: '2026.06.16(이희성)',
+              values: []
+            };
+            codeList.unshift(newCode);
+            alert('코드가 등록되었습니다.');
+          }
+          selectMenu('common-4', '코드 목록');
+        };
+
+        window.deleteCodeParent = () => {
+          if(confirm('코드 삭제 시 시스템에 영향(값 삭제, 정보 유실 등)이 있을 수 있습니다.\n시스템 관리자의 점검 후 삭제하세요.\n본 코드를 삭제하시겠습니까?')) {
+            const idx = codeList.findIndex(c => c.id === activeEditCodeId);
+            if(idx !== -1) {
+              codeList.splice(idx, 1);
+              alert('삭제되었습니다.');
+              selectMenu('common-4', '코드 목록');
+            }
+          }
+        };
+
+        window.renderValueTable = () => {
+          if(!isEdit) return;
+          const tbody = document.getElementById('code-val-table-body');
+          const sortedValues = codeItem.values.sort((a,b) => a.order - b.order);
+          document.getElementById('code-val-count').textContent = sortedValues.length;
+          
+          tbody.innerHTML = sortedValues.map((val, idx) => {
+            const statusClass = val.useStatus === '사용(Y)' ? 'badge-success' : 'badge-danger';
+            const isFirst = idx === 0;
+            const isLast = idx === sortedValues.length - 1;
+            
+            const upBtn = isFirst ? '' : `<span style="cursor:pointer; color:var(--blue); margin-right:4px;" onclick="moveValueOrder(${idx}, -1)">▲</span>`;
+            const downBtn = isLast ? '' : `<span style="cursor:pointer; color:var(--blue);" onclick="moveValueOrder(${idx}, 1)">▼</span>`;
+
+            return `<tr>
+              <td style="color:var(--text-sub); text-align:center;">${idx + 1}</td>
+              <td style="font-weight:700;">${val.valCode}</td>
+              <td>${val.valName}</td>
+              <td style="text-align:center;"><span class="badge ${statusClass}">${val.useStatus}</span></td>
+              <td style="color:var(--text-sub);">${val.regDate}</td>
+              <td>${val.regUser}</td>
+              <td style="text-align:center; font-size:14px; font-weight:bold;">${upBtn}${downBtn}</td>
+              <td style="text-align:center;">
+                <button class="btn btn-outline" style="height:26px; padding:0 8px; font-size:13px;" onclick="openValueEditModal(${val.id})">관리</button>
+              </td>
+              <td style="color:var(--text-sub);">${val.editDate || '—'}</td>
+            </tr>`;
+          }).join('');
+        };
+
+        window.moveValueOrder = (index, direction) => {
+          const targetIndex = index + direction;
+          if(targetIndex < 0 || targetIndex >= codeItem.values.length) return;
+          
+          const temp = codeItem.values[index].order;
+          codeItem.values[index].order = codeItem.values[targetIndex].order;
+          codeItem.values[targetIndex].order = temp;
+          
+          renderValueTable();
+        };
+
+        window.applyValueOrder = () => {
+          alert('순서 배치가 반영되었습니다.');
+          renderValueTable();
+        };
+
+        window.openValueAddModal = () => {
+          activeEditValueId = null;
+          document.getElementById('val-modal-code').value = `${codeItem.code}_${String(codeItem.values.length + 1).padStart(3, '0')}(자동 발번)`;
+          document.getElementById('val-modal-name').value = '';
+          document.getElementById('val-modal-status-y').checked = true;
+          document.getElementById('val-modal-regdate').value = '2026. 06. 16';
+          document.getElementById('val-modal-editdate').value = '—';
+
+          document.getElementById('btn-val-modal-add').style.display = 'inline-flex';
+          document.getElementById('btn-val-modal-edit').style.display = 'none';
+          document.getElementById('btn-val-modal-delete').style.display = 'none';
+
+          document.getElementById('code-value-modal').classList.add('open');
+          document.getElementById('code-value-overlay').classList.add('open');
+        };
+
+        window.openValueEditModal = (valId) => {
+          activeEditValueId = valId;
+          const valItem = codeItem.values.find(v => v.id === valId);
+          if(!valItem) return;
+
+          document.getElementById('val-modal-code').value = valItem.valCode;
+          document.getElementById('val-modal-name').value = valItem.valName;
+          
+          if(valItem.useStatus === '사용(Y)') {
+            document.getElementById('val-modal-status-y').checked = true;
+          } else {
+            document.getElementById('val-modal-status-n').checked = true;
+          }
+
+          document.getElementById('val-modal-regdate').value = valItem.regDate;
+          document.getElementById('val-modal-editdate').value = valItem.editDate || '—';
+
+          document.getElementById('btn-val-modal-add').style.display = 'none';
+          document.getElementById('btn-val-modal-edit').style.display = 'inline-flex';
+          document.getElementById('btn-val-modal-delete').style.display = 'inline-flex';
+
+          document.getElementById('code-value-modal').classList.add('open');
+          document.getElementById('code-value-overlay').classList.add('open');
+        };
+
+        renderValueTable();
+      }, 50);
+
+      return wrapper;
+    }
+
+    window.closeCodeValueModal = () => {
+      document.getElementById('code-value-modal').classList.remove('open');
+      document.getElementById('code-value-overlay').classList.remove('open');
+    };
+
+    window.saveCodeValue = (isEdit) => {
+      const parentCodeItem = codeList.find(c => c.id === activeEditCodeId);
+      if(!parentCodeItem) return;
+
+      const name = document.getElementById('val-modal-name').value.trim();
+      const status = document.querySelector('input[name="val-modal-status"]:checked').value;
+
+      if(!name) {
+        alert('필수(*) 항목을 입력해주세요.');
+        return;
+      }
+
+      if(isEdit) {
+        const valItem = parentCodeItem.values.find(v => v.id === activeEditValueId);
+        if(valItem) {
+          valItem.valName = name;
+          valItem.useStatus = status;
+          valItem.editDate = '2026.06.16(이희성)';
+          alert('수정되었습니다.');
+        }
+      } else {
+        const nextId = parentCodeItem.values.length > 0 ? Math.max(...parentCodeItem.values.map(v => v.id)) + 1 : 1;
+        const nextOrder = parentCodeItem.values.length > 0 ? Math.max(...parentCodeItem.values.map(v => v.order)) + 1 : 1;
+        const newCodeVal = {
+          id: nextId,
+          valCode: `${parentCodeItem.code}_${String(nextId).padStart(3, '0')}`,
+          valName: name,
+          useStatus: status,
+          regDate: '2026. 06. 16',
+          regUser: '이희성',
+          order: nextOrder,
+          editDate: '2026.06.16(이희성)'
+        };
+        parentCodeItem.values.push(newCodeVal);
+        alert('추가되었습니다.');
+      }
+      
+      closeCodeValueModal();
+      renderValueTable();
+    };
+
+    window.deleteCodeValue = () => {
+      if(confirm('코드(값) 삭제 시 시스템에 영향(값 삭제, 정보 유실 등)이 있을 수 있습니다.\n시스템 관리자의 점검 후 삭제하세요.\n본 코드를 삭제하시겠습니까?')) {
+        const parentCodeItem = codeList.find(c => c.id === activeEditCodeId);
+        if(!parentCodeItem) return;
+
+        const idx = parentCodeItem.values.findIndex(v => v.id === activeEditValueId);
+        if(idx !== -1) {
+          parentCodeItem.values.splice(idx, 1);
+          alert('삭제되었습니다.');
+          closeCodeValueModal();
+          renderValueTable();
+        }
+      }
+    };
+
+
+    /* ── 로그인 현황 템플릿 ── */
+    function getLoginStatusTemplate() {
+      const wrapper = document.createElement('div');
+      
+      const chartData = [
+        { label: '2026.01', value: 18, actual: 1523 },
+        { label: '2026.02', value: 130, actual: 1523 },
+        { label: '2026.03', value: 90, actual: 1523 },
+        { label: '2026.04', value: 70, actual: 1523 },
+        { label: '2026.05', value: 95, actual: 1523 },
+        { label: '2026.06', value: 150, actual: 1523 },
+        { label: '2026.07', value: 50, actual: 1523 },
+        { label: '2026.08', value: 95, actual: 1523 },
+        { label: '2026.09', value: 98, actual: 1523 }
+      ];
+
+      wrapper.innerHTML = `
+        <div class="card">
+          <div class="card-title">
+            <div class="card-title-icon">${svgIcon('settings', 15)}</div>
+            로그인 검색
+          </div>
+          <div style="display:flex; flex-direction:column; gap:16px;">
+            <div class="search-row">
+              <span class="search-row-label">기준 :</span>
+              <div class="radio-group" style="display:flex; gap:16px;">
+                <label class="radio-item"><input type="radio" name="login-criteria" value="daily" onchange="toggleLoginCriteria()"> 일별</label>
+                <label class="radio-item"><input type="radio" name="login-criteria" value="monthly" checked onchange="toggleLoginCriteria()"> 월별</label>
+                <label class="radio-item"><input type="radio" name="login-criteria" value="yearly" onchange="toggleLoginCriteria()"> 연도별</label>
+              </div>
+            </div>
+
+            <!-- 일별 컨트롤 -->
+            <div id="criteria-daily" class="criteria-container" style="display:none; align-items:center; gap:10px;">
+              <span style="font-size:13px; font-weight:600; width:120px; color:var(--text-label);">기간(일별) :</span>
+              <input type="date" id="login-day-start" class="form-control" style="width:150px;">
+              <span style="color:var(--text-sub);">~</span>
+              <input type="date" id="login-day-end" class="form-control" style="width:150px;">
+              <button class="btn btn-primary" onclick="alert('조회되었습니다.')">조회</button>
+            </div>
+
+            <!-- 월별 컨트롤 -->
+            <div id="criteria-monthly" class="criteria-container" style="display:flex; align-items:center; gap:10px;">
+              <span style="font-size:13px; font-weight:600; width:120px; color:var(--text-label);">기간(월별) :</span>
+              <select class="form-control" style="width:100px;">
+                <option value="2026">2026년</option>
+                <option value="2025">2025년</option>
+              </select>
+              <select class="form-control" style="width:80px;">
+                <option value="01">01월</option>
+              </select>
+              <span style="color:var(--text-sub);">~</span>
+              <select class="form-control" style="width:100px;">
+                <option value="2026">2026년</option>
+              </select>
+              <select class="form-control" style="width:80px;">
+                <option value="09" selected>09월</option>
+              </select>
+              <button class="btn btn-primary" onclick="alert('조회되었습니다.')">조회</button>
+            </div>
+
+            <!-- 연도별 컨트롤 -->
+            <div id="criteria-yearly" class="criteria-container" style="display:none; align-items:center; gap:10px;">
+              <span style="font-size:13px; font-weight:600; width:120px; color:var(--text-label);">기간(연도별) :</span>
+              <select class="form-control" style="width:120px;">
+                <option value="2024">2024년</option>
+              </select>
+              <span style="color:var(--text-sub);">~</span>
+              <select class="form-control" style="width:120px;">
+                <option value="2026" selected>2026년</option>
+              </select>
+              <button class="btn btn-primary" onclick="alert('조회되었습니다.')">조회</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="position:relative;">
+          <div class="card-title">
+            <div class="card-title-icon">${svgIcon('settings', 15)}</div>
+            로그인 접속 추이
+          </div>
+          <div class="chart-tooltip-el" id="chart-tooltip"></div>
+          
+          <div style="background-color: var(--bg2); padding: 10px; border-radius:8px;">
+            <svg viewBox="0 0 1000 300" style="width:100%; height:auto;">
+              <!-- Grid Lines -->
+              <line x1="50" y1="50" x2="950" y2="50" class="chart-grid-line" />
+              <text x="30" y="55" font-size="12" fill="var(--text-sub)" text-anchor="end">150</text>
+
+              <line x1="50" y1="117" x2="950" y2="117" class="chart-grid-line" />
+              <text x="30" y="122" font-size="12" fill="var(--text-sub)" text-anchor="end">100</text>
+
+              <line x1="50" y1="184" x2="950" y2="184" class="chart-grid-line" />
+              <text x="30" y="189" font-size="12" fill="var(--text-sub)" text-anchor="end">50</text>
+
+              <line x1="50" y1="250" x2="950" y2="250" class="chart-grid-line" />
+              <text x="30" y="255" font-size="12" fill="var(--text-sub)" text-anchor="end">0</text>
+
+              <path d="M 100 226 L 200 77 L 300 130 L 400 157 L 500 123 L 600 50 L 700 183 L 800 123 L 900 119" class="chart-line" />
+
+              <!-- Dots -->
+              <circle cx="100" cy="226" r="6" class="chart-point" onmouseover="showChartTooltip(event, '2026.01', 1523)" onmouseout="hideChartTooltip()" />
+              <circle cx="200" cy="77" r="6" class="chart-point" onmouseover="showChartTooltip(event, '2026.02', 1523)" onmouseout="hideChartTooltip()" />
+              <circle cx="300" cy="130" r="6" class="chart-point" onmouseover="showChartTooltip(event, '2026.03', 1523)" onmouseout="hideChartTooltip()" />
+              <circle cx="400" cy="157" r="6" class="chart-point" onmouseover="showChartTooltip(event, '2026.04', 1523)" onmouseout="hideChartTooltip()" />
+              <circle cx="500" cy="123" r="6" class="chart-point" onmouseover="showChartTooltip(event, '2026.05', 1523)" onmouseout="hideChartTooltip()" />
+              <circle cx="600" cy="50" r="6" class="chart-point" onmouseover="showChartTooltip(event, '2026.06', 1523)" onmouseout="hideChartTooltip()" />
+              <circle cx="700" cy="183" r="6" class="chart-point" onmouseover="showChartTooltip(event, '2026.07', 1523)" onmouseout="hideChartTooltip()" />
+              <circle cx="800" cy="123" r="6" class="chart-point" onmouseover="showChartTooltip(event, '2026.08', 1523)" onmouseout="hideChartTooltip()" />
+              <circle cx="900" cy="119" r="6" class="chart-point" onmouseover="showChartTooltip(event, '2026.09', 1523)" onmouseout="hideChartTooltip()" />
+
+              <!-- X-Axis Labels -->
+              <text x="100" y="280" font-size="12" fill="var(--text-sub)" text-anchor="middle">2026.01</text>
+              <text x="200" y="280" font-size="12" fill="var(--text-sub)" text-anchor="middle">2026.02</text>
+              <text x="300" y="280" font-size="12" fill="var(--text-sub)" text-anchor="middle">2026.03</text>
+              <text x="400" y="280" font-size="12" fill="var(--text-sub)" text-anchor="middle">2026.04</text>
+              <text x="500" y="280" font-size="12" fill="var(--text-sub)" text-anchor="middle">2026.05</text>
+              <text x="600" y="280" font-size="12" fill="var(--text-sub)" text-anchor="middle">2026.06</text>
+              <text x="700" y="280" font-size="12" fill="var(--text-sub)" text-anchor="middle">2026.07</text>
+              <text x="800" y="280" font-size="12" fill="var(--text-sub)" text-anchor="middle">2026.08</text>
+              <text x="900" y="280" font-size="12" fill="var(--text-sub)" text-anchor="middle">2026.09</text>
+            </svg>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <div class="card-title-icon">${svgIcon('settings', 15)}</div>
+            로그인 이력 데이터
+          </div>
+          <div style="display:flex; justify-content:flex-end; margin-bottom:12px;">
+            <button class="btn btn-outline" style="height:32px; font-size:13px;" onclick="alert('전체 로그인 이력이 엑셀(.xlsx) 파일로 다운로드되었습니다.')">
+              ${svgIcon('file', 13)} 다운로드(Excel)
+            </button>
+          </div>
+          <div class="table-wrap" style="overflow-x:auto;">
+            <table class="data-table">
+              <thead>
+                <tr id="login-table-header"></tr>
+              </thead>
+              <tbody id="login-table-body"></tbody>
+            </table>
+          </div>
+        </div>`;
+
+      setTimeout(() => {
+        window.toggleLoginCriteria = () => {
+          const val = document.querySelector('input[name="login-criteria"]:checked').value;
+          document.querySelectorAll('.criteria-container').forEach(c => c.style.display = 'none');
+          if (val === 'daily') {
+            document.getElementById('criteria-daily').style.display = 'flex';
+          } else if (val === 'monthly') {
+            document.getElementById('criteria-monthly').style.display = 'flex';
+          } else {
+            document.getElementById('criteria-yearly').style.display = 'flex';
+          }
+        };
+
+        window.showChartTooltip = (event, label, value) => {
+          const tooltip = document.getElementById('chart-tooltip');
+          tooltip.innerHTML = `로그인 횟수 (${label}) : ${value.toLocaleString()}`;
+          tooltip.style.display = 'block';
+          
+          const rect = event.target.getBoundingClientRect();
+          const cardRect = event.target.closest('.card').getBoundingClientRect();
+          tooltip.style.left = `${rect.left - cardRect.left - 50}px`;
+          tooltip.style.top = `${rect.top - cardRect.top - 40}px`;
+        };
+
+        window.hideChartTooltip = () => {
+          document.getElementById('chart-tooltip').style.display = 'none';
+        };
+
+        const renderTableData = () => {
+          const header = document.getElementById('login-table-header');
+          const tbody = document.getElementById('login-table-body');
+          
+          const periods = ['기간', '2026.01', '2026.02', '2026.03', '2026.04', '2026.05', '2026.05', '2026.06', '2026.07', '2026.08', '2026.09', '2026.10'];
+          
+          header.innerHTML = periods.map(p => `<th>${p}</th>`).join('');
+          
+          tbody.innerHTML = `
+            <tr>
+              <td><strong>로그인 횟수</strong></td>
+              <td><a href="#" style="color:var(--blue); font-weight:bold; text-decoration:none;" onclick="event.preventDefault(); alert('1,523건 조회')">1,523</a></td>
+              <td><a href="#" style="color:var(--blue); font-weight:bold; text-decoration:none;" onclick="event.preventDefault(); alert('1,523건 조회')">1,523</a></td>
+              <td><a href="#" style="color:var(--blue); font-weight:bold; text-decoration:none;" onclick="event.preventDefault(); alert('1,523건 조회')">1,523</a></td>
+              <td><a href="#" style="color:var(--blue); font-weight:bold; text-decoration:none;" onclick="event.preventDefault(); alert('1,523건 조회')">1,523</a></td>
+              <td><a href="#" style="color:var(--blue); font-weight:bold; text-decoration:none;" onclick="event.preventDefault(); alert('1,523건 조회')">1,523</a></td>
+              <td><a href="#" style="color:var(--blue); font-weight:bold; text-decoration:none;" onclick="event.preventDefault(); alert('1,523건 조회')">1,523</a></td>
+              <td><a href="#" style="color:var(--blue); font-weight:bold; text-decoration:none;" onclick="event.preventDefault(); alert('1,523건 조회')">1,523</a></td>
+              <td><a href="#" style="color:var(--blue); font-weight:bold; text-decoration:none;" onclick="event.preventDefault(); alert('1,523건 조회')">1,523</a></td>
+              <td><a href="#" style="color:var(--blue); font-weight:bold; text-decoration:none;" onclick="event.preventDefault(); alert('1,523건 조회')">1,523</a></td>
+              <td><a href="#" style="color:var(--blue); font-weight:bold; text-decoration:none;" onclick="event.preventDefault(); alert('1,523건 조회')">1,523</a></td>
+              <td><a href="#" style="color:var(--blue); font-weight:bold; text-decoration:none;" onclick="event.preventDefault(); alert('1,523건 조회')">1,523</a></td>
+            </tr>`;
+        };
+
+        renderTableData();
+      }, 50);
+
+      return wrapper;
+    }
+
+
+    /* ── 메뉴별 접속현황 템플릿 ── */
+    function getMenuAccessStatusTemplate() {
+      const wrapper = document.createElement('div');
+
+      wrapper.innerHTML = `
+        <div class="card">
+          <div class="card-title">
+            <div class="card-title-icon">${svgIcon('settings', 15)}</div>
+            검색
+          </div>
+          <div style="display:flex; flex-direction:column; gap:12px;">
+            <div class="search-row">
+              <span class="search-row-label">조회기간(등록일) :</span>
+              <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+                <div style="display:flex; gap:4px;">
+                  <button type="button" class="date-preset-btn" data-preset="1d">하루 전</button>
+                  <button type="button" class="date-preset-btn" data-preset="1w">1주일</button>
+                  <button type="button" class="date-preset-btn" data-preset="1m">1개월</button>
+                  <button type="button" class="date-preset-btn" data-preset="3m">3개월</button>
+                  <button type="button" class="date-preset-btn" data-preset="6m">6개월</button>
+                  <button type="button" class="date-preset-btn" data-preset="1y">1년</button>
+                </div>
+                <input type="date" id="menu-search-start-date" class="form-control" style="width:148px;" aria-label="검색 시작일">
+                <span style="color:var(--text-sub);">~</span>
+                <input type="date" id="menu-search-end-date" class="form-control" style="width:148px;" aria-label="검색 종료일">
+                <button class="btn btn-primary" onclick="alert('조회되었습니다.')">검색</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <div class="card-title-icon">${svgIcon('settings', 15)}</div>
+            메뉴별 접속현황
+          </div>
+          <div class="table-wrap">
+            <table class="data-table" style="table-layout:fixed;">
+              <thead>
+                <tr>
+                  <th>대메뉴(1Depth)</th>
+                  <th>중메뉴(2Depth)</th>
+                  <th>소메뉴(3Depth)</th>
+                  <th style="width:160px;">메뉴 접속 횟수</th>
+                </tr>
+              </thead>
+              <tbody id="menu-access-table-body"></tbody>
+            </table>
+          </div>
+          <div style="display:flex; justify-content:flex-end; margin-top:12px;">
+            <button class="btn btn-primary" style="height:32px; font-size:13px; background:#16a34a; border-color:#16a34a;" onclick="alert('메뉴별 접속현황이 엑셀(.xlsx) 파일로 다운로드되었습니다.')">
+              ${svgIcon('file', 13)} 다운로드(Excel)
+            </button>
+          </div>
+        </div>`;
+
+      setTimeout(() => {
+        const renderTable = () => {
+          const tbody = document.getElementById('menu-access-table-body');
+          const rows = [
+            { d1: '대메뉴(1Depth)명 #1', d2: '중메뉴(1Depth)명 #1', d3: '', count: 16528 },
+            { d1: '└', d2: '중메뉴(1Depth)명 #2', d3: '', count: 16528 },
+            { d1: '└', d2: '중메뉴(1Depth)명 #3', d3: '소메뉴(1Depth)명 #1', count: 16528 },
+            { d1: '└', d2: '└', d3: '소메뉴(1Depth)명 #2', count: 16528 },
+            { d1: '└', d2: '중메뉴(1Depth)명 #4', d3: '', count: 16528 },
+            { d1: '└', d2: '중메뉴(1Depth)명 #5', d3: '', count: 16528 },
+            { d1: '대메뉴(1Depth)명 #2', d2: '중메뉴(1Depth)명 #1', d3: '', count: 16528 },
+            { d1: '└', d2: '중메뉴(1Depth)명 #2', d3: '', count: 16528 },
+            { d1: '└', d2: '중메뉴(1Depth)명 #3', d3: '', count: 16528 }
+          ];
+
+          tbody.innerHTML = rows.map(r => {
+            const d1Align = r.d1 === '└' ? 'style="text-align:center; color:var(--text-sub); font-weight:700;"' : 'style="text-align:center; font-weight:700;"';
+            const d2Align = r.d2 === '└' ? 'style="text-align:center; color:var(--text-sub); font-weight:700;"' : 'style="text-align:center;"';
+            return `<tr>
+              <td ${d1Align}>${r.d1}</td>
+              <td ${d2Align}>${r.d2}</td>
+              <td style="text-align:center;">${r.d3}</td>
+              <td style="text-align:center; font-weight:800;">${r.count.toLocaleString()}</td>
+            </tr>`;
+          }).join('');
+        };
+
+        const presetBtns = wrapper.querySelectorAll('.date-preset-btn');
+        const startInput = wrapper.querySelector('#menu-search-start-date');
+        const endInput = wrapper.querySelector('#menu-search-end-date');
+        const formatDate = (d) => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+        const clearPresets = () => presetBtns.forEach(b => b.classList.remove('active'));
+        startInput.onchange = clearPresets;
+        endInput.onchange = clearPresets;
+        endInput.value = formatDate(new Date());
+
+        presetBtns.forEach(btn => {
+          btn.onclick = () => {
+            presetBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const preset = btn.getAttribute('data-preset');
+            const endDate = new Date();
+            let startDate = new Date(endDate);
+
+            if (preset === '1d') startDate.setDate(endDate.getDate() - 1);
+            else if (preset === '1w') startDate.setDate(endDate.getDate() - 7);
+            else if (preset === '1m') startDate.setMonth(endDate.getMonth() - 1);
+            else if (preset === '3m') startDate.setMonth(endDate.getMonth() - 3);
+            else if (preset === '6m') startDate.setMonth(endDate.getMonth() - 6);
+            else if (preset === '1y') startDate.setFullYear(endDate.getFullYear() - 1);
+
+            startInput.value = formatDate(startDate);
+            endInput.value = formatDate(endDate);
+          };
+        });
+
+        renderTable();
+      }, 50);
+
+      return wrapper;
     }
 
     /* ══ 초기화 ══ */
