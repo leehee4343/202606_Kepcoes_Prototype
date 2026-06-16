@@ -989,6 +989,117 @@
     .stat-grid-card-desc  { font-size: 14px; color: var(--text-sub); line-height: 1.5; }
 
     /* ════════════════════════════════
+       기간 검색 바 (통계분석 공통)
+    ════════════════════════════════ */
+    .period-search-bar {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 18px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      box-shadow: var(--sh-sm);
+    }
+    .period-search-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-label);
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .period-search-inputs {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .period-search-inputs input[type="date"] {
+      height: 34px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0 10px;
+      font-size: 13px;
+      color: var(--text);
+      background: var(--bg);
+      outline: none;
+      transition: border-color .15s;
+      cursor: pointer;
+    }
+    .period-search-inputs input[type="date"]:focus {
+      border-color: var(--blue);
+      background: #fff;
+    }
+    .period-search-sep {
+      font-size: 13px;
+      color: var(--text-sub);
+      font-weight: 500;
+    }
+    .period-search-presets {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .period-preset-btn {
+      height: 28px;
+      padding: 0 10px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: var(--bg);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-sub);
+      cursor: pointer;
+      transition: background .12s, color .12s, border-color .12s;
+      white-space: nowrap;
+    }
+    .period-preset-btn:hover,
+    .period-preset-btn.active {
+      background: var(--blue-lt);
+      color: var(--blue);
+      border-color: var(--blue);
+    }
+    .period-search-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-left: auto;
+    }
+    .period-search-btn {
+      height: 34px;
+      padding: 0 16px;
+      background: var(--blue);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background .12s;
+    }
+    .period-search-btn:hover { background: var(--blue-dk); }
+    .period-reset-btn {
+      height: 34px;
+      padding: 0 12px;
+      background: transparent;
+      color: var(--text-sub);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      cursor: pointer;
+      transition: background .12s;
+    }
+    .period-reset-btn:hover { background: var(--bg); color: var(--text); }
+
+    /* ════════════════════════════════
        로그인 화면
     ════════════════════════════════ */
     .login-wrap {
@@ -2169,13 +2280,93 @@
       selectMenu(currentActiveMenuId, currentActiveTab);
     };
 
+    /* ── 기간 검색 바 HTML (통계분석 공통) ── */
+    function getPeriodSearchBarHTML() {
+      const today = new Date();
+      const fmt = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+      const firstOfYear = new Date(today.getFullYear(), 0, 1);
+      return `
+        <div class="period-search-bar" id="period-search-bar">
+          <span class="period-search-label">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            기간 검색
+          </span>
+          <div class="period-search-inputs">
+            <input type="date" id="period-start" value="${fmt(firstOfYear)}" max="${fmt(today)}">
+            <span class="period-search-sep">~</span>
+            <input type="date" id="period-end" value="${fmt(today)}" max="${fmt(today)}">
+          </div>
+          <div class="period-search-presets">
+            <button class="period-preset-btn" onclick="setPeriodPreset('1m',this)">1개월</button>
+            <button class="period-preset-btn" onclick="setPeriodPreset('3m',this)">3개월</button>
+            <button class="period-preset-btn" onclick="setPeriodPreset('6m',this)">6개월</button>
+            <button class="period-preset-btn active" onclick="setPeriodPreset('year',this)">올해</button>
+            <button class="period-preset-btn" onclick="setPeriodPreset('prev',this)">전년도</button>
+          </div>
+          <div class="period-search-actions">
+            <button class="period-reset-btn" onclick="resetPeriodSearch()">초기화</button>
+            <button class="period-search-btn" onclick="applyPeriodSearch()">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              조회
+            </button>
+          </div>
+        </div>`;
+    }
+
+    function setPeriodPreset(type, btn) {
+      const today = new Date();
+      const fmt = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+      let start;
+      if (type === '1m') { start = new Date(today); start.setMonth(start.getMonth()-1); }
+      else if (type === '3m') { start = new Date(today); start.setMonth(start.getMonth()-3); }
+      else if (type === '6m') { start = new Date(today); start.setMonth(start.getMonth()-6); }
+      else if (type === 'year') { start = new Date(today.getFullYear(), 0, 1); }
+      else if (type === 'prev') {
+        start = new Date(today.getFullYear()-1, 0, 1);
+        const endEl = document.getElementById('period-end');
+        if (endEl) endEl.value = `${today.getFullYear()-1}-12-31`;
+      }
+      const startEl = document.getElementById('period-start');
+      if (startEl) startEl.value = fmt(start);
+      if (type !== 'prev') {
+        const endEl = document.getElementById('period-end');
+        if (endEl) endEl.value = fmt(today);
+      }
+      document.querySelectorAll('.period-preset-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
+    function resetPeriodSearch() {
+      const today = new Date();
+      const fmt = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+      const startEl = document.getElementById('period-start');
+      const endEl = document.getElementById('period-end');
+      if (startEl) startEl.value = `${today.getFullYear()}-01-01`;
+      if (endEl) endEl.value = fmt(today);
+      document.querySelectorAll('.period-preset-btn').forEach(b => b.classList.remove('active'));
+      const yearBtn = document.querySelector('.period-preset-btn:nth-child(4)');
+      if (yearBtn) yearBtn.classList.add('active');
+    }
+
+    function applyPeriodSearch() {
+      const s = document.getElementById('period-start')?.value;
+      const e = document.getElementById('period-end')?.value;
+      if (!s || !e) { alert('기간을 선택해 주세요.'); return; }
+      if (s > e) { alert('시작일은 종료일보다 이전이어야 합니다.'); return; }
+      const bar = document.getElementById('period-search-bar');
+      if (bar) {
+        bar.style.borderColor = 'var(--blue)';
+        setTimeout(() => { bar.style.borderColor = ''; }, 800);
+      }
+    }
+
     /* ── 통계/분석 템플릿 (원본 내용 동일 유지) ── */
     function getStatAnalysisTemplate(childId) {
       const wrap = document.createElement('div');
-      let html = '';
+      let html = getPeriodSearchBarHTML();
 
       if (childId === 'stat-analysis-1') {
-        html = `
+        html += `
           <div class="hero-card">
             <div class="hero-tag">PMS 통계 자료 분석 · 종합현황</div>
             <div class="hero-title">계약현황 종합 현황</div>
@@ -2214,7 +2405,7 @@
             </div>
           </div>`;
       } else if (childId === 'stat-analysis-2') {
-        html = `
+        html += `
           <div class="hero-card">
             <div class="hero-tag">PMS 통계 자료 분석 · 연도별 추이</div>
             <div class="hero-title">연도별 계약 추이 분석</div>
@@ -2251,7 +2442,7 @@
             </tbody></table></div>
           </div>`;
       } else if (childId === 'stat-analysis-3') {
-        html = `
+        html += `
           <div class="hero-card">
             <div class="hero-tag">PMS 통계 자료 분석 · 부서/분야별 현황</div>
             <div class="hero-title">부서·분야별 계약 현황</div>
@@ -2273,7 +2464,7 @@
             </div>
           </div>`;
       } else if (childId === 'stat-analysis-4') {
-        html = `
+        html += `
           <div class="hero-card">
             <div class="hero-tag">PMS 통계 자료 분석 · 진행/이상 현황</div>
             <div class="hero-title">진행·이상 사업 현황</div>
@@ -2287,7 +2478,7 @@
             <div class="kpi-card purple"><div class="kpi-lbl">상환 미수</div><div class="kpi-val">24<span class="kpi-unit">건</span></div><div class="kpi-sub">이상 中 57.1%</div></div>
           </div>`;
       } else if (childId === 'stat-analysis-5') {
-        html = `
+        html += `
           <div class="hero-card">
             <div class="hero-tag">PMS 통계 자료 분석 · 상환/회수 현황</div>
             <div class="hero-title">상환 및 회수 현황</div>
@@ -2301,7 +2492,7 @@
             <div class="kpi-card red"><div class="kpi-lbl">미수 발생</div><div class="kpi-val">87<span class="kpi-unit">억원</span></div><div class="kpi-sub">잔여 中 4.4%</div></div>
           </div>`;
       } else if (childId === 'stat-analysis-6') {
-        html = `
+        html += `
           <div class="hero-card">
             <div class="hero-tag">PMS 통계 자료 분석 · 수익율 분석</div>
             <div class="hero-title">사업 수익률 분석</div>
@@ -2336,7 +2527,7 @@
             </tbody></table></div>
           </div>`;
       } else if (childId === 'stat-analysis-7') {
-        html = `
+        html += `
           <div class="hero-card">
             <div class="hero-tag">PMS 통계 자료 분석 · 상환스케쥴 현황</div>
             <div class="hero-title">상환스케쥴 현황</div>

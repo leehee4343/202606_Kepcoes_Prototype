@@ -2153,7 +2153,8 @@
       gap: 46px;
       align-items: center;
       padding: 52px;
-      background: #f6faff;
+      background:
+        linear-gradient(135deg, #f8fbff 0%, #eef7f3 52%, #f7fbff 100%);
       position: relative;
       overflow: hidden;
     }
@@ -2162,8 +2163,13 @@
       position: absolute;
       inset: 0;
       z-index: 0;
-      background: url('login-bg-kepcoes-business.png') center / cover no-repeat;
-      transform: scaleX(-1);
+      background-image:
+        radial-gradient(circle at 18px 18px, rgba(23,78,166,0.13) 1.7px, transparent 2px),
+        radial-gradient(circle at 18px 18px, rgba(0,122,99,0.10) 1.2px, transparent 2px),
+        linear-gradient(115deg, transparent 0 18%, rgba(23,78,166,0.055) 18% 18.35%, transparent 18.35% 44%, rgba(0,122,99,0.055) 44% 44.35%, transparent 44.35% 100%);
+      background-size: 36px 36px, 72px 72px, 180px 180px;
+      background-position: 0 0, 18px 18px, center;
+      transform: none;
       pointer-events: none;
     }
     .login-screen::after {
@@ -2171,7 +2177,10 @@
       position: absolute;
       inset: 0;
       z-index: 0;
-      background: linear-gradient(90deg, rgba(246,250,255,0.97) 0%, rgba(246,250,255,0.86) 43%, rgba(246,250,255,0.22) 100%);
+      background:
+        radial-gradient(circle at 78% 22%, rgba(0,122,99,0.13), transparent 24%),
+        radial-gradient(circle at 64% 78%, rgba(23,78,166,0.11), transparent 26%),
+        linear-gradient(90deg, rgba(255,255,255,0.97) 0%, rgba(255,255,255,0.9) 47%, rgba(255,255,255,0.68) 100%);
       pointer-events: none;
     }
     .login-copy {
@@ -2736,6 +2745,34 @@
       display: block;
       margin-left: auto;
       margin-right: auto;
+    }
+    .stat-period-search {
+      margin-bottom: 18px;
+      padding: 18px 20px;
+      border-left: 4px solid #007a63;
+      background: #ffffff;
+    }
+    .stat-period-search .search-grid {
+      grid-template-columns: minmax(220px, 1.15fr) minmax(220px, 1.15fr) minmax(260px, 1.6fr) auto;
+      align-items: end;
+    }
+    .stat-period-actions {
+      display: inline-flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 7px;
+      white-space: nowrap;
+    }
+    .stat-period-presets {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      min-height: 40px;
+      align-items: center;
+    }
+    .stat-period-search .date-preset-btn {
+      height: 30px;
+      font-weight: 700;
     }
     .tab-navigation {
       height: 58px;
@@ -3509,6 +3546,7 @@
         construction: '<path d="M2 21h20"/><path d="M6 21V7l6-4 6 4v14"/><path d="M9 21v-8h6v8"/>',
         pin: '<path d="M12 21s7-5.3 7-12a7 7 0 0 0-14 0c0 6.7 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/>',
         help: '<circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 1 1 5.8 1c-.5 1.4-2.9 1.8-2.9 4"/><path d="M12 17h.01"/>',
+        search: '<circle cx="11" cy="11" r="7"/><path d="M16.5 16.5 21 21"/>',
         menu: '<path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/>',
         left: '<path d="M15 18l-6-6 6-6"/>',
         right: '<path d="M9 18l6-6-6-6"/>',
@@ -4422,6 +4460,72 @@
     };
 
     /* ── 통계/분석 템플릿 생성기 ── */
+    function getStatPeriodSearchTemplate(childId) {
+      return `
+        <div class="card stat-period-search">
+          <div class="card-title">기간 검색</div>
+          <div class="search-grid">
+            <div class="form-group">
+              <label for="${childId}-start-date">시작일</label>
+              <input type="date" id="${childId}-start-date" class="form-control" value="2026-01-01">
+            </div>
+            <div class="form-group">
+              <label for="${childId}-end-date">종료일</label>
+              <input type="date" id="${childId}-end-date" class="form-control" value="2026-05-31">
+            </div>
+            <div class="form-group">
+              <label>간편 선택</label>
+              <div class="stat-period-presets">
+                <button type="button" class="date-preset-btn" onclick="setStatPeriodPreset('${childId}', '1m', this)">1개월</button>
+                <button type="button" class="date-preset-btn" onclick="setStatPeriodPreset('${childId}', '3m', this)">3개월</button>
+                <button type="button" class="date-preset-btn active" onclick="setStatPeriodPreset('${childId}', '6m', this)">6개월</button>
+                <button type="button" class="date-preset-btn" onclick="setStatPeriodPreset('${childId}', '1y', this)">1년</button>
+                <button type="button" class="date-preset-btn" onclick="setStatPeriodPreset('${childId}', 'all', this)">전체</button>
+              </div>
+            </div>
+            <div class="stat-period-actions">
+              <button type="button" class="btn btn-primary" onclick="applyStatPeriodSearch('${childId}')">${uiIcon('search')} 조회</button>
+              <button type="button" class="btn btn-outline" onclick="resetStatPeriodSearch('${childId}')">초기화</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function setStatPeriodPreset(childId, preset, button) {
+      const start = document.getElementById(`${childId}-start-date`);
+      const end = document.getElementById(`${childId}-end-date`);
+      if (!start || !end) return;
+      const ranges = {
+        '1m': ['2026-05-01', '2026-05-31'],
+        '3m': ['2026-03-01', '2026-05-31'],
+        '6m': ['2025-12-01', '2026-05-31'],
+        '1y': ['2025-06-01', '2026-05-31'],
+        all: ['2021-01-01', '2026-05-31']
+      };
+      const selected = ranges[preset] || ranges['6m'];
+      start.value = selected[0];
+      end.value = selected[1];
+      document.querySelectorAll(`#contents-container .stat-period-presets .date-preset-btn`).forEach(btn => btn.classList.remove('active'));
+      if (button) button.classList.add('active');
+    }
+
+    function applyStatPeriodSearch(childId) {
+      const start = document.getElementById(`${childId}-start-date`)?.value || '';
+      const end = document.getElementById(`${childId}-end-date`)?.value || '';
+      alert(`기간 검색 조건이 적용되었습니다.\\n${start} ~ ${end}\\n※ 프로토타입 화면입니다.`);
+    }
+
+    function resetStatPeriodSearch(childId) {
+      const start = document.getElementById(`${childId}-start-date`);
+      const end = document.getElementById(`${childId}-end-date`);
+      if (start) start.value = '2026-01-01';
+      if (end) end.value = '2026-05-31';
+      document.querySelectorAll(`#contents-container .stat-period-presets .date-preset-btn`).forEach(btn => btn.classList.remove('active'));
+      const defaultBtn = document.querySelector(`#contents-container .stat-period-presets .date-preset-btn:nth-child(3)`);
+      if (defaultBtn) defaultBtn.classList.add('active');
+    }
+
     function getStatAnalysisTemplate(childId) {
       const wrapper = document.createElement('div');
       let html = '';
@@ -5333,7 +5437,7 @@
         `;
       }
       
-      wrapper.innerHTML = html;
+      wrapper.innerHTML = getStatPeriodSearchTemplate(childId) + html;
       return wrapper;
     }
   </script>

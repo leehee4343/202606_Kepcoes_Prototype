@@ -1,0 +1,6 @@
+기본 프로토타입 (LNB 왼쪽 메뉴 형태)
+URL: https://leehee4343.github.io/202606_Kepcoes_Prototype/index.html
+Claude 디자인 타입
+URL: https://leehee4343.github.io/202606_Kepcoes_Prototype/index_Claude.html
+ChatGPT 디자인 타입
+URL: https://leehee4343.github.io/202606_Kepcoes_Prototype/index_chatGPT.html
