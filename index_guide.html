@@ -1170,9 +1170,7 @@
       align-items: center;
       gap: 42px;
       padding: 56px 64px;
-      background:
-        linear-gradient(90deg, rgba(255,255,255,0.96) 0%, rgba(255,255,255,0.82) 42%, rgba(255,255,255,0.22) 100%),
-        url('assets/images/login-bg-life.png') center / cover no-repeat;
+      background: linear-gradient(135deg, #f0f5ff 0%, #e8f1ff 40%, #f4f8ff 100%);
       position: relative;
       overflow: hidden;
     }
@@ -1667,9 +1665,16 @@
 
     .login-screen {
       min-height: calc(100vh - 64px - 56px - 54px);
-      background:
-        linear-gradient(90deg, rgba(255,255,255,0.97) 0%, rgba(255,255,255,0.84) 43%, rgba(255,255,255,0.22) 100%),
-        url('assets/images/login-bg-life.png') center / cover no-repeat;
+      background: linear-gradient(135deg, #f0f5ff 0%, #e8f1ff 40%, #f4f8ff 100%);
+    }
+    .login-screen::before {
+      background: radial-gradient(ellipse at 15% 80%, rgba(15,58,125,0.07), transparent 40%),
+                  radial-gradient(ellipse at 85% 20%, rgba(47,109,246,0.06), transparent 38%);
+      background-image: none;
+      background-size: auto;
+    }
+    .login-screen::after {
+      background: none;
     }
     .login-main-copy { color: var(--navy); }
     .login-main-copy .highlight { color: var(--green-dk); }
@@ -2418,8 +2423,8 @@
       --text-muted: #64748b;
       --navy:       #0f3a7d;   /* GNB active/hover 수준으로 통일 */
     }
-    .breadcrumb-title { color: #1a4fa0 !important; font-weight: 600 !important; }
-    .card-title        { color: #1a4fa0 !important; }
+    .breadcrumb-title { color: #4b5563 !important; font-weight: 600 !important; }
+    .card-title        { color: #4b5563 !important; }
 
     .header {
       position: relative;
@@ -3656,8 +3661,6 @@
       background: #ffffff;
       color: #0f3a7d;
       font-weight: 700;
-      border-left: 3px solid #FFC200;
-      padding-left: 21px;
     }
     .left-menu-3depth-item.active::before {
       content: '✓';
@@ -3723,8 +3726,6 @@
     body.dark .left-menu-3depth-item.active {
       background: #0f172a;
       color: #93c5fd;
-      border-left: 3px solid #FFC200;
-      padding-left: 21px;
     }
     body.dark .left-menu-3depth-item.active::before { color: #FFC200; }
   </style>
