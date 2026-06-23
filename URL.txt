@@ -1,0 +1,18 @@
+KEPCO ES PMS 프로토타입 배포 URL
+====================================
+
+[디자인 시안 A] index.html
+https://leehee4343.github.io/202606_Kepcoes_Prototype/index.html
+
+[디자인 시안 B] index2.html
+https://leehee4343.github.io/202606_Kepcoes_Prototype/index2.html
+
+[디자인 시안 C] index3.html
+https://leehee4343.github.io/202606_Kepcoes_Prototype/index3.html
+
+[디자인 시안 D] index4.html
+https://leehee4343.github.io/202606_Kepcoes_Prototype/index4.html
+
+====================================
+GitHub Repository: https://github.com/leehee4343/202606_Kepcoes_Prototype
+배포 방식: GitHub Pages (main 브랜치)

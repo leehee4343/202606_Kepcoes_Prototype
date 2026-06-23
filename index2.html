@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
@@ -71,7 +71,7 @@
       /* ── 기타 ── */
       --radius:      8px;
       --radius-sm:   6px;
-      --font:        'Noto Sans KR', 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+      --font:        'Noto Sans KR', sans-serif;
 
       /* 레거시 호환 */
       --navy:        #0f2554;
@@ -251,7 +251,7 @@
       color: var(--text);
     }
     .hd-user-role {
-      font-size: 12px;
+      font-size:13px;
       color: var(--text-sub);
     }
 
@@ -355,7 +355,7 @@
       display: block;
     }
     .rail-item-label {
-      font-size: 12px;
+      font-size:13px;
       font-weight: 600;
       text-align: center;
       line-height: 1.2;
@@ -665,7 +665,7 @@
       background: rgba(255,255,255,0.04);
     }
     .hero-tag {
-      font-size: 12px;
+      font-size:13px;
       font-weight: 700;
       color: #7dd3fc;
       letter-spacing: 0.8px;
@@ -1051,7 +1051,7 @@
       border: 1px solid var(--border);
       border-radius: 14px;
       background: var(--bg);
-      font-size: 12px;
+      font-size:13px;
       font-weight: 500;
       color: var(--text-sub);
       cursor: pointer;
@@ -1152,7 +1152,7 @@
       justify-content: center;
     }
     .login-eyebrow {
-      font-size: 12px;
+      font-size:13px;
       font-weight: 800;
       letter-spacing: 2px;
       color: #93c5fd;
@@ -1200,7 +1200,7 @@
       margin-top: 22px;
     }
     .login-chip {
-      font-size: 12px;
+      font-size:13px;
       font-weight: 700;
       padding: 4px 10px;
       border-radius: 99px;
@@ -1377,7 +1377,7 @@
       color: #ffffff;
       padding: 6px 12px;
       border-radius: 4px;
-      font-size: 12px;
+      font-size:13px;
       font-weight: 700;
       pointer-events: none;
       box-shadow: 0 4px 10px rgba(0,0,0,0.25);
@@ -1434,6 +1434,16 @@
       stroke-linejoin: round;
       fill: none;
     }
+    /* ─── 콘텐츠 영역: 본문 Bold 제거 (제목 영역 제외) ─── */
+    .card *, .search-card * { font-weight: 400 !important; }
+    /* 제목 영역 예외: card-title, table 헤더, 섹션 헤딩, 주요 타이틀 */
+    .card .card-title, .search-card .card-title,
+    .card .stat-grid-card-title { font-weight: 700 !important; }
+    .card .data-table th, .search-card .data-table th { font-weight: 700 !important; }
+    .card [style*="font-weight:800"],
+    .search-card [style*="font-weight:800"] { font-weight: 800 !important; }
+    .card [style*="font-weight:700"][style*="border-bottom"],
+    .search-card [style*="font-weight:700"][style*="border-bottom"] { font-weight: 700 !important; }
   </style>
 </head>
 <body>
@@ -1770,21 +1780,32 @@
        메뉴 데이터 — 원본과 동일
     ══════════════════════════════════════ */
     const menuData = [
-      { id:'menu-login', label:'로그인', icon:'login', children:[{id:'login-1',label:'로그인'}] },
-      { id:'menu-rec', label:'접수관리', icon:'inbox', children:[{id:'rec-1',label:'접수현황 및 관리'}] },
-      { id:'menu-dsn', label:'설계관리', icon:'edit', children:[{id:'dsn-1',label:'설계도서 관리'}] },
+      { id:'menu-biz', label:'사업관리', icon:'building', children:[
+        {id:'biz-1',label:'신규 프로젝트 생성'},
+        {id:'biz-2',label:'사업접수현황 조회'}
+      ]},
+      { id:'menu-prj', label:'프로젝트 관리', icon:'target', children:[
+        {id:'prj-1',label:'프로젝트 목록'},
+        {id:'prj-2',label:'프로젝트 상세'}
+      ]},
       { id:'menu-con', label:'계약관리', icon:'clipboard', children:[{id:'con-1',label:'계약 현황'}] },
-      { id:'menu-rep', label:'상환관리', icon:'credit-card', children:[{id:'rep-1',label:'상환 스케줄'}] },
-      { id:'menu-acc', label:'결산현황', icon:'wallet', children:[{id:'acc-1',label:'월별/연도별 결산'}] },
+      { id:'menu-fund', label:'자금관리', icon:'wallet', children:[
+        {id:'fund-1',label:'상환 관리'},
+        {id:'fund-2',label:'결산 현황'}
+      ]},
+      { id:'menu-stat', label:'통계', icon:'bar-chart', children:[
+        {id:'stat-1',label:'종합현황'},
+        {id:'stat-2',label:'연도별 추이'},
+        {id:'stat-3',label:'부서/분야별 현황'},
+        {id:'stat-4',label:'진행/이상 현황'},
+        {id:'stat-5',label:'상환/회수 현황'},
+        {id:'stat-6',label:'수익율 분석'},
+        {id:'stat-7',label:'상환스케쥴 현황'}
+      ]},
       { id:'menu-trip', label:'출장관리', icon:'car', children:[{id:'trip-1',label:'출장신청 및 내역'}] },
-      { id:'menu-stat-analysis', label:'통계분석', icon:'bar-chart', children:[
-        {id:'stat-analysis-1',label:'종합현황'},
-        {id:'stat-analysis-2',label:'연도별 추이'},
-        {id:'stat-analysis-3',label:'부서/분야별 현황'},
-        {id:'stat-analysis-4',label:'진행/이상 현황'},
-        {id:'stat-analysis-5',label:'상환/회수 현황'},
-        {id:'stat-analysis-6',label:'수익율 분석'},
-        {id:'stat-analysis-7',label:'상환스케쥴 현황'}
+      { id:'menu-mypage', label:'마이페이지', icon:'user', children:[
+        {id:'mypage-1',label:'내 정보'},
+        {id:'mypage-2',label:'알림/공지'}
       ]},
       { id:'menu-common', label:'공통관리', icon:'settings', active:true, children:[
         {id:'common-1',label:'관리자 관리',active:true},
@@ -1793,32 +1814,33 @@
         {id:'common-4',label:'코드관리'},
         {id:'common-5',label:'로그인 현황'},
         {id:'common-6',label:'메뉴별 접속현황'}
-      ]},
-      { id:'menu-config', label:'환경설정', icon:'wrench', children:[{id:'config-1',label:'시스템 설정'}] }
+      ]}
     ];
 
     const tabData = {
-      'login-1':['로그인'],
-      'rec-1':['접수 목록','접수 등록'],
-      'dsn-1':['설계 목록','설계 등록'],
+      'biz-1':['신규 프로젝트 생성'],
+      'biz-2':['사업접수현황 조회'],
+      'prj-1':['프로젝트 목록'],
+      'prj-2':['프로젝트 상세'],
       'con-1':['계약 목록','계약 등록'],
-      'rep-1':['상환 스케줄러','상환 수금등록'],
-      'acc-1':['결산 목록','결산 세부현황'],
+      'fund-1':['상환 스케줄러','상환 수금등록'],
+      'fund-2':['결산 목록','결산 세부현황'],
+      'stat-1':['종합현황'],
+      'stat-2':['연도별 추이'],
+      'stat-3':['부서/분야별 현황'],
+      'stat-4':['진행/이상 현황'],
+      'stat-5':['상환/회수 현황'],
+      'stat-6':['수익율 분석'],
+      'stat-7':['상환스케쥴 현황'],
       'trip-1':['출장 신청','출장 정산'],
-      'stat-analysis-1':['종합현황'],
-      'stat-analysis-2':['연도별 추이'],
-      'stat-analysis-3':['부서/분야별 현황'],
-      'stat-analysis-4':['진행/이상 현황'],
-      'stat-analysis-5':['상환/회수 현황'],
-      'stat-analysis-6':['수익율 분석'],
-      'stat-analysis-7':['상환스케쥴 현황'],
+      'mypage-1':['내 정보','비밀번호 변경'],
+      'mypage-2':['알림 목록','공지사항'],
       'common-1':['관리자 목록','관리자 등록'],
       'common-2':['권한그룹 목록','권한 항목 설정'],
       'common-3':['IP 목록','IP 등록'],
       'common-4':['코드 목록','코드 등록'],
       'common-5':['로그인 이력'],
       'common-6':['메뉴별 접속현황'],
-      'config-1':['시스템 옵션','코드 관리']
     };
 
     // Mock databases for new screens
@@ -1871,8 +1893,8 @@
     ];
 
     let roleGroups = [
-      { id:1, name:'최고관리자', desc:'최고관리자(시스템 운영 담당자)를 대상으로 한 모든 권한', regDate:'2026-06-09', regUser:'이희성', editDate:'2026-06-10 10:45(이희성)', menuPermissions:['login-1','rec-1','dsn-1','con-1','rep-1','acc-1','trip-1','stat-analysis-1','stat-analysis-2','stat-analysis-3','stat-analysis-4','stat-analysis-5','stat-analysis-6','stat-analysis-7','common-1','common-2','common-3','common-4','common-5','common-6','config-1'], mappedStaff:[1,3] },
-      { id:2, name:'일반사용자', desc:'기본적인 업무 조회 및 출장관리 권한', regDate:'2026-06-10', regUser:'관리자A', editDate:'2026-06-11 11:20(관리자A)', menuPermissions:['login-1','trip-1'], mappedStaff:[2,4,5] }
+      { id:1, name:'최고관리자', desc:'최고관리자(시스템 운영 담당자)를 대상으로 한 모든 권한', regDate:'2026-06-09', regUser:'이희성', editDate:'2026-06-10 10:45(이희성)', menuPermissions:['biz-1','biz-2','prj-1','prj-2','con-1','fund-1','fund-2','stat-1','stat-2','stat-3','stat-4','stat-5','stat-6','stat-7','trip-1','mypage-1','mypage-2','common-1','common-2','common-3','common-4','common-5','common-6'], mappedStaff:[1,3] },
+      { id:2, name:'일반사용자', desc:'기본적인 업무 조회 및 출장관리 권한', regDate:'2026-06-10', regUser:'관리자A', editDate:'2026-06-11 11:20(관리자A)', menuPermissions:['biz-1','biz-2','trip-1','mypage-1','mypage-2'], mappedStaff:[2,4,5] }
     ];
     let selectedRoleGroupId   = null;
     let modalStaffCurrentPage = 1;
@@ -1936,7 +1958,7 @@
           <div class="rail-item-icon">${svgIcon(parent.icon || 'folder', 22)}</div>
           <div class="rail-item-label">${parent.label}</div>`;
         rail.appendChild(item);
-        if (['menu-stat', 'menu-trip', 'menu-stat-analysis'].includes(parent.id)) {
+        if (['menu-trip'].includes(parent.id)) {
           const div = document.createElement('div');
           div.className = 'rail-divider';
           rail.appendChild(div);
@@ -2084,31 +2106,18 @@
       container.innerHTML = '';
       document.getElementById('content-scroll').scrollTo({ top: 0 });
 
-      const subTabs = tabData[childId] || [];
-      if (subTabs.length > 1) {
-        const subBar = document.createElement('div');
-        subBar.className = 'subtab-bar';
-        subTabs.forEach(st => {
-          const btn = document.createElement('button');
-          btn.className = 'subtab-btn' + (st === tabName ? ' active' : '');
-          btn.textContent = st;
-          btn.onclick = () => selectMenu(childId, st);
-          subBar.appendChild(btn);
-        });
-        // subtab-bar는 content-scroll 앞에 삽입
-        const scroll = document.getElementById('content-scroll');
-        const existing = document.querySelector('.subtab-bar-wrap');
-        if (existing) existing.remove();
-        const wrap = document.createElement('div');
-        wrap.className = 'subtab-bar-wrap';
-        wrap.appendChild(subBar);
-        scroll.parentNode.insertBefore(wrap, scroll);
-      } else {
-        const existing = document.querySelector('.subtab-bar-wrap');
-        if (existing) existing.remove();
-      }
+      const existingSubtab = document.querySelector('.subtab-bar-wrap');
+      if (existingSubtab) existingSubtab.remove();
 
-      if (childId === 'login-1') {
+      if (childId === 'biz-1') {
+        container.appendChild(getNewProjectTemplate());
+      } else if (childId === 'biz-2') {
+        container.appendChild(getProjectStatusTemplate());
+      } else if (childId === 'prj-1') {
+        container.appendChild(getProjectListTemplate());
+      } else if (childId === 'prj-2') {
+        container.appendChild(getProjectDetailTemplate());
+      } else if (childId === 'login-1') {
         container.appendChild(getLoginTemplate());
       } else if (childId === 'common-1' && tabName === '관리자 목록') {
         container.appendChild(getAdminListTemplate());
@@ -2130,7 +2139,7 @@
         container.appendChild(getLoginStatusTemplate());
       } else if (childId === 'common-6' && tabName === '메뉴별 접속현황') {
         container.appendChild(getMenuAccessStatusTemplate());
-      } else if (childId.startsWith('stat-analysis-')) {
+      } else if (childId.startsWith('stat-')) {
         container.appendChild(getStatAnalysisTemplate(childId));
       } else {
         let path = '';
@@ -2921,7 +2930,7 @@
             <td><strong>${a.name}</strong></td>
             <td style="font-size:13px;">${a.dept}</td>
             <td style="font-size:13px;">${a.position}</td>
-            <td style="color:var(--text-sub);font-size:12px;">${a.email}</td>
+            <td style="color:var(--text-sub);font-size:13px;">${a.email}</td>
             <td style="text-align:center;"><span class="badge badge-success">사용(Y)</span></td>
           </tr>`).join('');
 
@@ -3275,7 +3284,7 @@
       const wrap = document.createElement('div');
       let html = getPeriodSearchBarHTML();
 
-      if (childId === 'stat-analysis-1') {
+      if (childId === 'stat-1') {
         html += `
           <div class="hero-card">
             <div class="hero-tag">PMS 통계 자료 분석 · 종합현황</div>
@@ -3314,7 +3323,7 @@
               </div>
             </div>
           </div>`;
-      } else if (childId === 'stat-analysis-2') {
+      } else if (childId === 'stat-2') {
         html += `
           <div class="hero-card">
             <div class="hero-tag">PMS 통계 자료 분석 · 연도별 추이</div>
@@ -3351,7 +3360,7 @@
               <tr style="background:var(--bg);"><td><strong>2026 (~05월)</strong></td><td>37건</td><td>506억원</td><td style="color:var(--text-sub);">—</td><td style="color:var(--text-sub);">—</td></tr>
             </tbody></table></div>
           </div>`;
-      } else if (childId === 'stat-analysis-3') {
+      } else if (childId === 'stat-3') {
         html += `
           <div class="hero-card">
             <div class="hero-tag">PMS 통계 자료 분석 · 부서/분야별 현황</div>
@@ -3373,7 +3382,7 @@
               <div class="stat-bar-container"><div class="stat-bar-title-row"><span class="stat-bar-label">기타</span><span class="stat-bar-value">1,166억원</span></div><div class="stat-bar-outer"><div class="stat-bar-inner" style="width:30.5%;background:#94a3b8;">89건 (14.7%)</div></div></div>
             </div>
           </div>`;
-      } else if (childId === 'stat-analysis-4') {
+      } else if (childId === 'stat-4') {
         html += `
           <div class="hero-card">
             <div class="hero-tag">PMS 통계 자료 분석 · 진행/이상 현황</div>
@@ -3387,7 +3396,7 @@
             <div class="kpi-card amber"><div class="kpi-lbl">공사 지연</div><div class="kpi-val">18<span class="kpi-unit">건</span></div><div class="kpi-sub">이상 中 42.9%</div></div>
             <div class="kpi-card purple"><div class="kpi-lbl">상환 미수</div><div class="kpi-val">24<span class="kpi-unit">건</span></div><div class="kpi-sub">이상 中 57.1%</div></div>
           </div>`;
-      } else if (childId === 'stat-analysis-5') {
+      } else if (childId === 'stat-5') {
         html += `
           <div class="hero-card">
             <div class="hero-tag">PMS 통계 자료 분석 · 상환/회수 현황</div>
@@ -3401,7 +3410,7 @@
             <div class="kpi-card amber"><div class="kpi-lbl">잔여 원금</div><div class="kpi-val">1,999<span class="kpi-unit">억원</span></div><div class="kpi-sub">31.6%</div></div>
             <div class="kpi-card red"><div class="kpi-lbl">미수 발생</div><div class="kpi-val">87<span class="kpi-unit">억원</span></div><div class="kpi-sub">잔여 中 4.4%</div></div>
           </div>`;
-      } else if (childId === 'stat-analysis-6') {
+      } else if (childId === 'stat-6') {
         html += `
           <div class="hero-card">
             <div class="hero-tag">PMS 통계 자료 분석 · 수익율 분석</div>
@@ -3436,7 +3445,7 @@
               <tr style="background:var(--bg);"><td><strong>2026 (~05월)</strong></td><td>7.5%</td><td style="color:var(--red);font-weight:700;">-0.1%p</td><td>「수익률 운영지침」 기준 적합</td></tr>
             </tbody></table></div>
           </div>`;
-      } else if (childId === 'stat-analysis-7') {
+      } else if (childId === 'stat-7') {
         html += `
           <div class="hero-card">
             <div class="hero-tag">PMS 통계 자료 분석 · 상환스케쥴 현황</div>
@@ -4654,6 +4663,858 @@
 
         renderTable();
       }, 50);
+
+      return wrapper;
+    }
+
+    /* ══════════════════════════════════════════════
+       신규 프로젝트 생성
+    ══════════════════════════════════════════════ */
+    function getNewProjectTemplate() {
+      const wrapper = document.createElement('div');
+
+      const today = new Date();
+      const fmt = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+
+      wrapper.innerHTML = `
+        <!-- 상태 표시 바 -->
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; padding:10px 16px; background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius-md);">
+          <div style="display:flex; align-items:center; gap:12px; font-size:13px;">
+            <span style="font-weight:600; color:var(--text-label);">상태</span>
+            <span class="badge badge-warning" style="font-size:13px;">임시저장</span>
+            <span style="color:var(--border);">|</span>
+            <span style="font-weight:600; color:var(--text-label);">프로젝트 번호</span>
+            <span style="color:var(--text-muted);">-</span>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <button class="btn btn-outline" style="height:32px; font-size:13px; padding:0 14px;" onclick="alert('임시저장되었습니다.')">임시저장</button>
+          </div>
+        </div>
+
+        <!-- 단계 표시 -->
+        <div style="display:flex; align-items:center; gap:0; margin-bottom:20px; background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius-md); overflow:hidden;">
+          <div style="flex:1; display:flex; align-items:center; justify-content:center; gap:8px; padding:10px 0; background:var(--blue); color:#fff; font-size:13px; font-weight:700;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+            신규 작성
+          </div>
+          <div style="width:0; height:0; border-top:22px solid transparent; border-bottom:22px solid transparent; border-left:14px solid var(--blue); flex-shrink:0;"></div>
+          <div style="flex:1; display:flex; align-items:center; justify-content:center; gap:8px; padding:10px 0; background:#f1f5f9; color:var(--text-muted); font-size:13px; font-weight:600;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v14a2 2 0 0 1-2 2z"/><polyline points="17,21 17,13 7,13 7,21"/><polyline points="7,3 7,8 15,8"/></svg>
+            임시저장
+          </div>
+          <div style="width:0; height:0; border-top:22px solid transparent; border-bottom:22px solid transparent; border-left:14px solid #f1f5f9; flex-shrink:0;"></div>
+          <div style="flex:1; display:flex; align-items:center; justify-content:center; gap:8px; padding:10px 0; background:#f1f5f9; color:var(--text-muted); font-size:13px; font-weight:600;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>
+            프로젝트 생성
+          </div>
+        </div>
+
+        <!-- 내부 탭 -->
+        <div style="display:flex; gap:4px; margin-bottom:16px;">
+          <button onclick="switchNewProjectTab2('basic')" id="tab2-basic"
+            style="height:36px; padding:0 20px; border-radius:var(--radius-sm); font-size:13px; font-weight:700; border:1.5px solid var(--blue); background:var(--blue); color:#fff; cursor:pointer; transition:all 0.15s;">
+            프로젝트 생성 기본 정보
+          </button>
+          <button onclick="switchNewProjectTab2('extra')" id="tab2-extra"
+            style="height:36px; padding:0 20px; border-radius:var(--radius-sm); font-size:13px; font-weight:700; border:1.5px solid var(--border); background:var(--bg2); color:var(--text-muted); cursor:pointer; transition:all 0.15s;">
+            프로젝트 생성 부가 정보
+          </button>
+        </div>
+
+        <!-- 기본 정보 카드 -->
+        <div id="np2-basic" class="card" style="margin-bottom:16px;">
+          <div class="card-title" style="margin-bottom:16px;">사업 기본정보</div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px 24px;">
+            <div>
+              <label style="font-size:13px; font-weight:600; color:var(--text-label); display:block; margin-bottom:5px;">접수번호</label>
+              <input type="text" class="form-control" value="2606_12A" readonly style="background:#f8faff; color:var(--text-muted);">
+            </div>
+            <div>
+              <label style="font-size:13px; font-weight:600; color:var(--text-label); display:block; margin-bottom:5px;">계약명 <span style="color:var(--red);">*</span></label>
+              <input type="text" class="form-control" placeholder="계약명을 입력하세요" id="np2-contract-name">
+            </div>
+            <div>
+              <label style="font-size:13px; font-weight:600; color:var(--text-label); display:block; margin-bottom:5px;">사업구분 <span style="color:var(--red);">*</span></label>
+              <select class="form-control" id="np2-biz-type">
+                <option value="">선택</option>
+                <option>산업체</option><option>건축물</option><option>공공</option>
+                <option>한전고효율</option><option>자가소비형</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size:13px; font-weight:600; color:var(--text-label); display:block; margin-bottom:5px;">사용자 소재지 <span style="color:var(--red);">*</span></label>
+              <select class="form-control" id="np2-location">
+                <option value="">선택</option>
+                <option>서울</option><option>경기</option><option>인천</option>
+                <option>부산</option><option>대구</option><option>광주</option>
+                <option>대전</option><option>울산</option><option>세종</option>
+                <option>강원</option><option>충북</option><option>충남</option>
+                <option>전북</option><option>전남</option><option>경북</option>
+                <option>경남</option><option>제주</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size:13px; font-weight:600; color:var(--text-label); display:block; margin-bottom:5px;">대상설비 <span style="color:var(--red);">*</span></label>
+              <select class="form-control" id="np2-equip">
+                <option value="">선택</option>
+                <option>LED</option><option>공기압축기</option><option>냉동공조</option>
+                <option>보일러</option><option>ESS</option><option>태양광</option>
+                <option>열병합</option><option>기타</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size:13px; font-weight:600; color:var(--text-label); display:block; margin-bottom:5px;">접수경로 <span style="color:var(--red);">*</span></label>
+              <select class="form-control" id="np2-route">
+                <option value="">선택</option>
+                <option>EPC사</option><option>한전접수</option><option>본인발굴</option><option>기타</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size:13px; font-weight:600; color:var(--text-label); display:block; margin-bottom:5px;">등록일</label>
+              <input type="date" class="form-control" value="${fmt(today)}" id="np2-reg-date">
+            </div>
+            <div>
+              <label style="font-size:13px; font-weight:600; color:var(--text-label); display:block; margin-bottom:5px;">담당자 <span style="color:var(--red);">*</span></label>
+              <div style="display:flex; gap:6px;">
+                <input type="text" class="form-control" placeholder="담당자 조회" id="np2-manager" style="flex:1;">
+                <button class="btn btn-outline" style="height:38px; padding:0 14px; font-size:13px; white-space:nowrap;"
+                  onclick="document.getElementById('np2-manager').value='홍길동'; document.getElementById('np2-dept').value='EERS팀';">조회</button>
+              </div>
+            </div>
+            <div>
+              <label style="font-size:13px; font-weight:600; color:var(--text-label); display:block; margin-bottom:5px;">담당부서</label>
+              <input type="text" class="form-control" id="np2-dept" placeholder="담당자 조회 후 자동입력" readonly style="background:#f8faff; color:var(--text-muted);">
+            </div>
+            <div style="grid-column:1/3;">
+              <label style="font-size:13px; font-weight:600; color:var(--text-label); display:block; margin-bottom:5px;">에너지 사용자</label>
+              <div style="display:flex; gap:6px;">
+                <input type="text" class="form-control" placeholder="에너지 사용자 조회" id="np2-energy-user" style="flex:1;">
+                <button class="btn btn-outline" style="height:38px; padding:0 14px; font-size:13px; white-space:nowrap;"
+                  onclick="document.getElementById('np2-energy-user').value='(주)포천움트리';">조회</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 부가 정보 카드 (기본 숨김) -->
+        <div id="np2-extra" class="card" style="margin-bottom:16px; display:none;">
+          <div class="card-title" style="margin-bottom:16px;">절감효과</div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px 24px;">
+            <div>
+              <label style="font-size:13px; font-weight:600; color:var(--text-label); display:block; margin-bottom:5px;">절감량 (toe/년)</label>
+              <input type="number" class="form-control" placeholder="0.00" step="0.01">
+            </div>
+            <div>
+              <label style="font-size:13px; font-weight:600; color:var(--text-label); display:block; margin-bottom:5px;">절감량 (kWh/년)</label>
+              <input type="number" class="form-control" placeholder="0">
+            </div>
+            <div>
+              <label style="font-size:13px; font-weight:600; color:var(--text-label); display:block; margin-bottom:5px;">에너지사용자 담당</label>
+              <input type="text" class="form-control" placeholder="담당자명">
+            </div>
+            <div>
+              <label style="font-size:13px; font-weight:600; color:var(--text-label); display:block; margin-bottom:5px;">담당자 연락처</label>
+              <input type="tel" class="form-control" placeholder="010-0000-0000">
+            </div>
+            <div>
+              <label style="font-size:13px; font-weight:600; color:var(--text-label); display:block; margin-bottom:5px;">수주가능성</label>
+              <select class="form-control">
+                <option value="">선택</option>
+                <option>높음</option><option>보통</option><option>낮음</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size:13px; font-weight:600; color:var(--text-label); display:block; margin-bottom:5px;">온실가스감축량 (tCO2/년)</label>
+              <input type="number" class="form-control" placeholder="0.00" step="0.01">
+            </div>
+            <div>
+              <label style="font-size:13px; font-weight:600; color:var(--text-label); display:block; margin-bottom:5px;">사업전 사용량 (toe/년)</label>
+              <input type="number" class="form-control" placeholder="0.00" step="0.01">
+            </div>
+            <div>
+              <label style="font-size:13px; font-weight:600; color:var(--text-label); display:block; margin-bottom:5px;">절감률 (%)</label>
+              <input type="number" class="form-control" placeholder="0.0" step="0.1">
+            </div>
+            <div>
+              <label style="font-size:13px; font-weight:600; color:var(--text-label); display:block; margin-bottom:5px;">수익률 (%)</label>
+              <input type="number" class="form-control" placeholder="0.00" step="0.01">
+            </div>
+            <div>
+              <label style="font-size:13px; font-weight:600; color:var(--text-label); display:block; margin-bottom:5px;">IRR (%)</label>
+              <input type="number" class="form-control" placeholder="0.00" step="0.01">
+            </div>
+            <div>
+              <label style="font-size:13px; font-weight:600; color:var(--text-label); display:block; margin-bottom:5px;">상환기간 (개월)</label>
+              <input type="number" class="form-control" placeholder="0">
+            </div>
+            <div>
+              <label style="font-size:13px; font-weight:600; color:var(--text-label); display:block; margin-bottom:5px;">적용할인율 (EPC/%)</label>
+              <input type="number" class="form-control" placeholder="0.00" step="0.01">
+            </div>
+            <div style="grid-column:1/3;">
+              <label style="font-size:13px; font-weight:600; color:var(--text-label); display:block; margin-bottom:5px;">이윤 (원)</label>
+              <input type="number" class="form-control" placeholder="0">
+            </div>
+          </div>
+        </div>
+
+        <!-- 안내 문구 -->
+        <div style="font-size:13px; color:var(--text-muted); margin-bottom:16px; padding:8px 12px; background:var(--blue-lt); border-radius:var(--radius-sm); border-left:3px solid var(--blue-md);">
+          ＊ 프로젝트 등록 이전에 기본정보를 생성하는 영역입니다. <span style="color:var(--red);">*</span> 표시 항목은 필수 입력입니다.
+        </div>
+
+        <!-- 하단 버튼 -->
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <button class="btn btn-outline" onclick="selectMenu('biz-2','사업접수현황 조회')" style="font-size:13px;">
+            사업접수현황 조회 →
+          </button>
+          <div style="display:flex; gap:8px;">
+            <button class="btn btn-secondary" onclick="alert('임시저장되었습니다.')" style="background:#64748b;">임시저장</button>
+            <button class="btn btn-primary" onclick="
+              const nm = document.getElementById('np2-contract-name').value;
+              const bt = document.getElementById('np2-biz-type').value;
+              const rt = document.getElementById('np2-route').value;
+              if (!nm || !bt || !rt) { alert('필수 항목(계약명, 사업구분, 접수경로)을 입력해주세요.'); return; }
+              alert('프로젝트가 등록되었습니다.\n프로젝트 번호: ' + new Date().getFullYear() + '_' + String(Math.floor(Math.random()*9000)+1000));
+              selectMenu('biz-2','사업접수현황 조회');
+            ">등록</button>
+          </div>
+        </div>
+      `;
+
+      window.switchNewProjectTab2 = function(tabKey) {
+        const basic = document.getElementById('np2-basic');
+        const extra = document.getElementById('np2-extra');
+        const tabB = document.getElementById('tab2-basic');
+        const tabE = document.getElementById('tab2-extra');
+        const on = { background:'var(--blue)', color:'#fff', borderColor:'var(--blue)' };
+        const off = { background:'var(--bg2)', color:'var(--text-muted)', borderColor:'var(--border)' };
+        if (tabKey === 'basic') {
+          basic.style.display = ''; extra.style.display = 'none';
+          Object.assign(tabB.style, on); Object.assign(tabE.style, off);
+        } else {
+          basic.style.display = 'none'; extra.style.display = '';
+          Object.assign(tabE.style, on); Object.assign(tabB.style, off);
+        }
+      };
+
+      return wrapper;
+    }
+
+    /* ══════════════════════════════════════════════
+       사업접수현황 조회
+    ══════════════════════════════════════════════ */
+    function getProjectStatusTemplate() {
+      const wrapper = document.createElement('div');
+
+      const projectList = [
+        { no:24, recNo:'2606_10K', name:'포천 움트리 스마트LED 에너지효율화사업', status:'임시저장', route:'EPC사', prjNo:'-', bizType:'한전고효율', location:'경기 포천', equip:'LED', regDate:'2026.12.14', manager:'홍길동', dept:'EERS팀', chance:'높음' },
+        { no:23, recNo:'2066_11K', name:'청주 승인컴퍼니(주) LED 에너지효율화사업', status:'프로젝트 생성', route:'EPC사', prjNo:'260001-1612-01-3I-C', bizType:'한전고효율', location:'경기 포천', equip:'LED', regDate:'2026.12.14', manager:'홍길동', dept:'EERS팀', chance:'높음' },
+        { no:22, recNo:'2066_10I', name:'김포 미래테크 공기압축기 에너지효율화사업', status:'임시저장', route:'한전접수', prjNo:'-', bizType:'한전고효율', location:'경기 포천', equip:'공기압축기', regDate:'2026.12.14', manager:'홍길동', dept:'EERS팀', chance:'보통' },
+        { no:21, recNo:'2606_10K', name:'포천 움트리 스마트LED 에너지효율화사업', status:'프로젝트 생성', route:'EPC사', prjNo:'260004-1612-01-3I-C', bizType:'한전고효율', location:'경기 포천', equip:'LED', regDate:'2026.12.14', manager:'홍길동', dept:'EERS팀', chance:'높음' },
+        { no:20, recNo:'2006_11K', name:'청주 승인컴퍼니(주) LED 에너지효율화사업', status:'프로젝트 생성', route:'EPC사', prjNo:'160001-1612-01-3I-C', bizType:'한전고효율', location:'경기 포천', equip:'LED', regDate:'2026.12.14', manager:'홍길동', dept:'EERS팀', chance:'높음' },
+        { no:19, recNo:'2006_10I', name:'김포 미래테크 공기압축기 에너지효율화사업', status:'프로젝트 생성', route:'EPC사', prjNo:'160001-1612-01-3I-C', bizType:'한전고효율', location:'경기 포천', equip:'공기압축기', regDate:'2026.12.14', manager:'홍길동', dept:'EERS팀', chance:'보통' },
+        { no:18, recNo:'2606_10K', name:'포천 움트리 스마트LED 에너지효율화사업', status:'프로젝트 생성', route:'본인발굴', prjNo:'160001-1612-01-3I-C', bizType:'한전고효율', location:'경기 포천', equip:'LED', regDate:'2026.12.14', manager:'홍길동', dept:'EERS팀', chance:'높음' },
+        { no:17, recNo:'2606_10K', name:'포천 움트리 스마트LED 에너지효율화사업', status:'프로젝트 생성', route:'EPC사', prjNo:'160001-1612-01-3I-C', bizType:'한전고효율', location:'경기 포천', equip:'LED', regDate:'2026.12.14', manager:'홍길동', dept:'EERS팀', chance:'높음' },
+        { no:16, recNo:'2006_11K', name:'청주 승인컴퍼니(주) LED 에너지효율화사업', status:'임시저장', route:'EPC사', prjNo:'-', bizType:'한전고효율', location:'경기 포천', equip:'LED', regDate:'2026.12.14', manager:'홍길동', dept:'EERS팀', chance:'높음' },
+        { no:15, recNo:'2006_10I', name:'김포 미래테크 공기압축기 에너지효율화사업', status:'임시저장', route:'EPC사', prjNo:'-', bizType:'한전고효율', location:'경기 포천', equip:'공기압축기', regDate:'2026.12.14', manager:'홍길동', dept:'EERS팀', chance:'낮음' },
+      ];
+
+      function statusBadge(s) {
+        if (s === '프로젝트 생성') return '<span class="badge badge-success" style="font-size:13px; white-space:nowrap;">프로젝트 생성</span>';
+        if (s === '임시저장')    return '<span class="badge badge-warning" style="font-size:13px; white-space:nowrap;">임시저장</span>';
+        return `<span class="badge badge-secondary" style="font-size:13px;">${s}</span>`;
+      }
+      function chanceBadge(c) {
+        if (c === '높음') return `<span style="color:var(--green); font-weight:700; font-size:13px;">높음</span>`;
+        if (c === '낮음') return `<span style="color:var(--red);   font-weight:700; font-size:13px;">낮음</span>`;
+        return `<span style="color:var(--amber); font-weight:700; font-size:13px;">${c}</span>`;
+      }
+
+      const rows = projectList.map(r => `
+        <tr onmouseover="this.style.background='#f8faff'" onmouseout="this.style.background=''">
+          <td style="text-align:center; color:var(--text-muted);">${r.no}</td>
+          <td style="text-align:center; font-family:var(--font-ui); font-size:13px; color:var(--blue); font-weight:600;">${r.recNo}</td>
+          <td style="max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${r.name}</td>
+          <td style="text-align:center;">${statusBadge(r.status)}</td>
+          <td style="text-align:center; font-size:13px;">${r.route}</td>
+          <td style="font-family:var(--font-ui); font-size:13px; color:var(--text-muted);">${r.prjNo}</td>
+          <td style="text-align:center; font-size:13px;">${r.bizType}</td>
+          <td style="text-align:center; font-size:13px;">${r.location}</td>
+          <td style="text-align:center; font-size:13px;">${r.equip}</td>
+          <td style="text-align:center; font-size:13px;">${r.regDate}</td>
+          <td style="text-align:center; font-size:13px;">${r.manager}</td>
+          <td style="text-align:center; font-size:13px;">${r.dept}</td>
+          <td style="text-align:center;">${chanceBadge(r.chance)}</td>
+        </tr>`).join('');
+
+      const today = new Date();
+      const fmtD = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+      const oneYearAgo = new Date(today); oneYearAgo.setFullYear(today.getFullYear() - 1);
+
+      wrapper.innerHTML = `
+        <!-- 검색 조건 -->
+        <div class="card search-card" style="margin-bottom:16px;">
+          <div class="card-title" style="margin-bottom:14px;">검색 조건</div>
+          <div style="display:flex; flex-direction:column; gap:10px;">
+            <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+              <label style="width:120px; flex-shrink:0; font-size:13px; font-weight:600; color:var(--text-label);">조회기간 (등록일)</label>
+              <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+                <div style="display:flex; gap:3px;">
+                  <button type="button" class="date-preset-btn" onclick="setPsB('ps2-start','ps2-end','1d')">하루 전</button>
+                  <button type="button" class="date-preset-btn" onclick="setPsB('ps2-start','ps2-end','1m')">1개월</button>
+                  <button type="button" class="date-preset-btn" onclick="setPsB('ps2-start','ps2-end','3m')">3개월</button>
+                  <button type="button" class="date-preset-btn active" onclick="setPsB('ps2-start','ps2-end','1y')">1년</button>
+                </div>
+                <input type="date" id="ps2-start" class="form-control" value="${fmtD(oneYearAgo)}" style="width:145px;">
+                <span style="color:var(--text-muted);">~</span>
+                <input type="date" id="ps2-end" class="form-control" value="${fmtD(today)}" style="width:145px;">
+              </div>
+            </div>
+            <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <label style="font-size:13px; font-weight:600; color:var(--text-label); white-space:nowrap;">접수경로</label>
+                <select class="form-control" style="width:120px;"><option>전체</option><option>EPC사</option><option>한전접수</option><option>본인발굴</option></select>
+              </div>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <label style="font-size:13px; font-weight:600; color:var(--text-label); white-space:nowrap;">사업구분</label>
+                <select class="form-control" style="width:130px;"><option>전체</option><option>산업체</option><option>건축물</option><option>공공</option><option>한전고효율</option></select>
+              </div>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <label style="font-size:13px; font-weight:600; color:var(--text-label); white-space:nowrap;">대상설비</label>
+                <select class="form-control" style="width:120px;"><option>전체</option><option>LED</option><option>공기압축기</option><option>냉동공조</option><option>보일러</option></select>
+              </div>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <label style="font-size:13px; font-weight:600; color:var(--text-label); white-space:nowrap;">상태</label>
+                <select class="form-control" style="width:130px;"><option>전체</option><option>임시저장</option><option>프로젝트 생성</option></select>
+              </div>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <label style="width:120px; flex-shrink:0; font-size:13px; font-weight:600; color:var(--text-label);">키워드 검색</label>
+              <input type="text" class="form-control" placeholder="사업명, 담당자, 접수번호 검색" style="flex:1; max-width:340px;">
+              <button class="btn btn-primary" style="height:38px; padding:0 20px;">검색</button>
+              <button class="btn btn-outline" style="height:38px; padding:0 16px;">초기화</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 결과 테이블 -->
+        <div class="card">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <div style="font-size:13px; color:var(--text-muted);">
+              조회 결과 : <strong style="color:var(--navy); font-size:14px;">24</strong>건
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <select class="form-control" style="width:80px; height:32px; font-size:13px; padding:0 8px;">
+                <option>10개</option><option>20개</option><option>50개</option>
+              </select>
+              <button class="btn btn-outline" style="height:32px; font-size:13px; padding:0 14px; display:flex; align-items:center; gap:5px;" onclick="alert('Excel 다운로드')">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                다운로드(Excel)
+              </button>
+              <button class="btn btn-primary" style="height:32px; font-size:13px; padding:0 14px;" onclick="selectMenu('biz-1','신규 프로젝트 생성')">
+                + 신규 등록
+              </button>
+            </div>
+          </div>
+
+          <div style="overflow-x:auto;">
+            <table class="data-table" style="min-width:1100px; white-space:nowrap;">
+              <thead>
+                <tr>
+                  <th style="text-align:center; width:44px;">순번</th>
+                  <th style="text-align:center; width:90px;">접수번호</th>
+                  <th style="min-width:200px;">사업명</th>
+                  <th style="text-align:center; width:90px;">상태</th>
+                  <th style="text-align:center; width:80px;">접수경로</th>
+                  <th style="width:160px;">프로젝트(계약)번호</th>
+                  <th style="text-align:center; width:80px;">사업구분</th>
+                  <th style="text-align:center; width:80px;">소재지</th>
+                  <th style="text-align:center; width:80px;">대상설비</th>
+                  <th style="text-align:center; width:90px;">등록일</th>
+                  <th style="text-align:center; width:64px;">담당자</th>
+                  <th style="text-align:center; width:70px;">담당부서</th>
+                  <th style="text-align:center; width:70px;">수주가능성</th>
+                </tr>
+              </thead>
+              <tbody>${rows}</tbody>
+            </table>
+          </div>
+
+          <div style="display:flex; justify-content:center; align-items:center; gap:4px; margin-top:16px; padding-top:12px; border-top:1px solid var(--border);">
+            <button style="width:32px; height:32px; display:flex; align-items:center; justify-content:center; border:1px solid var(--border); border-radius:var(--radius-sm); background:var(--bg2); cursor:pointer; color:var(--text-muted);">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+            </button>
+            <button style="width:32px; height:32px; border:1px solid var(--blue); border-radius:var(--radius-sm); background:var(--blue); color:#fff; font-size:13px; font-weight:700; cursor:pointer;">1</button>
+            <button style="width:32px; height:32px; border:1px solid var(--border); border-radius:var(--radius-sm); background:var(--bg2); font-size:13px; cursor:pointer; color:var(--text);">2</button>
+            <button style="width:32px; height:32px; border:1px solid var(--border); border-radius:var(--radius-sm); background:var(--bg2); font-size:13px; cursor:pointer; color:var(--text);">3</button>
+            <button style="width:32px; height:32px; display:flex; align-items:center; justify-content:center; border:1px solid var(--border); border-radius:var(--radius-sm); background:var(--bg2); cursor:pointer; color:var(--text-muted);">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
+          </div>
+
+          <div style="font-size:13px; color:var(--text-muted); margin-top:10px; padding-top:10px; border-top:1px solid var(--border);">
+            ＊ 프로젝트 생성 이전에 접수/등록된 사업의 목록입니다.
+          </div>
+        </div>
+      `;
+
+      window.setPsB = function(startId, endId, preset) {
+        const end = new Date(); const start = new Date(end);
+        if (preset === '1d') start.setDate(end.getDate() - 1);
+        else if (preset === '1m') start.setMonth(end.getMonth() - 1);
+        else if (preset === '3m') start.setMonth(end.getMonth() - 3);
+        else if (preset === '1y') start.setFullYear(end.getFullYear() - 1);
+        const f = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+        const s = document.getElementById(startId); if (s) s.value = f(start);
+        const e = document.getElementById(endId);   if (e) e.value = f(end);
+      };
+
+      return wrapper;
+    }
+
+    /* ══════════════════════════════════════════════
+       프로젝트 목록
+    ══════════════════════════════════════════════ */
+    function getProjectListTemplate() {
+      const wrapper = document.createElement('div');
+
+      const projects = [
+        { no:24, pno:'160001-1612-01-3I-C', regDate:'2025.06.01', contractDate:'-',         name:'포천 움트리 스마트LED 에너지효율화사업',     type:'EPC계약',  client:'군장에너지주식회사', loc:'강원 강릉시', status:'품의요청', total:'2,345,341,000', paidPct:'100%', stage:'-',   done:'-',         repay:'-',         chgCnt:1,  orderCnt:1,  mgr:'홍길동', dept:'EERS팀', equip:'LED',   bizType:'건축물', irr:'6.08', xirr:'5.89', profit:'15.7', route:'EPC사',        attCnt:4 },
+        { no:23, pno:'160001-1612-01-3I-C', regDate:'2026.05.30', contractDate:'2026.06.30', name:'청주 승인컴퍼니(주) LED 에너지효율화사업',   type:'ESCO계약', client:'보성파워텍',     loc:'경기 수원시', status:'계약체결', total:'209,000,000',   paidPct:'100%', stage:'완료', done:'2026.12.31', repay:'2026.12.31', chgCnt:'-', orderCnt:'-', mgr:'김의성', dept:'EERS팀', equip:'LED',   bizType:'사업체', irr:'9.41', xirr:'24.81', profit:'12',  route:'에너지사용자', attCnt:4 },
+        { no:22, pno:'260001-2601-02-4A-C', regDate:'2026.04.10', contractDate:'2026.05.01', name:'김포 미래테크 공기압축기 에너지효율화사업',   type:'EPC계약',  client:'포천 미래테크',  loc:'경기 김포시', status:'계약체결', total:'1,120,000,000', paidPct:'50%',  stage:'진행', done:'-',         repay:'2028.06.30', chgCnt:0,  orderCnt:2,  mgr:'홍길동', dept:'EERS팀', equip:'공기압축기', bizType:'산업체', irr:'7.23', xirr:'8.10',  profit:'18.3', route:'EPC사',        attCnt:3 },
+        { no:21, pno:'250012-2501-01-2B-C', regDate:'2025.11.20', contractDate:'2026.01.15', name:'인천 스마트팩토리 LED 절전 사업',          type:'ESCO계약', client:'인천에너지',     loc:'인천 남동구', status:'준공완료', total:'780,000,000',  paidPct:'100%', stage:'완료', done:'2026.06.30', repay:'2028.01.31', chgCnt:1,  orderCnt:1,  mgr:'이지훈', dept:'EERS팀', equip:'LED',   bizType:'건축물', irr:'8.55', xirr:'10.20', profit:'22.0', route:'한전접수',      attCnt:6 },
+        { no:20, pno:'250008-2412-03-5C-E', regDate:'2025.08.05', contractDate:'2025.09.20', name:'세종 공공기관 냉동공조 효율화사업',          type:'EPC계약',  client:'세종시설공단',   loc:'세종 조치원', status:'착공',     total:'450,000,000',  paidPct:'50%',  stage:'진행', done:'-',         repay:'2027.10.31', chgCnt:0,  orderCnt:1,  mgr:'박민준', dept:'EERS팀', equip:'냉동공조', bizType:'공공', irr:'5.90', xirr:'6.78',  profit:'13.5', route:'본인발굴',      attCnt:2 },
+        { no:19, pno:'250005-2411-02-3A-C', regDate:'2025.05.18', contractDate:'2025.07.01', name:'수원 제조공장 보일러 에너지절감사업',        type:'ESCO계약', client:'수원산업',       loc:'경기 수원시', status:'상환중',   total:'330,000,000',  paidPct:'100%', stage:'완료', done:'2025.12.31', repay:'2027.07.31', chgCnt:2,  orderCnt:1,  mgr:'김의성', dept:'EERS팀', equip:'보일러', bizType:'산업체', irr:'6.70', xirr:'7.55',  profit:'16.8', route:'에너지사용자',  attCnt:5 },
+        { no:18, pno:'240019-2409-01-1D-C', regDate:'2024.09.10', contractDate:'2024.11.01', name:'부산 항만물류센터 태양광 사업',             type:'EPC계약',  client:'부산항만공사',   loc:'부산 남구',   status:'상환중',   total:'2,100,000,000',paidPct:'100%', stage:'완료', done:'2025.06.30', repay:'2029.11.30', chgCnt:0,  orderCnt:3,  mgr:'홍길동', dept:'EERS팀', equip:'태양광', bizType:'공공', irr:'9.80', xirr:'11.30', profit:'24.5', route:'EPC사',         attCnt:7 },
+        { no:17, pno:'240015-2408-04-2E-C', regDate:'2024.08.22', contractDate:'2024.10.15', name:'대전 연구단지 LED 스마트 조명 사업',        type:'ESCO계약', client:'대전연구원',     loc:'대전 유성구', status:'상환완료', total:'195,000,000',  paidPct:'100%', stage:'완료', done:'2025.04.30', repay:'2026.10.31', chgCnt:1,  orderCnt:1,  mgr:'이지훈', dept:'EERS팀', equip:'LED',   bizType:'공공', irr:'7.10', xirr:'8.90',  profit:'19.2', route:'한전접수',      attCnt:4 },
+        { no:16, pno:'240010-2405-03-1B-C', regDate:'2024.05.30', contractDate:'2024.07.20', name:'광주 제조업체 ESS 에너지저장 사업',         type:'EPC계약',  client:'광주전자',       loc:'광주 광산구', status:'상환완료', total:'890,000,000',  paidPct:'100%', stage:'완료', done:'2025.01.31', repay:'2026.07.31', chgCnt:0,  orderCnt:2,  mgr:'박민준', dept:'EERS팀', equip:'ESS',   bizType:'산업체', irr:'8.20', xirr:'9.65',  profit:'21.3', route:'EPC사',         attCnt:5 },
+        { no:15, pno:'240006-2403-02-4C-C', regDate:'2024.03.15', contractDate:'2024.05.01', name:'울산 석유화학 열병합발전 에너지효율화사업',  type:'ESCO계약', client:'울산에너지',     loc:'울산 남구',   status:'상환완료', total:'3,500,000,000',paidPct:'100%', stage:'완료', done:'2024.12.31', repay:'2027.05.31', chgCnt:3,  orderCnt:4,  mgr:'김의성', dept:'EERS팀', equip:'열병합', bizType:'산업체', irr:'10.50',xirr:'12.80', profit:'27.0', route:'에너지사용자',  attCnt:9 },
+      ];
+
+      function statusBadge(s) {
+        const map = { '품의요청':'badge-warning','계약체결':'badge-success','착공':'badge-info','준공완료':'badge-success','상환중':'badge-primary','상환완료':'badge-secondary' };
+        return `<span class="badge ${map[s]||'badge-secondary'}" style="font-size:13px; white-space:nowrap;">${s}</span>`;
+      }
+
+      const rows = projects.map(r => `
+        <tr style="cursor:pointer;" onmouseover="this.style.background='#f0f6ff'" onmouseout="this.style.background=''"
+          onclick="selectMenu('prj-2','프로젝트 상세')">
+          <td style="text-align:center; color:var(--text-muted);">${r.no}</td>
+          <td style="font-family:var(--font-ui); font-size:13px; color:var(--blue); font-weight:600; white-space:nowrap;">${r.pno}</td>
+          <td style="text-align:center; font-size:13px; white-space:nowrap;">${r.regDate}</td>
+          <td style="text-align:center; font-size:13px; white-space:nowrap;">${r.contractDate}</td>
+          <td style="max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:600;">${r.name}</td>
+          <td style="text-align:center; font-size:13px;">${r.type}</td>
+          <td style="font-size:13px; max-width:100px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${r.client}</td>
+          <td style="text-align:center; font-size:13px;">${r.loc}</td>
+          <td style="text-align:center;">${statusBadge(r.status)}</td>
+          <td style="text-align:right; font-size:13px; white-space:nowrap;">${r.total}</td>
+          <td style="text-align:center; font-size:13px; font-weight:700; color:var(--green);">${r.paidPct}</td>
+          <td style="text-align:center; font-size:13px;">${r.stage}</td>
+          <td style="text-align:center; font-size:13px;">${r.done}</td>
+          <td style="text-align:center; font-size:13px;">${r.repay}</td>
+          <td style="text-align:center; font-size:13px;">${r.chgCnt}</td>
+          <td style="text-align:center; font-size:13px;">${r.orderCnt}</td>
+          <td style="text-align:center; font-size:13px;">${r.mgr}</td>
+          <td style="text-align:center; font-size:13px;">${r.dept}</td>
+          <td style="text-align:center; font-size:13px;">${r.equip}</td>
+          <td style="text-align:center; font-size:13px;">${r.bizType}</td>
+          <td style="text-align:right; font-size:13px;">${r.irr}</td>
+          <td style="text-align:right; font-size:13px;">${r.xirr}</td>
+          <td style="text-align:right; font-size:13px;">${r.profit}</td>
+          <td style="text-align:center; font-size:13px;">${r.route}</td>
+          <td style="text-align:center; font-size:13px;">${r.attCnt}</td>
+        </tr>`).join('');
+
+      const today = new Date();
+      const fmtD = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+      const oneYearAgo = new Date(today); oneYearAgo.setFullYear(today.getFullYear() - 1);
+
+      wrapper.innerHTML = `
+        <div class="card search-card" style="margin-bottom:16px;">
+          <div class="card-title" style="margin-bottom:14px;">검색 조건</div>
+          <div style="display:flex; flex-direction:column; gap:10px;">
+            <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+              <label style="width:120px; flex-shrink:0; font-size:13px; font-weight:600; color:var(--text-label);">조회기간 (등록일)</label>
+              <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+                <div style="display:flex; gap:3px;">
+                  <button type="button" class="date-preset-btn" onclick="setPrjList2('pl2-start','pl2-end','1d')">하루 전</button>
+                  <button type="button" class="date-preset-btn" onclick="setPrjList2('pl2-start','pl2-end','1m')">1개월</button>
+                  <button type="button" class="date-preset-btn" onclick="setPrjList2('pl2-start','pl2-end','3m')">3개월</button>
+                  <button type="button" class="date-preset-btn active" onclick="setPrjList2('pl2-start','pl2-end','1y')">1년</button>
+                </div>
+                <input type="date" id="pl2-start" class="form-control" value="${fmtD(oneYearAgo)}" style="width:145px;">
+                <span style="color:var(--text-muted);">~</span>
+                <input type="date" id="pl2-end" class="form-control" value="${fmtD(today)}" style="width:145px;">
+              </div>
+            </div>
+            <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <label style="font-size:13px; font-weight:600; color:var(--text-label); white-space:nowrap;">계약형태</label>
+                <select class="form-control" style="width:120px;"><option>전체</option><option>EPC계약</option><option>ESCO계약</option></select>
+              </div>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <label style="font-size:13px; font-weight:600; color:var(--text-label); white-space:nowrap;">진행상태</label>
+                <select class="form-control" style="width:120px;"><option>전체</option><option>품의요청</option><option>계약체결</option><option>착공</option><option>준공완료</option><option>상환중</option><option>상환완료</option></select>
+              </div>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <label style="font-size:13px; font-weight:600; color:var(--text-label); white-space:nowrap;">공사단계</label>
+                <select class="form-control" style="width:100px;"><option>전체</option><option>진행</option><option>완료</option></select>
+              </div>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <label style="font-size:13px; font-weight:600; color:var(--text-label); white-space:nowrap;">대상설비</label>
+                <select class="form-control" style="width:120px;"><option>전체</option><option>LED</option><option>공기압축기</option><option>냉동공조</option><option>보일러</option><option>ESS</option><option>태양광</option><option>열병합</option></select>
+              </div>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <label style="font-size:13px; font-weight:600; color:var(--text-label); white-space:nowrap;">사업구분</label>
+                <select class="form-control" style="width:120px;"><option>전체</option><option>산업체</option><option>건축물</option><option>공공</option><option>한전고효율</option></select>
+              </div>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <label style="width:120px; flex-shrink:0; font-size:13px; font-weight:600; color:var(--text-label);">키워드 검색</label>
+              <input type="text" class="form-control" placeholder="사업명, 에너지사용자, 프로젝트번호 검색" style="flex:1; max-width:340px;">
+              <button class="btn btn-primary" style="height:38px; padding:0 20px;">검색</button>
+              <button class="btn btn-outline" style="height:38px; padding:0 16px;">초기화</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <div style="font-size:13px; color:var(--text-muted);">조회 결과 : <strong style="color:var(--navy); font-size:14px;">24</strong>건</div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <select class="form-control" style="width:80px; height:32px; font-size:13px; padding:0 8px;">
+                <option>10개</option><option>20개</option><option>50개</option>
+              </select>
+              <button class="btn btn-outline" style="height:32px; font-size:13px; padding:0 14px; display:flex; align-items:center; gap:5px;" onclick="alert('Excel 다운로드')">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                다운로드(Excel)
+              </button>
+            </div>
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="data-table" style="min-width:1500px; white-space:nowrap; font-size:13px;">
+              <thead>
+                <tr>
+                  <th style="text-align:center; width:36px;">순번</th>
+                  <th style="width:150px;">프로젝트(계약)번호</th>
+                  <th style="text-align:center; width:80px;">등록일</th>
+                  <th style="text-align:center; width:80px;">계약체결일</th>
+                  <th style="min-width:180px;">사업명</th>
+                  <th style="text-align:center; width:80px;">계약형태</th>
+                  <th style="width:100px;">에너지사용자</th>
+                  <th style="text-align:center; width:80px;">소재지</th>
+                  <th style="text-align:center; width:80px;">진행상태</th>
+                  <th style="text-align:right; width:110px;">총 사업금액</th>
+                  <th style="text-align:center; width:70px;">투자금지급률</th>
+                  <th style="text-align:center; width:60px;">공사단계</th>
+                  <th style="text-align:center; width:80px;">준공일</th>
+                  <th style="text-align:center; width:80px;">상환완료일</th>
+                  <th style="text-align:center; width:60px;">계약변경</th>
+                  <th style="text-align:center; width:60px;">발주계약</th>
+                  <th style="text-align:center; width:60px;">담당자</th>
+                  <th style="text-align:center; width:70px;">담당부서</th>
+                  <th style="text-align:center; width:70px;">대상설비</th>
+                  <th style="text-align:center; width:70px;">사업구분</th>
+                  <th style="text-align:right; width:60px;">IRR(%)</th>
+                  <th style="text-align:right; width:60px;">XIRR</th>
+                  <th style="text-align:right; width:60px;">수익률(%)</th>
+                  <th style="text-align:center; width:80px;">접수경로</th>
+                  <th style="text-align:center; width:60px;">첨부(건)</th>
+                </tr>
+              </thead>
+              <tbody>${rows}</tbody>
+            </table>
+          </div>
+          <div style="display:flex; justify-content:center; align-items:center; gap:4px; margin-top:16px; padding-top:12px; border-top:1px solid var(--border);">
+            <button style="width:32px; height:32px; display:flex; align-items:center; justify-content:center; border:1px solid var(--border); border-radius:var(--radius-sm); background:var(--bg2); cursor:pointer; color:var(--text-muted);">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+            </button>
+            <button style="width:32px; height:32px; border:1px solid var(--blue); border-radius:var(--radius-sm); background:var(--blue); color:#fff; font-size:13px; font-weight:700; cursor:pointer;">1</button>
+            <button style="width:32px; height:32px; border:1px solid var(--border); border-radius:var(--radius-sm); background:var(--bg2); font-size:13px; cursor:pointer; color:var(--text);">2</button>
+            <button style="width:32px; height:32px; border:1px solid var(--border); border-radius:var(--radius-sm); background:var(--bg2); font-size:13px; cursor:pointer; color:var(--text);">3</button>
+            <span style="font-size:13px; color:var(--text-muted); padding:0 4px;">...</span>
+            <button style="width:32px; height:32px; border:1px solid var(--border); border-radius:var(--radius-sm); background:var(--bg2); font-size:13px; cursor:pointer; color:var(--text);">10</button>
+            <button style="width:32px; height:32px; display:flex; align-items:center; justify-content:center; border:1px solid var(--border); border-radius:var(--radius-sm); background:var(--bg2); cursor:pointer; color:var(--text-muted);">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
+          </div>
+          <div style="font-size:13px; color:var(--text-muted); margin-top:10px; padding-top:10px; border-top:1px solid var(--border);">
+            ＊ 행(Row)을 클릭하면 프로젝트 상세 화면으로 이동합니다.
+          </div>
+        </div>
+      `;
+
+      window.setPrjList2 = function(startId, endId, preset) {
+        const end = new Date(); const start = new Date(end);
+        if (preset === '1d') start.setDate(end.getDate() - 1);
+        else if (preset === '1m') start.setMonth(end.getMonth() - 1);
+        else if (preset === '3m') start.setMonth(end.getMonth() - 3);
+        else if (preset === '1y') start.setFullYear(end.getFullYear() - 1);
+        const f = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+        const s = document.getElementById(startId); if (s) s.value = f(start);
+        const e = document.getElementById(endId);   if (e) e.value = f(end);
+      };
+
+      return wrapper;
+    }
+
+    /* ══════════════════════════════════════════════
+       프로젝트 상세
+    ══════════════════════════════════════════════ */
+    function getProjectDetailTemplate() {
+      const wrapper = document.createElement('div');
+
+      const steps = [
+        { label:'사업심의', dates:['2026.06.30 요청','2026.06.30 승인'], done:true  },
+        { label:'계약',     dates:['2026.07.30 품의','2026.06.31 체결'], done:false, current:true },
+        { label:'발주(1차)',dates:['2026.07.30 발주'],                   done:false },
+        { label:'착공',     dates:['2026.07.30 착공'],                  done:false },
+        { label:'준공',     dates:['2026.08.30 준공'],                  done:false },
+        { label:'지급(준공금)',dates:['2026.08.31 투자금 지급'],         done:false },
+        { label:'상환',     dates:['2026.09.30 상환개시','2028.09.30 상환완료'], done:false },
+      ];
+
+      const stepHtml = steps.map((s, i) => {
+        const color    = s.done ? 'var(--green)' : s.current ? 'var(--blue)' : '#cbd5e1';
+        const txtColor = s.done || s.current ? '#fff' : 'var(--text-muted)';
+        const lineColor= i < steps.length - 1 ? (s.done ? 'var(--green)' : '#e2e8f0') : 'transparent';
+        return `
+          <div style="display:flex; flex-direction:column; align-items:center; flex:1; position:relative;">
+            ${i < steps.length-1 ? `<div style="position:absolute; top:16px; left:50%; width:100%; height:2px; background:${lineColor}; z-index:0;"></div>` : ''}
+            <div style="width:32px; height:32px; border-radius:50%; background:${color}; color:${txtColor}; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:800; position:relative; z-index:1; border:2px solid ${color};">
+              ${s.done ? '✓' : (i+1)}
+            </div>
+            <div style="font-size:13px; font-weight:700; color:${s.current?'var(--blue)':'var(--text-label)'}; margin-top:6px; text-align:center; white-space:nowrap;">${s.label}</div>
+            ${s.dates.map(d=>`<div style="font-size:13px; color:var(--text-muted); text-align:center;">${d}</div>`).join('')}
+          </div>`;
+      }).join('');
+
+      wrapper.innerHTML = `
+        <!-- 상단 요약 -->
+        <div class="card" style="margin-bottom:16px;">
+          <div style="display:flex; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+            <div>
+              <div style="font-size:18px; font-weight:800; color:var(--navy); margin-bottom:6px;">김포 미래테크 공기압축기 에너지효율화사업</div>
+              <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                <span class="badge badge-warning" style="font-size:13px;">계약 품의요청</span>
+                <span style="font-size:13px; color:var(--text-muted);">사업구분: <strong style="color:var(--text);">건축물</strong></span>
+                <span style="font-size:13px; color:var(--text-muted);">담당자: <strong style="color:var(--text);">홍길동 (EERS팀)</strong></span>
+              </div>
+            </div>
+            <button class="btn btn-outline" style="height:34px; font-size:13px; padding:0 14px;"
+              onclick="selectMenu('prj-1','프로젝트 목록')">← 목록으로</button>
+          </div>
+          <div style="display:grid; grid-template-columns:repeat(6,1fr); gap:0; margin-top:16px; border:1px solid var(--border); border-radius:var(--radius-md); overflow:hidden;">
+            ${[['총 사업금액','2,345,341,000원'],['투자금액','2,345,341,000원'],['수익률','15.7%'],['IRR(입력)','6.08%'],['XIRR','5.89%'],['프로젝트번호','160001-1612-01-3I-C']].map((item,i)=>`
+              <div style="padding:10px 14px; border-right:${i<5?'1px solid var(--border)':'none'}; ${i>=3?'border-top:1px solid var(--border);':''}">
+                <div style="font-size:13px; color:var(--text-muted); margin-bottom:3px;">${item[0]}</div>
+                <div style="font-size:13px; font-weight:700; color:var(--navy);">${item[1]}</div>
+              </div>`).join('')}
+          </div>
+        </div>
+
+        <!-- 진행 타임라인 -->
+        <div class="card" style="margin-bottom:16px; padding:20px 24px;">
+          <div style="font-size:13px; font-weight:700; color:var(--text-label); margin-bottom:16px;">프로젝트 진행 현황</div>
+          <div style="display:flex; align-items:flex-start; gap:0;">${stepHtml}</div>
+        </div>
+
+        <!-- 내부 탭 -->
+        <div style="display:flex; gap:0; margin-bottom:0; border-bottom:2px solid var(--border);">
+          ${['계약정보','투자금 지급정보','상환금정보','발주계약정보'].map((tab,i)=>`
+            <button id="dtab2-${i}" onclick="switchDetailTab2(${i})"
+              style="height:40px; padding:0 24px; border:none; background:none; font-size:13px; font-weight:700; cursor:pointer;
+                color:${i===0?'var(--blue)':'var(--text-muted)'};
+                border-bottom:${i===0?'3px solid var(--blue)':'3px solid transparent'};
+                margin-bottom:-2px; transition:all 0.15s;">${tab}</button>`).join('')}
+        </div>
+
+        <div id="detail2-tab-content" class="card" style="border-radius:0 0 var(--radius-md) var(--radius-md); margin-top:0;">
+
+          <!-- 계약정보 -->
+          <div id="dtab2-content-0">
+            <div style="font-weight:700; font-size:14px; color:var(--navy); margin-bottom:16px; padding-bottom:8px; border-bottom:1px solid var(--border);">■ 계약 기본정보</div>
+            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px 24px; margin-bottom:20px;">
+              <div>
+                <label style="font-size:13px; font-weight:600; color:var(--text-label); display:block; margin-bottom:4px;">진행 상태</label>
+                <span class="badge badge-warning" style="font-size:13px;">계약 품의중</span>
+              </div>
+              <div>
+                <label style="font-size:13px; font-weight:600; color:var(--text-label); display:block; margin-bottom:4px;">계약번호</label>
+                <div style="font-size:13px; font-family:var(--font-ui); color:var(--blue); font-weight:600;">160001-1612-01-3I-C</div>
+              </div>
+              <div>
+                <label style="font-size:13px; font-weight:600; color:var(--text-label); display:block; margin-bottom:4px;">프로젝트(계약)명</label>
+                <div style="font-size:13px;">김포 미래테크 공기압축기 에너지효율화사업</div>
+              </div>
+              <div>
+                <label style="font-size:13px; font-weight:600; color:var(--text-label); display:block; margin-bottom:4px;">사업구분</label>
+                <input type="text" class="form-control" value="산업체" readonly style="background:#f8faff; color:var(--text-muted); font-size:13px; height:34px;">
+              </div>
+              <div>
+                <label style="font-size:13px; font-weight:600; color:var(--text-label); display:block; margin-bottom:4px;">사용자 소재지</label>
+                <input type="text" class="form-control" value="경기도 안산시" readonly style="background:#f8faff; color:var(--text-muted); font-size:13px; height:34px;">
+              </div>
+              <div>
+                <label style="font-size:13px; font-weight:600; color:var(--text-label); display:block; margin-bottom:4px;">대상설비</label>
+                <input type="text" class="form-control" value="에어드라이어" readonly style="background:#f8faff; color:var(--text-muted); font-size:13px; height:34px;">
+              </div>
+              <div>
+                <label style="font-size:13px; font-weight:600; color:var(--text-label); display:block; margin-bottom:4px;">에너지 사용자</label>
+                <input type="text" class="form-control" value="포천 미래테크" readonly style="background:#f8faff; color:var(--text-muted); font-size:13px; height:34px;">
+              </div>
+              <div>
+                <label style="font-size:13px; font-weight:600; color:var(--text-label); display:block; margin-bottom:4px;">업종</label>
+                <input type="text" class="form-control" value="화학" readonly style="background:#f8faff; color:var(--text-muted); font-size:13px; height:34px;">
+              </div>
+              <div>
+                <label style="font-size:13px; font-weight:600; color:var(--text-label); display:block; margin-bottom:4px;">EPC 수행방식</label>
+                <select class="form-control" style="font-size:13px; height:34px; padding:0 8px;">
+                  <option selected>우리회사 EPC 수행</option><option>외부 EPC 수행</option>
+                </select>
+              </div>
+              <div>
+                <label style="font-size:13px; font-weight:600; color:var(--text-label); display:block; margin-bottom:4px;">접수경로</label>
+                <select class="form-control" style="font-size:13px; height:34px; padding:0 8px;">
+                  <option selected>EPC사</option><option>한전접수</option><option>본인발굴</option>
+                </select>
+              </div>
+              <div>
+                <label style="font-size:13px; font-weight:600; color:var(--text-label); display:block; margin-bottom:4px;">계약형태</label>
+                <select class="form-control" style="font-size:13px; height:34px; padding:0 8px;">
+                  <option selected>EPC 계약</option><option>ESCO 계약</option>
+                </select>
+              </div>
+              <div>
+                <label style="font-size:13px; font-weight:600; color:var(--text-label); display:block; margin-bottom:4px;">IRR (입력/%)</label>
+                <input type="number" class="form-control" value="6.08" style="font-size:13px; height:34px;">
+              </div>
+              <div>
+                <label style="font-size:13px; font-weight:600; color:var(--text-label); display:block; margin-bottom:4px;">투자금액 (VAT별도/원)</label>
+                <input type="number" class="form-control" value="2345341000" style="font-size:13px; height:34px;">
+              </div>
+              <div>
+                <label style="font-size:13px; font-weight:600; color:var(--text-label); display:block; margin-bottom:4px;">총사업금액 (VAT별도/원)</label>
+                <input type="number" class="form-control" value="2345341000" style="font-size:13px; height:34px;">
+              </div>
+              <div>
+                <label style="font-size:13px; font-weight:600; color:var(--text-label); display:block; margin-bottom:4px;">EPC사 또는 협력회사</label>
+                <input type="text" class="form-control" value="대일화재" style="font-size:13px; height:34px;">
+              </div>
+              <div>
+                <label style="font-size:13px; font-weight:600; color:var(--text-label); display:block; margin-bottom:4px;">EPC사 필요면허</label>
+                <input type="text" class="form-control" value="EPC 계약" style="font-size:13px; height:34px;">
+              </div>
+              <div>
+                <label style="font-size:13px; font-weight:600; color:var(--text-label); display:block; margin-bottom:4px;">상환개시일</label>
+                <input type="date" class="form-control" value="2026-09-30" style="font-size:13px; height:34px;">
+              </div>
+              <div>
+                <label style="font-size:13px; font-weight:600; color:var(--text-label); display:block; margin-bottom:4px;">준공(예상)일자</label>
+                <input type="date" class="form-control" value="2026-08-30" style="font-size:13px; height:34px;">
+              </div>
+              <div>
+                <label style="font-size:13px; font-weight:600; color:var(--text-label); display:block; margin-bottom:4px;">상환완료일</label>
+                <input type="date" class="form-control" value="2028-09-30" style="font-size:13px; height:34px;">
+              </div>
+              <div>
+                <label style="font-size:13px; font-weight:600; color:var(--text-label); display:block; margin-bottom:4px;">착공일자</label>
+                <input type="date" class="form-control" value="2026-07-30" style="font-size:13px; height:34px;">
+              </div>
+            </div>
+            <div style="margin-bottom:20px;">
+              <div style="font-weight:700; font-size:13px; color:var(--text-label); margin-bottom:10px;">공사금액 지급 (%)</div>
+              <div style="display:flex; gap:12px; align-items:center;">
+                <div style="text-align:center;"><div style="font-size:13px; color:var(--text-muted); margin-bottom:4px;">착공금</div><input type="number" class="form-control" value="50" style="width:80px; font-size:13px; text-align:center;"></div>
+                <div style="color:var(--border); font-size:20px; margin-top:16px;">+</div>
+                <div style="text-align:center;"><div style="font-size:13px; color:var(--text-muted); margin-bottom:4px;">중도금</div><input type="number" class="form-control" value="0" style="width:80px; font-size:13px; text-align:center;"></div>
+                <div style="color:var(--border); font-size:20px; margin-top:16px;">+</div>
+                <div style="text-align:center;"><div style="font-size:13px; color:var(--text-muted); margin-bottom:4px;">준공금</div><input type="number" class="form-control" value="50" style="width:80px; font-size:13px; text-align:center;"></div>
+                <div style="color:var(--border); font-size:20px; margin-top:16px;">=</div>
+                <div style="text-align:center;"><div style="font-size:13px; color:var(--text-muted); margin-bottom:4px;">합계</div><div style="width:80px; height:38px; display:flex; align-items:center; justify-content:center; background:#f8faff; border:1px solid var(--border); border-radius:var(--radius-sm); font-size:14px; font-weight:700; color:var(--navy);">100%</div></div>
+              </div>
+            </div>
+            <div style="margin-bottom:20px;">
+              <label style="font-size:13px; font-weight:600; color:var(--text-label); display:block; margin-bottom:4px;">비고</label>
+              <textarea class="form-control" rows="2" style="font-size:13px; resize:vertical;">EPC 계약</textarea>
+            </div>
+            <div style="font-size:13px; color:var(--amber); background:var(--amber-lt); padding:8px 12px; border-radius:var(--radius-sm); border-left:3px solid var(--amber); margin-bottom:16px;">
+              ＊ 계약 품의 중에는 계약정보를 변경하실 수 없습니다.
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div style="display:flex; gap:6px;">
+                <button class="btn btn-outline" style="font-size:13px; height:34px;" onclick="alert('사업심의 완료 처리됩니다.')">사업심의 완료</button>
+                <button class="btn btn-outline" style="font-size:13px; height:34px;" onclick="alert('사업심의를 생략합니다.')">사업심의 생략</button>
+                <button class="btn btn-outline" style="font-size:13px; height:34px;" onclick="alert('계약품의를 요청합니다.')">계약품의 요청</button>
+                <button class="btn btn-outline" style="font-size:13px; height:34px; color:var(--red); border-color:var(--red);" onclick="alert('미계약승인을 요청합니다.')">미계약승인요청</button>
+              </div>
+              <button class="btn btn-primary" style="font-size:13px;" onclick="alert('저장되었습니다.')">저장</button>
+            </div>
+          </div>
+
+          <!-- 투자금 지급정보 -->
+          <div id="dtab2-content-1" style="display:none;">
+            <div style="font-weight:700; font-size:14px; color:var(--navy); margin-bottom:16px; padding-bottom:8px; border-bottom:1px solid var(--border);">■ 투자금 지급대상 정보</div>
+            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px 24px; margin-bottom:20px;">
+              <div><label style="font-size:13px; font-weight:600; color:var(--text-label); display:block; margin-bottom:4px;">구분</label><input type="text" class="form-control" value="일반 공사비" style="font-size:13px; height:34px;"></div>
+              <div><label style="font-size:13px; font-weight:600; color:var(--text-label); display:block; margin-bottom:4px;">공급가액 (원)</label><input type="number" class="form-control" value="2345341000" style="font-size:13px; height:34px;"></div>
+              <div><label style="font-size:13px; font-weight:600; color:var(--text-label); display:block; margin-bottom:4px;">부가세 (원)</label><input type="number" class="form-control" value="234534100" readonly style="font-size:13px; height:34px; background:#f8faff; color:var(--text-muted);"></div>
+              <div><label style="font-size:13px; font-weight:600; color:var(--text-label); display:block; margin-bottom:4px;">계약금액 (VAT별도/원)</label><input type="number" class="form-control" value="2345341000" style="font-size:13px; height:34px;"></div>
+              <div><label style="font-size:13px; font-weight:600; color:var(--text-label); display:block; margin-bottom:4px;">EPC사 또는 협력회사</label><input type="text" class="form-control" value="대일화재" style="font-size:13px; height:34px;"></div>
+              <div><label style="font-size:13px; font-weight:600; color:var(--text-label); display:block; margin-bottom:4px;">EPC사 필요면허</label><input type="text" class="form-control" value="EPC 계약" style="font-size:13px; height:34px;"></div>
+              <div><label style="font-size:13px; font-weight:600; color:var(--text-label); display:block; margin-bottom:4px;">공사시작일</label><input type="date" class="form-control" value="2026-08-30" style="font-size:13px; height:34px;"></div>
+              <div><label style="font-size:13px; font-weight:600; color:var(--text-label); display:block; margin-bottom:4px;">공사종료일</label><input type="date" class="form-control" value="2026-09-30" style="font-size:13px; height:34px;"></div>
+              <div><label style="font-size:13px; font-weight:600; color:var(--text-label); display:block; margin-bottom:4px;">계약체결일</label><input type="date" class="form-control" value="2026-07-30" style="font-size:13px; height:34px;"></div>
+              <div><label style="font-size:13px; font-weight:600; color:var(--text-label); display:block; margin-bottom:4px;">상환완료일</label><input type="date" class="form-control" value="2028-09-30" readonly style="font-size:13px; height:34px; background:#f8faff; color:var(--text-muted);"></div>
+              <div><label style="font-size:13px; font-weight:600; color:var(--text-label); display:block; margin-bottom:4px;">협력회사</label><input type="text" class="form-control" value="동부라이텍 주식회사" style="font-size:13px; height:34px;"></div>
+            </div>
+            <div style="font-size:13px; color:var(--amber); background:var(--amber-lt); padding:8px 12px; border-radius:var(--radius-sm); border-left:3px solid var(--amber); margin-bottom:16px;">
+              ＊ 계약 품의 중에는 투자금 지급정보를 변경하실 수 없습니다.
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <button class="btn btn-outline" style="font-size:13px; height:34px;" onclick="alert('행을 추가합니다.')">+ 추가</button>
+              <div style="display:flex; gap:6px;">
+                <button class="btn btn-outline" style="font-size:13px; height:34px;" onclick="alert('사업심의 완료')">사업심의 완료</button>
+                <button class="btn btn-outline" style="font-size:13px; height:34px;" onclick="alert('사업심의 생략')">사업심의 생략</button>
+                <button class="btn btn-outline" style="font-size:13px; height:34px;" onclick="alert('계약품의 요청')">계약품의 요청</button>
+                <button class="btn btn-outline" style="font-size:13px; height:34px; color:var(--red); border-color:var(--red);" onclick="alert('미계약승인요청')">미계약승인요청</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 상환금정보 -->
+          <div id="dtab2-content-2" style="display:none;">
+            <div style="font-weight:700; font-size:14px; color:var(--navy); margin-bottom:16px; padding-bottom:8px; border-bottom:1px solid var(--border);">■ 상환금정보</div>
+            <div style="text-align:center; padding:40px; color:var(--text-muted); font-size:14px;">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:10px; color:#94a3b8;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <div>계약 품의 완료 후 상환금정보가 등록됩니다.</div>
+            </div>
+          </div>
+
+          <!-- 발주계약정보 -->
+          <div id="dtab2-content-3" style="display:none;">
+            <div style="font-weight:700; font-size:14px; color:var(--navy); margin-bottom:16px; padding-bottom:8px; border-bottom:1px solid var(--border);">■ 발주계약정보</div>
+            <div style="text-align:center; padding:40px; color:var(--text-muted); font-size:14px;">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:10px; color:#94a3b8;"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+              <div>계약 체결 후 발주계약정보가 등록됩니다.</div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      window.switchDetailTab2 = function(idx) {
+        for (let i = 0; i < 4; i++) {
+          const btn = document.getElementById('dtab2-' + i);
+          const con = document.getElementById('dtab2-content-' + i);
+          if (btn) {
+            btn.style.color = i === idx ? 'var(--blue)' : 'var(--text-muted)';
+            btn.style.borderBottom = i === idx ? '3px solid var(--blue)' : '3px solid transparent';
+          }
+          if (con) con.style.display = i === idx ? '' : 'none';
+        }
+      };
 
       return wrapper;
     }
